@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_margin="44dp"
+        android:id="@+id/image_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <Button
+        android:id="@+id/random"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_gravity="center|bottom"
+        android:gravity="center"
+        android:text="random"
+        android:textColor="@android:color/black"
+        android:textSize="16dp" />
+
+</FrameLayout>

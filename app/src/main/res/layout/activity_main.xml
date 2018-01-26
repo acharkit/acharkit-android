@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/start_activity_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Start Activity Fragment" />
+
+            <Button
+                android:id="@+id/start_activity_viewpager"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Start Activity ViewPager" />
+
+            <Button
+                android:id="@+id/start_activity_carousel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Start Activity Carousel" />
+
+            <Button
+                android:id="@+id/start_activity_intro_pager"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Start Activity indicatorPager" />
+
+            <Button
+                android:id="@+id/start_activity_utils"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Start Activity Utils" />
+
+            <Button
+                android:id="@+id/start_activity_dialog"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Start Dialog" />
+
+            <Button
+                android:id="@+id/start_activity_image_loader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Start Image Loader" />
+            <Button
+                android:id="@+id/start_request_connection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Start Request Connection" />
+
+            <Button
+                android:id="@+id/start_request_download"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Start Request Download" />
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+</android.support.constraint.ConstraintLayout>
