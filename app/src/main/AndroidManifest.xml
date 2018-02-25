@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -42,6 +43,12 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".test.TestImageLoader"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".test.TestGif"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".test.TestProgress"
             android:screenOrientation="portrait" />
     </application>
 </manifest>

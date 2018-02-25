@@ -46,6 +46,18 @@
                 android:text="Start Activity Utils" />
 
             <Button
+                android:id="@+id/start_activity_gif"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Start Gif" />
+
+            <Button
+                android:id="@+id/start_activity_progress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Start Progress" />
+
+            <Button
                 android:id="@+id/start_activity_dialog"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -56,6 +68,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Start Image Loader" />
+
             <Button
                 android:id="@+id/start_request_connection"
                 android:layout_width="match_parent"

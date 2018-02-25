@@ -4,7 +4,7 @@ import android.os.Bundle;
 
 import ir.acharkit.android.app.AbstractActivity;
 import ir.acharkit.android.component.IndicatorPager;
-import ir.acharkit.android.component.listener.OnPageChangeListener;
+import ir.acharkit.android.component.indicator.OnPageChangeListener;
 import ir.acharkit.android.demo.R;
 import ir.acharkit.android.demo.UseFragment;
 import ir.acharkit.android.util.Log;

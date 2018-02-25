@@ -3,7 +3,7 @@ package ir.acharkit.android.component.indicator.adapter;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +16,7 @@ import ir.acharkit.android.component.indicator.model.IndicatorPagerModel;
  * Email:   alirezat775@gmail.com
  */
 
-public class IndicatorPagerAdapter extends FragmentPagerAdapter {
+public class IndicatorPagerAdapter extends FragmentStatePagerAdapter {
 
     private List<IndicatorPagerModel> items = new ArrayList<>();
 
@@ -45,7 +45,7 @@ public class IndicatorPagerAdapter extends FragmentPagerAdapter {
     }
 
     /**
-     * @return
+     * @return count of items in the list
      */
     @Override
     public int getCount() {
@@ -53,7 +53,7 @@ public class IndicatorPagerAdapter extends FragmentPagerAdapter {
     }
 
     /**
-     * @param item
+     * @param item add item to list
      */
     public void add(@NonNull IndicatorPagerModel item) {
         items.add(item);

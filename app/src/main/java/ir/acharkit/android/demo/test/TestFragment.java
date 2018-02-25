@@ -4,11 +4,8 @@ import android.os.Bundle;
 import android.view.View;
 
 import ir.acharkit.android.app.AbstractActivity;
-import ir.acharkit.android.app.AbstractFragment;
-
 import ir.acharkit.android.demo.R;
 import ir.acharkit.android.demo.UseFragment;
-import ir.acharkit.android.util.Log;
 
 /**
  * Author:  Alireza Tizfahm Fard
@@ -46,11 +43,11 @@ public class TestFragment extends AbstractActivity {
                 i++;
                 useFragment = new UseFragment();
                 useFragment.setTags("# : " + i);
-                useFragment.setTagId("TAB_" + i);
-                useFragment.actionFragment(R.id.frameLayout, AbstractFragment.TYPE_REPLACE, true);
-                Log.d(TAG, "getVisibleFragment:" + getVisibleFragment());
+                presentFragment(useFragment, R.id.frameLayout, "FRAGMENT" + i, true);
             }
         });
 
     }
+
+
 }

@@ -8,12 +8,12 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import ir.acharkit.android.app.AbstractActivity;
-import ir.acharkit.android.component.CardList;
-import ir.acharkit.android.component.cardList.CardListSnappingListener;
-import ir.acharkit.android.component.cardList.CardListView;
+import ir.acharkit.android.component.Carousel;
+import ir.acharkit.android.component.carousel.CarouselListener;
+import ir.acharkit.android.component.carousel.CarouselView;
 import ir.acharkit.android.demo.R;
-import ir.acharkit.android.demo.adapter.TestCardListAdapter;
-import ir.acharkit.android.demo.model.TestCardListModel;
+import ir.acharkit.android.demo.adapter.TestCarouselAdapter;
+import ir.acharkit.android.demo.model.TestCarouselModel;
 import ir.acharkit.android.util.Log;
 
 /**
@@ -37,9 +37,13 @@ public class TestCarouselPager extends AbstractActivity {
     private String url7 = "https://www.gettyimages.ca/gi-resources/images/Homepage/Hero/UK/CMS_Creative_164657191_Kingfisher.jpg";
     private String url8 = "https://www.wonderplugin.com/videos/demo-image0.jpg";
     private String url9 = "https://www.aussiespecialist.com/content/asp/en_us/sales-resources/image-and-video-galleries/jcr:content/mainParsys/hero/image.adapt.1663.medium.jpg";
-    private ArrayList<String> list = new ArrayList<>();
-    private CardList cardList;
+    private String url10 = "@drawable/linux";
+    private String url11 = "@drawable/java";
+    private String url12 = "@drawable/postman";
+    private String url13 = "@drawable/ic_android";
 
+    private ArrayList<String> list = new ArrayList<>();
+    private Carousel carousel;
 
     @Override
     public void onBackPressed() {
@@ -52,16 +56,16 @@ public class TestCarouselPager extends AbstractActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        if (cardList != null) {
-            cardList.setAutoScrollPause();
+        if (carousel != null) {
+            carousel.setAutoScrollPause();
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (cardList != null) {
-            cardList.setAutoScrollResume();
+        if (carousel != null) {
+            carousel.setAutoScrollResume();
         }
     }
 
@@ -80,23 +84,27 @@ public class TestCarouselPager extends AbstractActivity {
         list.add(url7);
         list.add(url8);
         list.add(url9);
+        list.add(url10);
+        list.add(url11);
+        list.add(url12);
+        list.add(url13);
 
         Button add_carousel = findViewById(R.id.add_carousel);
-        TestCardListAdapter carouselPagerAdapter = new TestCardListAdapter(this);
-        cardList = new CardList(this, R.id.carousel, carouselPagerAdapter);
-        cardList.setOrientation(CardListView.HORIZONTAL, true);
-        cardList.setAutoScroll(true, 5000, true);
-        cardList.setScaleView(true);
-        for (int i = 0; i < 10; i++) {
+        TestCarouselAdapter carouselPagerAdapter = new TestCarouselAdapter(this);
+        carousel = new Carousel(this, R.id.carousel, carouselPagerAdapter);
+        carousel.setOrientation(CarouselView.HORIZONTAL, true);
+        carousel.setAutoScroll(true, 5000, true);
+        carousel.setScaleView(true);
+        for (int i = 0; i < 14; i++) {
             count = i;
-            TestCardListModel model = new TestCardListModel();
+            TestCarouselModel model = new TestCarouselModel();
             model.setId(i);
             model.setTitle("# " + i);
             model.setImageUri(list.get(i));
-            cardList.add(model);
+            carousel.add(model);
         }
 
-        cardList.setSnappingListener(new CardListSnappingListener() {
+        carousel.setSnappingListener(new CarouselListener() {
             @Override
             public void onPositionChange(int position) {
                 Log.d(TAG, "position: " + position);
@@ -105,7 +113,6 @@ public class TestCarouselPager extends AbstractActivity {
             @Override
             public void onScroll(int dx, int dy) {
                 Log.d(TAG, "dx: " + dx + " dy: " + dy);
-
             }
         });
 
@@ -115,11 +122,11 @@ public class TestCarouselPager extends AbstractActivity {
                 count++;
                 Random random = new Random();
                 int index = random.nextInt(list.size());
-                TestCardListModel model = new TestCardListModel();
+                TestCarouselModel model = new TestCarouselModel();
                 model.setId(count);
                 model.setTitle("# " + count);
                 model.setImageUri(list.get(index));
-                cardList.add(model);
+                carousel.add(model);
             }
         });
     }

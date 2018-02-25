@@ -8,9 +8,9 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import ir.acharkit.android.component.indicator.OnPageChangeListener;
 import ir.acharkit.android.component.indicator.ViewPagerIndicator;
 import ir.acharkit.android.component.indicator.adapter.IndicatorPagerAdapter;
-import ir.acharkit.android.component.listener.OnPageChangeListener;
 import ir.acharkit.android.component.indicator.model.IndicatorPagerModel;
 
 
@@ -59,7 +59,14 @@ public class IndicatorPager {
         viewPager = view.findViewById(viewPagerId);
         indicator = view.findViewById(viewPagerIndicator);
         adapter = new IndicatorPagerAdapter(activity.getSupportFragmentManager());
-        viewPager.setAdapter(adapter);
+
+        if (indicator == null)
+            throw new NullPointerException("indicator is Null");
+
+        if (viewPager == null)
+            throw new NullPointerException("viewPager is Null");
+        else
+            viewPager.setAdapter(adapter);
     }
 
     /**

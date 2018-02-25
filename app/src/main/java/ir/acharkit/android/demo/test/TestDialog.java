@@ -9,7 +9,10 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import ir.acharkit.android.app.AbstractActivity;
-import ir.acharkit.android.component.AbstractDialog;
+import ir.acharkit.android.component.DialogView;
+import ir.acharkit.android.component.Progress;
+import ir.acharkit.android.component.progress.FadeProgress;
+import ir.acharkit.android.component.progress.LoadingIndicatorProgress;
 import ir.acharkit.android.demo.R;
 import ir.acharkit.android.util.Util;
 
@@ -21,32 +24,36 @@ import ir.acharkit.android.util.Util;
 
 public class TestDialog extends AbstractActivity {
 
-    private AbstractDialog.Builder builder;
+    private DialogView.Builder builder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_dialog);
 
-        findViewById(R.id.start_dialog).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        showDialog();
+    }
 
-                builder = new AbstractDialog.Builder(TestDialog.this);
-                builder.setBackgroundColor(0xFF232323, 8)
-                        .setFont("OpenSans.ttf", Typeface.NORMAL)
-                        .setTitle("title", 5, 0xFFFFFFFF)
-                        .setMessage("message", 5, 0xFFFFFFFF)
-                        .setButtonsViewOrientation(LinearLayout.HORIZONTAL)
-                        .addButton("button1", 5, 0xFF0A8A12, 0xFFFFFFFF, onClicklistenerOne(), Gravity.CENTER, 8)
-                        .addDismissButton("dismiss", 5, 0xFFFF0000, 0xFFFFFFFF, Gravity.CENTER, 8)
-                        .setCancelable(true)
-                        .setCanceledOnTouchOutside(false)
-                        .setOnCancelListener(onCancelListener())
-                        .setOnDismissListener(onDismissListener())
-                        .show();
-            }
-        });
+    private void showDialog() {
+        final Progress progress = new Progress(TestDialog.this)
+                .setProgress(new LoadingIndicatorProgress(TestDialog.this))
+                .setColor(0xFFFF00FF);
+        progress.load();
+
+        builder = new DialogView.Builder(TestDialog.this);
+        builder.setBackgroundColor(0xFF232323, 8)
+                .setFont("OpenSans.ttf", Typeface.NORMAL)
+                .setTitle("title", 5, 0xFFFFFFFF)
+                .setMessage("message", 5, 0xFFFFFFFF)
+                .setProgressbar(progress)
+                .setButtonsViewOrientation(LinearLayout.VERTICAL)
+                .addButton("button1", 5, 0xFF0A8A12, 0xFFFFFFFF, onClickListenerOne(), Gravity.CENTER, 8)
+                .addDismissButton("dismiss", 5, 0xFFFF0000, 0xFFFFFFFF, Gravity.CENTER, 8)
+                .setCancelable(true)
+                .setCanceledOnTouchOutside(false)
+                .setOnCancelListener(onCancelListener())
+                .setOnDismissListener(onDismissListener())
+                .show();
     }
 
     private DialogInterface.OnDismissListener onDismissListener() {
@@ -54,6 +61,7 @@ public class TestDialog extends AbstractActivity {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
                 Util.showToast(TestDialog.this, "setOnDismissListener called", Toast.LENGTH_SHORT);
+                finish();
             }
         };
     }
@@ -63,11 +71,12 @@ public class TestDialog extends AbstractActivity {
             @Override
             public void onCancel(DialogInterface dialogInterface) {
                 Util.showToast(TestDialog.this, "setOnCancelListener called", Toast.LENGTH_SHORT);
+                finish();
             }
         };
     }
 
-    private View.OnClickListener onClicklistenerOne() {
+    private View.OnClickListener onClickListenerOne() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {

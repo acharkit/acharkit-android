@@ -13,19 +13,20 @@ import ir.acharkit.android.annotation.FragmentStack;
  * Email:   alirezat775@gmail.com
  */
 
-public class AbstractFragment extends Fragment {
+public abstract class AbstractFragment extends Fragment {
 
     public static final int TYPE_REPLACE = 0;
     public static final int TYPE_ADD = 1;
     private static final String TAG = AbstractFragment.class.getName();
     private FragmentTransaction fragmentTransaction;
     private String tagId;
+    private boolean instantiate = true;
 
     public AbstractFragment() {
     }
 
     /**
-     * @return
+     * @return identifier fragment
      */
     public String getTagId() {
         if (tagId != null)
@@ -35,14 +36,14 @@ public class AbstractFragment extends Fragment {
     }
 
     /**
-     * @param tagId
+     * @param tagId identifier fragment
      */
     public void setTagId(String tagId) {
         this.tagId = tagId;
     }
 
     /**
-     * @return
+     * @return FragmentTransaction from AbstractActivity
      */
     public FragmentTransaction getFragmentTransaction() {
         if (fragmentTransaction == null) {
@@ -55,17 +56,20 @@ public class AbstractFragment extends Fragment {
     }
 
     /**
-     * @param frameLayoutId
-     * @param type
+     * @param frameLayoutId container layout
+     * @param type          action replace or add
      */
-    public void actionFragment(@IdRes int frameLayoutId, @FragmentStack int type, boolean addToBackStack) {
+    public synchronized void actionFragment(@IdRes int frameLayoutId, @FragmentStack int type, boolean addToBackStack) {
         FragmentTransaction transaction = getFragmentTransaction();
+        AbstractFragment fragment;
+        if (isInstantiate()) fragment = findFragment() != null ? findFragment() : this;
+        else fragment = this;
         switch (type) {
             case TYPE_REPLACE:
-                transaction.replace(frameLayoutId, findFragment() != null ? findFragment() : this, getTagId());
+                transaction.replace(frameLayoutId, fragment, getTagId());
                 break;
             case TYPE_ADD:
-                transaction.add(frameLayoutId, findFragment() != null ? findFragment() : this, getTagId());
+                transaction.add(frameLayoutId, fragment, getTagId());
                 break;
         }
         if (addToBackStack) {
@@ -75,17 +79,32 @@ public class AbstractFragment extends Fragment {
     }
 
     /**
-     * @return
+     * @return find fragment with tagId
      */
-    private AbstractFragment findFragment() {
+    private synchronized AbstractFragment findFragment() {
         return AbstractActivity.getActivity().getSupportFragmentManager().getBackStackEntryCount() > 0 ? (AbstractFragment) AbstractActivity.getActivity().getSupportFragmentManager().findFragmentByTag(getTagId()) : null;
     }
 
     /**
-     *
+     * remove fragment from backStack
      */
-    public void removeFragmentPopBackStack() {
+    public synchronized void removeFragmentPopBackStack() {
         AbstractActivity.getActivity().getSupportFragmentManager().popBackStack(getId(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+    }
+
+    /**
+     * @return save one instance of fragment
+     */
+    private boolean isInstantiate() {
+        return instantiate;
+    }
+
+    /**
+     * @param instantiate if set true find instance from backStack and action with this instance
+     *                    else if set false remove create new instance and action with this instance
+     */
+    public void setInstantiate(boolean instantiate) {
+        this.instantiate = instantiate;
     }
 
     @Override
@@ -112,5 +131,4 @@ public class AbstractFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
     }
-
 }

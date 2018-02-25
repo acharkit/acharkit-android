@@ -15,6 +15,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -38,16 +40,8 @@ public class Util {
     private static final String TAG = Util.class.getName();
 
     /**
-     * @param uri
-     * @return
-     */
-    public static String getFileType(String uri) {
-        return uri.substring(uri.lastIndexOf("."));
-    }
-
-    /**
      * @param email
-     * @return
+     * @return validate email address
      */
     public static boolean isValidateEmail(@NonNull String email) {
         if (StringHelper.isNotEmpty(email)) {
@@ -62,7 +56,7 @@ public class Util {
 
     /**
      * @param inputNumber
-     * @return
+     * @return validate phone number (specific for iran number)
      */
     public static String isValidPhoneNumberIran(@NonNull String inputNumber) {
         String res = "";
@@ -76,8 +70,8 @@ public class Util {
     }
 
     /**
-     * @param number
-     * @return
+     * @param number arabic or persian number
+     * @return convert arabic or persian number to decimal number
      */
     public static String arabicToDecimal(@NonNull String number) {
         char[] chars = new char[number.length()];
@@ -210,4 +204,22 @@ public class Util {
         clipboard.setPrimaryClip(clip);
     }
 
+    /**
+     * @param is
+     * @param os
+     */
+    public static void copyStream(InputStream is, OutputStream os) {
+        final int buffer_size = 8192;
+        try {
+            byte[] bytes = new byte[buffer_size];
+            while (true) {
+                int count = is.read(bytes, 0, buffer_size);
+                if (count == -1)
+                    break;
+                os.write(bytes, 0, count);
+            }
+        } catch (Exception e) {
+            Log.w(TAG, e);
+        }
+    }
 }

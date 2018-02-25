@@ -10,7 +10,6 @@ import android.support.annotation.Size;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
@@ -27,7 +26,7 @@ import ir.acharkit.android.annotation.RequestMethod;
  * Date:    11/7/2017
  * Email:   alirezat775@gmail.com
  */
-public class ConnectionRequest {
+public abstract class ConnectionRequest {
     private static final String TAG = ConnectionRequest.class.getName();
 
     public interface Method {
@@ -144,6 +143,15 @@ public class ConnectionRequest {
          * @param parameters
          * @return
          */
+        public Builder setParameters(JSONObject parameters) {
+            setParameters(parameters.toString());
+            return this;
+        }
+
+        /**
+         * @param parameters
+         * @return
+         */
         public Builder setParameters(String parameters) {
             if (getMethod().equalsIgnoreCase(Method.GET) || getMethod().equalsIgnoreCase(Method.HEAD)) {
                 this.parameters = parameters;
@@ -155,20 +163,11 @@ public class ConnectionRequest {
         }
 
         /**
-         * @param parameters
-         * @return
-         */
-        public Builder setParameters(JSONObject parameters) {
-            setParameters(parameters.toString());
-            return this;
-        }
-
-        /**
          * @return
          */
         @RequiresPermission(Manifest.permission.INTERNET)
         public Builder sendRequest() {
-            request.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            request.execute();
             return this;
         }
 
@@ -250,7 +249,7 @@ public class ConnectionRequest {
 
                     responseRequest = ConnectionUtil.inputStreamToString(connection);
 
-                } catch (IOException e) {
+                } catch (Exception e) {
                     if (e instanceof ProtocolException || e instanceof MalformedURLException) {
                         throw new RuntimeException("The entered protocol is not valid");
                     } else if (e instanceof SSLHandshakeException) {
@@ -278,7 +277,8 @@ public class ConnectionRequest {
             @Override
             protected void onCancelled(Void aVoid) {
                 super.onCancelled(aVoid);
-                connection.disconnect();
+                if (connection != null)
+                    connection.disconnect();
                 if (getOnRequestListener() != null) {
                     getOnRequestListener().error("Request cancelled");
                 }

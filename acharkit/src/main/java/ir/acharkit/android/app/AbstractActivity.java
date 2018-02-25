@@ -2,11 +2,12 @@ package ir.acharkit.android.app;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -15,44 +16,20 @@ import java.util.List;
  * Email:   alirezat775@gmail.com
  */
 
-public class AbstractActivity extends AppCompatActivity {
+public abstract class AbstractActivity extends AppCompatActivity {
 
     private static final String TAG = AbstractActivity.class.getName();
     private static AbstractActivity instance;
-    public HashMap<Fragment, String> fragmentList = new HashMap<>();
 
     /**
-     * @return
+     * @return instance of AbstractActivity
      */
     public static AbstractActivity getActivity() {
         return instance;
     }
 
-    public void startActivity(Class aClass) {
-        Intent intent = new Intent(instance, aClass);
-        startActivity(intent);
-    }
-
-    public Fragment findFragment(String tagId) {
-        return hasBackStack() ? getSupportFragmentManager().findFragmentByTag(tagId) : null;
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        instance = this;
-    }
-
     /**
-     * @return
-     */
-    public boolean hasBackStack() {
-        int count = getSupportFragmentManager().getBackStackEntryCount();
-        return count != 0;
-    }
-
-    /**
-     * @return
+     * @return which fragment is visible
      */
     public Fragment getVisibleFragment() {
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
@@ -66,10 +43,63 @@ public class AbstractActivity extends AppCompatActivity {
         return null;
     }
 
-    public void clearBackStack(){
+    /**
+     * @return list of fragment
+     */
+    public List<Fragment> getFragmentList() {
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        return fragmentManager.getFragments();
+    }
+
+    /**
+     * @param aClass start new activity
+     */
+    public void startActivity(Class aClass) {
+        Intent intent = new Intent(getActivity(), aClass);
+        startActivity(intent);
+    }
+
+    /**
+     * @param tagId find fragment from backStack with tagId
+     * @return backStack has instance fragment
+     */
+    public Fragment findFragment(String tagId) {
+        return hasBackStack() ? getSupportFragmentManager().findFragmentByTag(tagId) : null;
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        instance = this;
+    }
+
+    /**
+     * @return backStack has any fragment
+     */
+    public boolean hasBackStack() {
+        int count = getSupportFragmentManager().getBackStackEntryCount();
+        return count != 0;
+    }
+
+    /**
+     * remove all fragment from backStack
+     */
+    public void clearBackStack() {
         FragmentManager fm = getActivity().getSupportFragmentManager();
         for (int i = 0; i < fm.getBackStackEntryCount(); ++i) {
             fm.popBackStack();
         }
+    }
+
+    /**
+     * show fragment with action in container layout
+     * @param fragment instance of AbstractFragment
+     * @param container layout id
+     * @param tagId identifier fragment
+     * @param addToBackStack add to backStack
+     */
+    public void presentFragment(@NonNull AbstractFragment fragment, @IdRes int container, @NonNull String tagId, boolean addToBackStack) {
+        fragment.setTagId(tagId);
+        fragment.actionFragment(container, AbstractFragment.TYPE_REPLACE, addToBackStack);
     }
 }

@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 
 import ir.acharkit.android.app.AbstractActivity;
-import ir.acharkit.android.component.AbstractTabLayout;
+import ir.acharkit.android.component.TabPager;
 import ir.acharkit.android.demo.R;
 import ir.acharkit.android.demo.UseFragment;
 import ir.acharkit.android.util.Log;
@@ -39,7 +39,7 @@ public class TestViewPager extends AbstractActivity {
         useFragment1.setTags("Second");
         useFragment2.setTags("Third");
 
-        final AbstractTabLayout tab = new AbstractTabLayout(this, R.id.viewPager, R.id.tabLayout);
+        final TabPager tab = new TabPager(this, R.id.viewPager, R.id.tabLayout);
         tab.setOffscreenPageLimit(3);
         tab.setIndicatorColor(0xffffdd33);
         tab.setIndicatorHeight(4);
@@ -48,7 +48,7 @@ public class TestViewPager extends AbstractActivity {
         tab.add(useFragment0, "One", R.mipmap.ic_launcher);
         tab.add(useFragment1, "Two", R.mipmap.ic_launcher);
         tab.add(useFragment2, "Three", R.mipmap.ic_launcher);
-        Log.d(TAG, "getVisibleFragment:" + getVisibleFragment());
+        Log.d(TAG, "getVisibleFragment:" + getFragmentList());
 
         tab.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override

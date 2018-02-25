@@ -18,6 +18,7 @@
         android:layout_width="250dp"
         android:layout_height="250dp"
         android:layout_margin="12dp"
+        android:scaleType="centerInside"
         android:background="@android:color/black"
         android:gravity="center" />
 </LinearLayout>

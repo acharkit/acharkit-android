@@ -11,6 +11,7 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,8 +21,10 @@ import ir.acharkit.android.connection.OnRequestListener;
 import ir.acharkit.android.demo.test.TestCarouselPager;
 import ir.acharkit.android.demo.test.TestDialog;
 import ir.acharkit.android.demo.test.TestFragment;
+import ir.acharkit.android.demo.test.TestGif;
 import ir.acharkit.android.demo.test.TestImageLoader;
 import ir.acharkit.android.demo.test.TestIntroPager;
+import ir.acharkit.android.demo.test.TestProgress;
 import ir.acharkit.android.demo.test.TestUtils;
 import ir.acharkit.android.demo.test.TestViewPager;
 import ir.acharkit.android.downloader.Downloader;
@@ -39,6 +42,7 @@ public class MainActivity extends AbstractActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,7 +54,6 @@ public class MainActivity extends AbstractActivity {
         initDatabase();
         crypt();
         font();
-
 
         findViewById(R.id.start_activity_fragment).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,6 +87,20 @@ public class MainActivity extends AbstractActivity {
             @Override
             public void onClick(View view) {
                 startActivity(TestUtils.class);
+            }
+        });
+
+        findViewById(R.id.start_activity_gif).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(TestGif.class);
+            }
+        });
+
+        findViewById(R.id.start_activity_progress).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(TestProgress.class);
             }
         });
 
@@ -141,7 +158,7 @@ public class MainActivity extends AbstractActivity {
     }
 
     private void permissionRequest() {
-        PermissionRequest permissionRequest = new PermissionRequest(this, Manifest.permission.INTERNET);
+        PermissionRequest permissionRequest = new PermissionRequest(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
         permissionRequest.send();
     }
 
@@ -163,7 +180,7 @@ public class MainActivity extends AbstractActivity {
         header.put("Access-Token", "1234567890ABC");
 
         if (checkNetworkAvailable(this)) {
-            ConnectionRequest.Builder builder = new ConnectionRequest.Builder(this, ConnectionRequest.Method.POST, "http://www.test.com/api")
+            new ConnectionRequest.Builder(this, ConnectionRequest.Method.POST, "http://www.test.com/api")
                     .trustSSL(true)
                     .setHeader(header)
                     .setParameters(parameter)
@@ -180,8 +197,7 @@ public class MainActivity extends AbstractActivity {
                             Log.d(TAG, "response:" + response);
                             Util.showToast(getApplicationContext(), response, Toast.LENGTH_SHORT);
                         }
-                    });
-            builder.sendRequest();
+                    }).sendRequest();
         }
     }
 
@@ -190,7 +206,7 @@ public class MainActivity extends AbstractActivity {
         header.put("Access-Token", "1234567890ABC");
 
         if (checkNetworkAvailable(this)) {
-            Downloader.Builder builder = new Downloader.Builder(getApplicationContext(), "http://www.xsjjys.com/data/out/60/WHDQ-512049955.png")
+            new Downloader.Builder(getApplicationContext(), "http://www.xsjjys.com/data/out/60/WHDQ-512049955.png")
                     .setDownloadDir(String.valueOf(getExternalFilesDir("download")))
                     .setTimeOut(60 * 2000)
                     .setFileName("image", "png")
@@ -198,7 +214,7 @@ public class MainActivity extends AbstractActivity {
                     .setHeader(header)
                     .setDownloadListener(new OnDownloadListener() {
                         @Override
-                        public void onCompleted() {
+                        public void onCompleted(File file) {
                             Log.d(TAG, "onCompleted:");
                         }
 
@@ -211,8 +227,8 @@ public class MainActivity extends AbstractActivity {
                         public void progressUpdate(int percent, int downloadedSize, int totalSize) {
                             Log.d(TAG, "progressUpdate:" + percent);
                         }
-                    });
-            builder.download();
+                    }).download();
+
         }
     }
 

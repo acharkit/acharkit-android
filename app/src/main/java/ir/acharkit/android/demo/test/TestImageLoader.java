@@ -1,5 +1,6 @@
 package ir.acharkit.android.demo.test;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -8,11 +9,11 @@ import android.widget.ImageView;
 import java.util.ArrayList;
 import java.util.Random;
 
+import ir.acharkit.android.ImageLoader.ImageLoader;
+import ir.acharkit.android.ImageLoader.OnImageLoaderListener;
+import ir.acharkit.android.ImageLoader.cache.OnCacheListener;
 import ir.acharkit.android.app.AbstractActivity;
 import ir.acharkit.android.demo.R;
-import ir.acharkit.android.imageLoader.ImageLoader;
-import ir.acharkit.android.imageLoader.OnCleanCacheListener;
-import ir.acharkit.android.imageLoader.OnImageLoadListener;
 import ir.acharkit.android.util.Log;
 
 /**
@@ -30,7 +31,7 @@ public class TestImageLoader extends AbstractActivity {
     private String url4 = "https://api.androidhive.info/images/glide/large/squad.jpg";
 
     private ArrayList<String> list = new ArrayList<>();
-    private ImageLoader.Builder builder;
+    private ImageLoader.Builder imageLoader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +44,8 @@ public class TestImageLoader extends AbstractActivity {
         list.add(url3);
         list.add(url4);
 
-        final ImageView imageView = findViewById(R.id.image_view);
-        builder = new ImageLoader.Builder(TestImageLoader.this, imageView).setPlaceHolder(R.mipmap.ic_launcher);
+        final ImageView image = findViewById(R.id.image_view);
+        imageLoader = new ImageLoader.Builder(this, null);
 
         Button random = findViewById(R.id.random);
         random.setOnClickListener(new View.OnClickListener() {
@@ -52,29 +53,32 @@ public class TestImageLoader extends AbstractActivity {
             public void onClick(View v) {
                 Random random = new Random();
                 int index = random.nextInt(list.size());
-                builder.setOnImageLoadListener(new OnImageLoadListener() {
+                imageLoader.setImageLoaderListener(new OnImageLoaderListener() {
                     @Override
-                    public void onCompleted(ImageView imageView) {
-                        Log.d(TAG, "onCompleted");
+                    public void onStart(ImageView imageView, String url) {
+                        Log.d(TAG, "onStart:-- " + "imageView: " + imageView + "url: " + url);
+                    }
+
+                    @Override
+                    public void onCompleted(ImageView imageView, String url, Bitmap bitmap) {
+                        Log.d(TAG, "onCompleted:-- " + "image: " + image.toString() + "response: " + imageView.toString());
                     }
 
                     @Override
                     public void onFailure(String reason) {
-                        Log.d(TAG, "fail: " + reason);
-
+                        Log.d(TAG, "onFailure:-- " + reason);
                     }
-                });
-                builder.load(list.get(index));
+                }).load(image, list.get(index));
             }
         });
 
         random.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                builder.cleanCache(new OnCleanCacheListener() {
+                imageLoader.clearCache(new OnCacheListener() {
                     @Override
                     public void onCompleted() {
-                        Log.d(TAG,"clean cache");
+                        Log.d(TAG, "onCompleted: -- clearCache");
                     }
                 });
                 return false;

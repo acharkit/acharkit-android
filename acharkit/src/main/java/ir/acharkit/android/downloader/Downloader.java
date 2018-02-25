@@ -3,14 +3,13 @@ package ir.acharkit.android.downloader;
 import android.Manifest;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.os.StrictMode;
+import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresPermission;
 import android.webkit.CookieManager;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -29,7 +28,7 @@ import ir.acharkit.android.util.helper.MimeHelper;
  * Date:    11/6/2017
  * Email:   alirezat775@gmail.com
  */
-public class Downloader {
+public abstract class Downloader {
     private static final String TAG = Downloader.class.getSimpleName();
 
     public static class Builder {
@@ -65,6 +64,7 @@ public class Downloader {
          * @param downloadDir
          * @return
          */
+        @CheckResult
         public Builder setDownloadDir(@NonNull String downloadDir) {
             this.downloadDir = downloadDir;
             return this;
@@ -102,6 +102,7 @@ public class Downloader {
          * @param downloadListener
          * @return
          */
+        @CheckResult
         public Builder setDownloadListener(@NonNull OnDownloadListener downloadListener) {
             this.downloadListener = downloadListener;
             return this;
@@ -112,6 +113,7 @@ public class Downloader {
          * @param extension
          * @return
          */
+        @CheckResult
         public Builder setFileName(@NonNull String fileName, @NonNull String extension) {
             this.fileName = fileName;
             this.extension = extension;
@@ -136,6 +138,7 @@ public class Downloader {
          * @param header
          * @return
          */
+        @CheckResult
         public Builder setHeader(@NonNull Map<String, String> header) {
             this.header = header;
             return this;
@@ -152,6 +155,7 @@ public class Downloader {
          * @param timeOut
          * @return
          */
+        @CheckResult
         public Builder setTimeOut(int timeOut) {
             this.timeOut = timeOut;
             return this;
@@ -161,6 +165,7 @@ public class Downloader {
          * @param trust
          * @return
          */
+        @CheckResult
         public Builder trustSSL(boolean trust) {
             this.trust = trust;
             return this;
@@ -172,6 +177,16 @@ public class Downloader {
         private boolean isTrust() {
             return trust;
         }
+
+
+        /**
+         * @return
+         */
+        public Builder cancelDownload() {
+            downloadRequest.cancel(true);
+            return this;
+        }
+
 
         @RequiresPermission(Manifest.permission.INTERNET)
         public Builder download() {
@@ -256,7 +271,7 @@ public class Downloader {
                     outputStream.flush();
                     outputStream.close();
                     inputStream.close();
-                } catch (IOException e) {
+                } catch (Exception e) {
                     if (e instanceof ProtocolException || e instanceof MalformedURLException) {
                         throw new RuntimeException("The entered protocol is not valid");
                     }
@@ -275,9 +290,18 @@ public class Downloader {
                 super.onPostExecute(aVoid);
 
                 if (getDownloadListener() != null)
-                    getDownloadListener().onCompleted();
+                    getDownloadListener().onCompleted(file);
             }
 
+            @Override
+            protected void onCancelled(Void aVoid) {
+                super.onCancelled(aVoid);
+                if (connection != null)
+                    connection.disconnect();
+                if (getDownloadListener() != null) {
+                    getDownloadListener().onFailure("Request cancelled");
+                }
+            }
         }
     }
 }

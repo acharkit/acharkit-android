@@ -6,12 +6,12 @@
   For more information, go to the site of [AcharKit](http://www.acharkit.ir)
 
 ```code
-    compile project(':acharkit-release-0.0.2')
+    compile project(':acharkit-release-0.0.3')
     or
-    implementation project(':acharkit-release-0.0.2')
+    implementation project(':acharkit-release-0.0.3')
 ```
 
-# [download verson release-0.0.2](https://raw.githubusercontent.com/acharkit/acharkit-android/master/release/acharkit-release-0.0.2.aar)
+# [download verson release-0.0.3](https://raw.githubusercontent.com/acharkit/acharkit-android/master/release/acharkit-release-0.0.3.aar)
 
 
 Note : Helper classes have many methods that may not be used here
@@ -40,9 +40,9 @@ Remove fragment from backStack
     useFragment.removeFragmentPopBackStack();
 ```
 
-Use AbstractTabLayout
+Use TabPager
 ```code
-        final AbstractTabLayout tab = new AbstractTabLayout(activity, R.id.viewPager, R.id.tabLayout);
+        final TabPager tab = new TabPager(activity, R.id.viewPager, R.id.tabLayout);
 
         tab.setOffscreenPageLimit(3);                   // optional
         tab.setIndicatorColor(0xffffdd33);              // optional
@@ -54,10 +54,10 @@ Use AbstractTabLayout
         tab.add(useFragment2.setTagId(2), "Three", R.mipmap.ic_launcher);
 ```
 
-Use AbstractDialog
+Use DialogView
 ```code
 
-    builder = new AbstractDialog.Builder(TestDialog.this);
+    builder = new DialogView.Builder(TestDialog.this);
                     builder.setBackgroundColor(0xFF232323, 8)
                             .setBackgroundResource(R.mipmap.ic_launcher)
                             .setSize(0.8f, 0.8f)
@@ -155,23 +155,66 @@ Use Downloader
 Use ImageLoader
 ```code
 
-        ImageLoader.Builder builder = new ImageLoader.Builder(context, imageView)
-        .setPlaceHolder(R.mipmap.ic_launcher)
-        .setTrust(true)
-        .setTimeOut(60 * 1000)
-        .setOnImageLoadListener(new OnImageLoadListener() {
-            @Override
-            public void onCompleted(ImageView imageView) {
-                Log.d(TAG, "onCompleted");
-            }
+        imageLoader = new ImageLoader.Builder(this, cacheDir);
+                .setPlaceHolder(R.mipmap.ic_launcher)
+                .imageLoader.setImageLoaderListener(new OnImageLoaderListener() {
+                    @Override
+                    public void onStart(ImageView imageView, String url) {
+                        Log.d(TAG, "onStart:-- " + "imageView: " + imageView + "url: " + url);
+                    }
 
-            @Override
-            public void onFailure(String reason) {
-                Log.d(TAG, "fail: " + reason);
-            }
-        });
-        builder.load("http://www.xsjjys.com/data/out/60/WHDQ-512049955.png");
+                    @Override
+                    public void onCompleted(ImageView imageView, String url, Bitmap bitmap) {
+                        Log.d(TAG, "onCompleted:-- " + "image: " + image.toString() + "response: " + imageView.toString());
+                    }
 
+                    @Override
+                    public void onFailure(String reason) {
+                        Log.d(TAG, "onFailure:-- " + reason);
+                    }
+                }).load(image, "http://www.xsjjys.com/data/out/60/WHDQ-512049955.png");
+
+```
+
+
+Use Progress
+```code
+
+  <ir.acharkit.android.component.progress.FadeProgress
+        android:id="@+id/fadeProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:gravity="center" />
+        
+    fadeProgress = findViewById(R.id.fadeProgress);
+    
+    final Progress fade = new Progress(context)
+        .setProgress(fadeProgress)
+        .setColor(Progress.DEFAULT_COLOR);
+    fade.load();
+
+```
+
+
+Use GifView
+```code
+
+ <ir.acharkit.android.component.GifView
+        android:id="@+id/gifView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:GifHeight="1000"
+        app:GifWidth="1000"
+        app:repeatCount="-1" <-- infinity -->
+        app:src="@drawable/linux" />
+        
+  final GifView gifView = findViewById(R.id.gifView);
+        gifView.loadResource(R.drawable.linux)
+        .setRepeatCount(GifView.INFINITE)
+        .setFullScreen(false);
 
 ```
 
@@ -220,23 +263,23 @@ Use Indicator Pager
 Use Card List
 ```code
 
-    <ir.acharkit.android.component.cardList.CardListView
+    <ir.acharkit.android.component.carousel.CarouselView
         android:id="@+id/carousel"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-        TestCardListAdapter carouselPagerAdapter = new TestCardListAdapter(this);
-        final CardList cardList = new CardList(this, R.id.carousel, carouselPagerAdapter);
-        cardList.setOrientation(CardListView.HORIZONTAL, true);
-        cardList.setAutoScroll(true, 5000, true);
-        cardList.setScaleView(true);
+          TestCarouselAdapter carouselPagerAdapter = new TestCarouselAdapter(this);
+          carousel = new Carousel(this, R.id.carousel, carouselPagerAdapter);
+          carousel.setOrientation(CarouselView.HORIZONTAL, true);
+          carousel.setAutoScroll(true, 5000, true);
+          carousel.setScaleView(true);
         
         for(int i = 0; i < 10; i++) {
-        TestCardListModel model = new TestCardListModel();
+        TestCarouselModel model = new TestCarouselModel();
         ...
         ...
         ...
-        cardList.add(model);
+        carousel.add(model);
         }
 
 ```
@@ -251,7 +294,7 @@ Use ConvertHelper
         ConvertHelper.byteToString(new byte[16]);
 ```
 
-Use DatabaseHelper
+Use Database
 ```code
         Database.init(this);
         Database.getInstance().prepareDB("db.sqlite", 1);

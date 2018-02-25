@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ir.acharkit.android.R;
-import ir.acharkit.android.component.listener.OnPageChangeListener;
 
 /**
  * Author:  Alireza Tizfahm Fard
@@ -31,7 +30,7 @@ public class ViewPagerIndicator extends LinearLayoutCompat implements ViewPager.
     private final List<ImageView> imageViewList = new ArrayList<>();
     private int itemSize = DEF_VALUE;
     private int delimiterSize = DEF_VALUE;
-    private int itemIcon = DEF_VALUE;
+    private int itemIcon = DEF_ICON;
 
     private int selected;
     private int pageCount;
@@ -41,24 +40,24 @@ public class ViewPagerIndicator extends LinearLayoutCompat implements ViewPager.
 
 
     /**
-     * @param context
+     * @param context current context, will be used to access resources
      */
     public ViewPagerIndicator(@NonNull final Context context) {
         this(context, null);
     }
 
     /**
-     * @param context
-     * @param attrs
+     * @param context current context, will be used to access resources
+     * @param attrs   attribute
      */
     public ViewPagerIndicator(@NonNull final Context context, @Nullable final AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
     /**
-     * @param context
-     * @param attrs
-     * @param defStyleAttr
+     * @param context      current context, will be used to access resources
+     * @param attrs        attribute
+     * @param defStyleAttr style
      */
     public ViewPagerIndicator(@NonNull final Context context, @Nullable final AttributeSet attrs, final int defStyleAttr) {
         super(context, attrs, defStyleAttr);
@@ -84,25 +83,27 @@ public class ViewPagerIndicator extends LinearLayoutCompat implements ViewPager.
 
 
     /**
-     * @param selectedIndex
+     * @param selectedIndex select specific position
      */
-    private void setSelectedIndex(final int selectedIndex) {
+    public void setSelectedIndex(final int selectedIndex) {
         if (selectedIndex < 0 || selectedIndex > pageCount - 1)
             return;
 
         final ImageView unselectedView = imageViewList.get(selected);
+        unselectedView.setAlpha(100);
         unselectedView.animate().scaleX(NO_SCALE).scaleY(NO_SCALE).setDuration(300).start();
 
         final ImageView selectedView = imageViewList.get(selectedIndex);
+        selectedView.setAlpha(255);
         selectedView.animate().scaleX(SCALE).scaleY(SCALE).setDuration(300).start();
 
         selected = selectedIndex;
     }
 
     /**
-     * @param pageCount
+     * @param pageCount set total count
      */
-    private void setPageCount(final int pageCount) {
+    public void setPageCount(final int pageCount) {
         this.pageCount = pageCount;
         selected = 0;
         removeAllViews();
@@ -122,26 +123,27 @@ public class ViewPagerIndicator extends LinearLayoutCompat implements ViewPager.
     private FrameLayout createBoxedItem(final int position) {
         final FrameLayout box = new FrameLayout(getContext());
         final ImageView item = createItem();
+        item.setAlpha(100);
         box.addView(item);
         imageViewList.add(item);
-
         final LinearLayoutCompat.LayoutParams boxParams = new LinearLayoutCompat.LayoutParams((int) (itemSize * SCALE), (int) (itemSize * SCALE));
-        if (position > 0) {
-            boxParams.setMargins(delimiterSize, 0, 0, 0);
+        if (position >= 0) {
+            int margin = delimiterSize / 4;
+            boxParams.setMargins(margin, margin, margin, margin);
         }
         box.setLayoutParams(boxParams);
         return box;
     }
 
     /**
-     * @param listener
+     * @param listener page change listener
      */
     public void addOnPageChangeListener(final OnPageChangeListener listener) {
         onPageChangeListener = listener;
     }
 
     /**
-     * @return
+     * @return item indicator
      */
     @NonNull
     private ImageView createItem() {
@@ -154,6 +156,11 @@ public class ViewPagerIndicator extends LinearLayoutCompat implements ViewPager.
         return index;
     }
 
+    /**
+     * @param position
+     * @param positionOffset
+     * @param positionOffsetPixels
+     */
     @Override
     public void onPageScrolled(final int position, final float positionOffset, final int positionOffsetPixels) {
         if (onPageChangeListener != null)
@@ -161,6 +168,9 @@ public class ViewPagerIndicator extends LinearLayoutCompat implements ViewPager.
 
     }
 
+    /**
+     * @param position
+     */
     @Override
     public void onPageSelected(final int position) {
         setSelectedIndex(position);
@@ -169,6 +179,9 @@ public class ViewPagerIndicator extends LinearLayoutCompat implements ViewPager.
 
     }
 
+    /**
+     * @param state
+     */
     @Override
     public void onPageScrollStateChanged(final int state) {
         if (onPageChangeListener != null)
