@@ -2,6 +2,7 @@ package ir.acharkit.android.component.indicator;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ir.acharkit.android.R;
+import ir.acharkit.android.util.Color;
 
 /**
  * Author:  Alireza Tizfahm Fard
@@ -26,11 +28,13 @@ public class ViewPagerIndicator extends LinearLayoutCompat implements ViewPager.
     private static final float SCALE = 1.6f;
     private static final int NO_SCALE = 1;
     private static final int DEF_VALUE = 10;
-    private static final int DEF_ICON = R.drawable.white_circle;
+    private static final int DURATION = 300;
+    private static final int FULL_ALPHA = 255;
+    private static final int SEMI_ALPHA = 100;
     private final List<ImageView> imageViewList = new ArrayList<>();
     private int itemSize = DEF_VALUE;
     private int delimiterSize = DEF_VALUE;
-    private int itemIcon = DEF_ICON;
+    private int itemIcon;
 
     private int selected;
     private int pageCount;
@@ -66,7 +70,7 @@ public class ViewPagerIndicator extends LinearLayoutCompat implements ViewPager.
         try {
             itemSize = attributes.getDimensionPixelSize(R.styleable.ViewPagerIndicator_itemSize, DEF_VALUE);
             delimiterSize = attributes.getDimensionPixelSize(R.styleable.ViewPagerIndicator_delimiterSize, DEF_VALUE);
-            itemIcon = attributes.getResourceId(R.styleable.ViewPagerIndicator_itemIcon, DEF_ICON);
+            itemIcon = attributes.getResourceId(R.styleable.ViewPagerIndicator_itemIcon, 0);
         } finally {
             attributes.recycle();
         }
@@ -90,12 +94,12 @@ public class ViewPagerIndicator extends LinearLayoutCompat implements ViewPager.
             return;
 
         final ImageView unselectedView = imageViewList.get(selected);
-        unselectedView.setAlpha(100);
-        unselectedView.animate().scaleX(NO_SCALE).scaleY(NO_SCALE).setDuration(300).start();
+        unselectedView.setAlpha(SEMI_ALPHA);
+        unselectedView.animate().scaleX(NO_SCALE).scaleY(NO_SCALE).setDuration(DURATION).start();
 
         final ImageView selectedView = imageViewList.get(selectedIndex);
-        selectedView.setAlpha(255);
-        selectedView.animate().scaleX(SCALE).scaleY(SCALE).setDuration(300).start();
+        selectedView.setAlpha(FULL_ALPHA);
+        selectedView.animate().scaleX(SCALE).scaleY(SCALE).setDuration(DURATION).start();
 
         selected = selectedIndex;
     }
@@ -123,7 +127,7 @@ public class ViewPagerIndicator extends LinearLayoutCompat implements ViewPager.
     private FrameLayout createBoxedItem(final int position) {
         final FrameLayout box = new FrameLayout(getContext());
         final ImageView item = createItem();
-        item.setAlpha(100);
+        item.setAlpha(SEMI_ALPHA);
         box.addView(item);
         imageViewList.add(item);
         final LinearLayoutCompat.LayoutParams boxParams = new LinearLayoutCompat.LayoutParams((int) (itemSize * SCALE), (int) (itemSize * SCALE));
@@ -151,9 +155,23 @@ public class ViewPagerIndicator extends LinearLayoutCompat implements ViewPager.
         final FrameLayout.LayoutParams indexParams = new FrameLayout.LayoutParams(itemSize, itemSize);
         indexParams.gravity = Gravity.CENTER;
         index.setLayoutParams(indexParams);
-        index.setImageResource(itemIcon);
+        shapeView(index, Color.WHITE, Color.WHITE);
         index.setScaleType(ImageView.ScaleType.FIT_CENTER);
         return index;
+    }
+
+    /**
+     * @param imageView
+     * @param color
+     * @param colorStroke
+     */
+    public void shapeView(ImageView imageView, int color, int colorStroke) {
+        GradientDrawable shape = new GradientDrawable();
+        shape.setShape(GradientDrawable.OVAL);
+        shape.setCornerRadii(new float[]{8, 8, 8, 8, 0, 0, 0, 0});
+        shape.setColor(color);
+        shape.setStroke(4, colorStroke);
+        imageView.setBackgroundDrawable(shape);
     }
 
     /**

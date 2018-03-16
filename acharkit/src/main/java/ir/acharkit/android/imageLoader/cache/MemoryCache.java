@@ -1,4 +1,4 @@
-package ir.acharkit.android.ImageLoader.cache;
+package ir.acharkit.android.imageLoader.cache;
 
 import android.graphics.Bitmap;
 
@@ -7,7 +7,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import ir.acharkit.android.ImageLoader.ImageLoaderUtil;
+import ir.acharkit.android.imageLoader.ImageLoaderUtil;
 
 /**
  * Author:  Alireza Tizfahm Fard

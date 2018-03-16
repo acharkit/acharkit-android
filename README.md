@@ -6,12 +6,12 @@
   For more information, go to the site of [AcharKit](http://www.acharkit.ir)
 
 ```code
-    compile project(':acharkit-release-0.0.3')
+    compile project(':acharkit-release-0.0.4')
     or
-    implementation project(':acharkit-release-0.0.3')
+    implementation project(':acharkit-release-0.0.4')
 ```
 
-# [download verson release-0.0.3](https://raw.githubusercontent.com/acharkit/acharkit-android/master/release/acharkit-release-0.0.3.aar)
+# [download version release-0.0.4](https://raw.githubusercontent.com/acharkit/acharkit-android/master/release/acharkit-release-0.0.4.aar)
 
 
 Note : Helper classes have many methods that may not be used here
@@ -52,6 +52,30 @@ Use TabPager
         tab.add(useFragment0.setTagId(0), "One", R.mipmap.ic_launcher);
         tab.add(useFragment1.setTagId(1), "Two", R.mipmap.ic_launcher);
         tab.add(useFragment2.setTagId(2), "Three", R.mipmap.ic_launcher);
+```
+
+
+Use BottomTab
+```code
+
+        BottomTab bottomTab = new BottomTab(this, R.id.frameLayout, R.id.bottom_tab);
+        
+        UseFragment useFragment0 = new UseFragment();
+        UseFragment useFragment1 = new UseFragment();
+        UseFragment useFragment2 = new UseFragment();
+        useFragment0.setTags("First");
+        useFragment1.setTags("Second");
+        useFragment2.setTags("Third");
+        
+        bottomTab.setEnableType(BottomTab.EnableType.TEXT_ANIMATION);
+        bottomTab.setFont("OpenSans.ttf", Typeface.BOLD);
+        bottomTab.setBackground(Color.LTGRAY);
+        bottomTab.setTabItemColor(Color.BLUE, Color.WHITE);
+        bottomTab.add(useFragment0, "test", android.R.drawable.stat_notify_more);
+        bottomTab.add(useFragment1, "test", android.R.drawable.stat_notify_chat);
+        bottomTab.add(useFragment2, "test", android.R.drawable.stat_notify_sync);
+        bottomTab.setDefaultTab(1);
+
 ```
 
 Use DialogView
@@ -260,7 +284,7 @@ Use Indicator Pager
         indicatorPager.add(useFragment0.setTagId("0"));
 ```
 
-Use Card List
+Use Carousel
 ```code
 
     <ir.acharkit.android.component.carousel.CarouselView

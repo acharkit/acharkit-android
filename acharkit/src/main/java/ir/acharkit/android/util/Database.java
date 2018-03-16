@@ -77,7 +77,7 @@ public class Database {
      *
      */
     private void setFilePath() {
-        this.path = new File(context.getExternalFilesDir("db") + "/" + databaseName);
+        this.path = new File(getContext().getExternalFilesDir("db") + "/" + databaseName);
     }
 
     /**
@@ -95,7 +95,7 @@ public class Database {
     }
 
     public boolean prepareDB(@NonNull String databaseName, int version) {
-        Cache.setContext(context);
+        Cache.setContext(getContext());
         InputStream is = null;
         int currentVersion = Cache.get(getVersionDataBase(), 0);
         if (currentVersion > version) {
@@ -142,7 +142,6 @@ public class Database {
      * @param is
      * @return
      */
-
     private boolean checkDatabase(InputStream is) {
         if (getFilePath().exists()) {
             database = SQLiteDatabase.openOrCreateDatabase(getFilePath(), null);

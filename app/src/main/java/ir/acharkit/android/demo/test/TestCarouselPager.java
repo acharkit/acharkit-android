@@ -43,6 +43,7 @@ public class TestCarouselPager extends AbstractActivity {
     private String url13 = "@drawable/ic_android";
 
     private ArrayList<String> list = new ArrayList<>();
+    private ArrayList<TestCarouselModel> testCarouselModels = new ArrayList<>();
     private Carousel carousel;
 
     @Override
@@ -90,7 +91,7 @@ public class TestCarouselPager extends AbstractActivity {
         list.add(url13);
 
         Button add_carousel = findViewById(R.id.add_carousel);
-        TestCarouselAdapter carouselPagerAdapter = new TestCarouselAdapter(this);
+        final TestCarouselAdapter carouselPagerAdapter = new TestCarouselAdapter(this);
         carousel = new Carousel(this, R.id.carousel, carouselPagerAdapter);
         carousel.setOrientation(CarouselView.HORIZONTAL, true);
         carousel.setAutoScroll(true, 5000, true);
@@ -101,8 +102,10 @@ public class TestCarouselPager extends AbstractActivity {
             model.setId(i);
             model.setTitle("# " + i);
             model.setImageUri(list.get(i));
-            carousel.add(model);
+            testCarouselModels.add(model);
         }
+
+        carousel.addAll(testCarouselModels);
 
         carousel.setSnappingListener(new CarouselListener() {
             @Override
@@ -127,6 +130,14 @@ public class TestCarouselPager extends AbstractActivity {
                 model.setTitle("# " + count);
                 model.setImageUri(list.get(index));
                 carousel.add(model);
+            }
+        });
+
+        add_carousel.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                carousel.remove(carouselPagerAdapter.getItems().get(1));
+                return false;
             }
         });
     }

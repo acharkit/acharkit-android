@@ -1,13 +1,13 @@
-package ir.acharkit.android.ImageLoader;
+package ir.acharkit.android.imageLoader;
 
 import android.content.Context;
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 import android.widget.ImageView;
 
-import ir.acharkit.android.ImageLoader.cache.DiskCache;
-import ir.acharkit.android.ImageLoader.cache.MemoryCache;
-import ir.acharkit.android.ImageLoader.cache.OnCacheListener;
+import ir.acharkit.android.imageLoader.cache.DiskCache;
+import ir.acharkit.android.imageLoader.cache.MemoryCache;
+import ir.acharkit.android.imageLoader.cache.OnCacheListener;
 
 /**
  * Author:  Alireza Tizfahm Fard

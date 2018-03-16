@@ -47,6 +47,15 @@ public class TestFragment extends AbstractActivity {
             }
         });
 
+        findViewById(R.id.add_fragment).setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                useFragment.removeFragment();
+                i = 0;
+                return false;
+            }
+        });
+
     }
 
 

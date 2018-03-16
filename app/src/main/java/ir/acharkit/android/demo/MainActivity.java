@@ -18,6 +18,7 @@ import java.util.Map;
 import ir.acharkit.android.app.AbstractActivity;
 import ir.acharkit.android.connection.ConnectionRequest;
 import ir.acharkit.android.connection.OnRequestListener;
+import ir.acharkit.android.demo.test.TestBottomTab;
 import ir.acharkit.android.demo.test.TestCarouselPager;
 import ir.acharkit.android.demo.test.TestDialog;
 import ir.acharkit.android.demo.test.TestFragment;
@@ -42,19 +43,16 @@ public class MainActivity extends AbstractActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         log();
         permissionRequest();
         cache();
         initDatabase();
         crypt();
         font();
-
         findViewById(R.id.start_activity_fragment).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -111,6 +109,13 @@ public class MainActivity extends AbstractActivity {
             }
         });
 
+        findViewById(R.id.start_activity_bottom_tab).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(TestBottomTab.class);
+            }
+        });
+
         findViewById(R.id.start_activity_image_loader).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -163,6 +168,7 @@ public class MainActivity extends AbstractActivity {
     }
 
     private void log() {
+
         Log.setDebugMode(true);
         Log.setAcharkitLog(true);
     }

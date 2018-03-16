@@ -1,4 +1,4 @@
-package ir.acharkit.android.ImageLoader;
+package ir.acharkit.android.imageLoader;
 
 import android.content.Context;
 import android.graphics.Bitmap;

@@ -9,9 +9,9 @@ import android.widget.ImageView;
 import java.util.ArrayList;
 import java.util.Random;
 
-import ir.acharkit.android.ImageLoader.ImageLoader;
-import ir.acharkit.android.ImageLoader.OnImageLoaderListener;
-import ir.acharkit.android.ImageLoader.cache.OnCacheListener;
+import ir.acharkit.android.imageLoader.ImageLoader;
+import ir.acharkit.android.imageLoader.OnImageLoaderListener;
+import ir.acharkit.android.imageLoader.cache.OnCacheListener;
 import ir.acharkit.android.app.AbstractActivity;
 import ir.acharkit.android.demo.R;
 import ir.acharkit.android.util.Log;

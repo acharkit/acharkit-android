@@ -43,16 +43,13 @@ public abstract class AbstractFragment extends Fragment {
     }
 
     /**
-     * @return FragmentTransaction from AbstractActivity
+     * @return FragmentManager from AbstractActivity
      */
-    public FragmentTransaction getFragmentTransaction() {
-        if (fragmentTransaction == null) {
-            if (AbstractActivity.getActivity() == null)
-                throw new NullPointerException("Your activity must extends from AbstractActivity");
-            else
-                fragmentTransaction = AbstractActivity.getActivity().getSupportFragmentManager().beginTransaction();
-        }
-        return fragmentTransaction;
+    public FragmentManager fragmentManager() {
+        if (AbstractActivity.getActivity() == null)
+            throw new NullPointerException("Your activity must extends from AbstractActivity");
+        else
+            return AbstractActivity.getActivity().getSupportFragmentManager();
     }
 
     /**
@@ -60,7 +57,7 @@ public abstract class AbstractFragment extends Fragment {
      * @param type          action replace or add
      */
     public synchronized void actionFragment(@IdRes int frameLayoutId, @FragmentStack int type, boolean addToBackStack) {
-        FragmentTransaction transaction = getFragmentTransaction();
+        FragmentTransaction transaction = fragmentManager().beginTransaction();
         AbstractFragment fragment;
         if (isInstantiate()) fragment = findFragment() != null ? findFragment() : this;
         else fragment = this;
@@ -89,7 +86,17 @@ public abstract class AbstractFragment extends Fragment {
      * remove fragment from backStack
      */
     public synchronized void removeFragmentPopBackStack() {
-        AbstractActivity.getActivity().getSupportFragmentManager().popBackStack(getId(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        fragmentManager().popBackStack();
+    }
+
+    /**
+     * remove fragment
+     */
+    public synchronized void removeFragment() {
+        FragmentTransaction transaction = fragmentManager().beginTransaction();
+        AbstractFragment fragment = findFragment() != null ? findFragment() : this;
+        transaction.remove(fragment);
+        transaction.commit();
     }
 
     /**

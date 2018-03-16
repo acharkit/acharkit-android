@@ -1,4 +1,4 @@
-package ir.acharkit.android.ImageLoader.cache;
+package ir.acharkit.android.imageLoader.cache;
 
 /**
  * Author:  Alireza Tizfahm Fard

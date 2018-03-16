@@ -515,13 +515,15 @@ public abstract class DialogView {
             return this;
         }
 
-        /**
-         * @return
-         */
-        public Builder show() {
+        public void show() {
+            getDialogView().removeAllViews();
             addViews();
             dialog.show();
-            return new Builder(context);
+        }
+
+        public void dismiss() {
+            getDialogView().removeAllViews();
+            dialog.dismiss();
         }
 
         /**

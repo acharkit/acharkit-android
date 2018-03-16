@@ -56,7 +56,6 @@ public abstract class AbstractProgress extends LinearLayoutCompat {
     boolean reverse = true;
     private int duration;
     private int color;
-    private Handler handler = new Handler();
 
     public AbstractProgress(Context context) {
         super(context);
@@ -99,7 +98,7 @@ public abstract class AbstractProgress extends LinearLayoutCompat {
         final ImageView item = createItem(scaleSize);
         box.addView(item);
         imageViewList.add(item);
-        final LinearLayoutCompat.LayoutParams boxParams = new LinearLayoutCompat.LayoutParams((int) (itemSize * scaleSize), (int) (itemSize * scaleSize));
+        final LinearLayoutCompat.LayoutParams boxParams = new LinearLayoutCompat.LayoutParams((itemSize * scaleSize), (itemSize * scaleSize));
         boxParams.width = boxParams.width * scaleSize;
         boxParams.height = boxParams.height * scaleSize;
         if (position >= 0) {

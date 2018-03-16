@@ -6,6 +6,8 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import java.util.ArrayList;
+
 import ir.acharkit.android.annotation.CarouselOrientation;
 import ir.acharkit.android.component.carousel.CarouselLayoutManager;
 import ir.acharkit.android.component.carousel.CarouselListener;
@@ -103,6 +105,14 @@ public class Carousel {
             setOrientation(CarouselView.HORIZONTAL, false);
         }
         return manager;
+    }
+
+    /**
+     * @param items
+     */
+    public void addAll(@NonNull ArrayList items) {
+        adapter.addAll(items);
+        adapter.notifyDataSetChanged();
     }
 
     /**

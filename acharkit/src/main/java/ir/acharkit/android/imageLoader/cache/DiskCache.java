@@ -1,4 +1,4 @@
-package ir.acharkit.android.ImageLoader.cache;
+package ir.acharkit.android.imageLoader.cache;
 
 import android.content.Context;
 
@@ -6,7 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
-import ir.acharkit.android.ImageLoader.ImageLoaderUtil;
+import ir.acharkit.android.imageLoader.ImageLoaderUtil;
 import ir.acharkit.android.util.helper.MimeHelper;
 
 /**

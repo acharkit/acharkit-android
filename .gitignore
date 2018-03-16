@@ -32,3 +32,6 @@ proguard/
 captures/
 
 .idea/
+
+build-maven.gradle
+

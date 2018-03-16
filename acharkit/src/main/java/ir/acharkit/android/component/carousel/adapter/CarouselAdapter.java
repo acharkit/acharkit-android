@@ -51,8 +51,13 @@ public abstract class CarouselAdapter extends RecyclerView.Adapter<CarouselAdapt
         }
     }
 
+    public void addAll(ArrayList items) {
+        this.items = items;
+    }
+
     /**
      * add item to list and notifyDataSetChanged adapter
+     *
      * @param item instance CarouselModel
      */
     private void add(CarouselModel item) {
@@ -62,6 +67,7 @@ public abstract class CarouselAdapter extends RecyclerView.Adapter<CarouselAdapt
 
     /**
      * remove item from list and notifyDataSetChanged adapter
+     *
      * @param item instance CarouselModel
      */
     private void remove(CarouselModel item) {
