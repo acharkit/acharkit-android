@@ -11,7 +11,6 @@ import android.widget.Toast;
 import ir.acharkit.android.app.AbstractActivity;
 import ir.acharkit.android.component.DialogView;
 import ir.acharkit.android.component.Progress;
-import ir.acharkit.android.component.progress.FadeProgress;
 import ir.acharkit.android.component.progress.LoadingIndicatorProgress;
 import ir.acharkit.android.demo.R;
 import ir.acharkit.android.util.Util;
@@ -48,11 +47,21 @@ public class TestDialog extends AbstractActivity {
                 .setProgressbar(progress)
                 .setButtonsViewOrientation(LinearLayout.VERTICAL)
                 .addButton("button1", 5, 0xFF0A8A12, 0xFFFFFFFF, onClickListenerOne(), Gravity.CENTER, 8)
-                .addDismissButton("dismiss", 5, 0xFFFF0000, 0xFFFFFFFF, Gravity.CENTER, 8)
+                .addButton("dismiss", 5, 0xFFFF0000, 0xFFFFFFFF, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        builder.dismiss();
+                    }
+                }, Gravity.CENTER, 8)
                 .setCancelable(true)
                 .setCanceledOnTouchOutside(false)
                 .setOnCancelListener(onCancelListener())
-                .setOnDismissListener(onDismissListener())
+                .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+
+                    }
+                })
                 .show();
     }
 

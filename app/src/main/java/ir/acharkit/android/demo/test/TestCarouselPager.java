@@ -105,6 +105,7 @@ public class TestCarouselPager extends AbstractActivity {
             testCarouselModels.add(model);
         }
 
+        carousel.setCurrentPosition(3);
         carousel.addAll(testCarouselModels);
 
         carousel.setSnappingListener(new CarouselListener() {

@@ -4,14 +4,16 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ir.acharkit.android.component.tabPager.TabPagerView
-        android:id="@+id/tabLayout"
+    <Button
+        android:id="@+id/add_job"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text="Start Job" />
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/viewPager"
+    <Button
+        android:id="@+id/remove_job"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content"
+        android:text="Stop Job" />
 
 </LinearLayout>

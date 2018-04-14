@@ -3,13 +3,16 @@ package ir.acharkit.android.component;
 import android.support.annotation.ColorInt;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 
 import java.util.ArrayList;
 
+import ir.acharkit.android.app.AbstractActivity;
 import ir.acharkit.android.app.AbstractFragment;
 import ir.acharkit.android.component.bottomTab.BottomTabView;
+import ir.acharkit.android.component.bottomTab.OnTabChangeListener;
 import ir.acharkit.android.component.bottomTab.model.BottomTabModel;
 
 /**
@@ -20,17 +23,21 @@ import ir.acharkit.android.component.bottomTab.model.BottomTabModel;
 public class BottomTab {
 
     private static final String TAG = BottomTab.class.getName();
+    private static final int ANIMATION_DURATION = 300;
+    private static BottomTab bottomTab;
     private ArrayList<BottomTabModel> tabList = new ArrayList<>();
-    private AppCompatActivity activity;
+    private AbstractActivity activity;
     private BottomTabView bottomTabView;
     private int container;
+    private boolean mainTab = false;
+    private OnTabChangeListener tabChangeListener;
 
     /**
      * @param activity
      * @param frameLayoutId
      * @param bottomTabId
      */
-    public BottomTab(AppCompatActivity activity, @IdRes int frameLayoutId, @IdRes int bottomTabId) {
+    public BottomTab(AbstractActivity activity, @IdRes int frameLayoutId, @IdRes int bottomTabId) {
         View view = activity.getWindow().getDecorView();
         init(activity, view, frameLayoutId, bottomTabId);
     }
@@ -41,8 +48,17 @@ public class BottomTab {
      * @param frameLayoutId
      * @param bottomTabId
      */
-    public BottomTab(AppCompatActivity activity, View view, @IdRes int frameLayoutId, @IdRes int bottomTabId) {
+    public BottomTab(AbstractActivity activity, View view, @IdRes int frameLayoutId, @IdRes int bottomTabId) {
         init(activity, view, frameLayoutId, bottomTabId);
+    }
+
+    /**
+     * @return instance of BottomTab
+     */
+    public static BottomTab getBottomTab() {
+        if (bottomTab == null)
+            throw new NullPointerException("You must be create instance from BottomTab");
+        return bottomTab;
     }
 
     /**
@@ -51,17 +67,19 @@ public class BottomTab {
      * @param frameLayoutId
      * @param bottomTabId
      */
-    private void init(AppCompatActivity activity, View view, @IdRes final int frameLayoutId, @IdRes int bottomTabId) {
+    private void init(final AbstractActivity activity, View view, @IdRes final int frameLayoutId, @IdRes int bottomTabId) {
         this.activity = activity;
         container = frameLayoutId;
         bottomTabView = view.findViewById(bottomTabId);
         bottomTabView.setTabChangeListener(new BottomTabView.TabChangeListener() {
             @Override
             public void onTabChanged(int index) {
+                if (getTabChangeListener() != null) getTabChangeListener().tabChange(index);
                 AbstractFragment fragment = tabList.get(index).getFragment();
                 presentTabFragment(fragment, container);
             }
         });
+        bottomTab = this;
     }
 
     /**
@@ -94,11 +112,8 @@ public class BottomTab {
         tabList.add(tabModel);
     }
 
-    /**
-     * @param tabChangeListener
-     */
-    private void setTabChangeListener(BottomTabView.TabChangeListener tabChangeListener) {
-        bottomTabView.setTabChangeListener(tabChangeListener);
+    public void setChangeResume(int index) {
+        bottomTabView.setSelected(index);
     }
 
     /**
@@ -141,7 +156,8 @@ public class BottomTab {
      * @param container layout id
      */
     private void presentTabFragment(@NonNull AbstractFragment fragment, @IdRes int container) {
-        fragment.actionFragment(container, AbstractFragment.TYPE_REPLACE, true);
+        fragment.actionFragment(container, AbstractFragment.TYPE_REPLACE, mainTab);
+        mainTab = true;
     }
 
     /**
@@ -154,11 +170,82 @@ public class BottomTab {
     }
 
     /**
+     * show BottomTabView
+     */
+    public void show() {
+        if (bottomTabView.getVisibility() == View.VISIBLE)
+            return;
+        TranslateAnimation animate = new TranslateAnimation(0, 0, bottomTabView.getHeight(), 0);
+        animate.setDuration(ANIMATION_DURATION);
+        bottomTabView.startAnimation(animate);
+        animate.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                bottomTabView.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+    }
+
+    /**
+     * hide BottomTabView
+     */
+    public void hide() {
+        if (bottomTabView.getVisibility() == View.GONE)
+            return;
+        bottomTabView.setVisibility(View.GONE);
+        TranslateAnimation animate = new TranslateAnimation(0, 0, 0, bottomTabView.getHeight());
+        animate.setDuration(ANIMATION_DURATION);
+        bottomTabView.startAnimation(animate);
+    }
+
+    /**
+     * @return TabChangeListener
+     */
+    private OnTabChangeListener getTabChangeListener() {
+        return tabChangeListener;
+    }
+
+    /**
+     * @param tabChangeListener the new listener to set, or null to set no listener
+     */
+    public void setTabChangeListener(OnTabChangeListener tabChangeListener) {
+        this.tabChangeListener = tabChangeListener;
+    }
+
+    /**
+     * @param index           add badge to index of bottomTab
+     * @param backgroundColor change badge backgroundColor
+     * @param textColor       change badge textColor
+     * @param number          change badge number
+     */
+    public void addBadge(int index, int backgroundColor, int textColor, int number) {
+        bottomTabView.addBadge(index, backgroundColor, textColor, number);
+    }
+
+    /**
+     * @param index remove badge from index of bottomTab
+     */
+    public void removeBadge(int index) {
+        bottomTabView.removeBadge(index);
+    }
+
+    /**
      * type of animation
      */
     public enum EnableType {
-        TEXT_ANIMATION,
-        COLOR_ANIMATION,
+        TRANSLATION_ANIMATION,
+        NO_ANIMATION,
         ALPHA_ANIMATION,
     }
+
 }

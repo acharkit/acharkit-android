@@ -1,7 +1,5 @@
 package ir.acharkit.android.component.bottomTab.model;
 
-import android.support.v4.app.Fragment;
-
 import ir.acharkit.android.app.AbstractFragment;
 
 /**

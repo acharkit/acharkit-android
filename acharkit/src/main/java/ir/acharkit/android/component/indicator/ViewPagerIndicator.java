@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ir.acharkit.android.R;
-import ir.acharkit.android.util.Color;
+import ir.acharkit.android.util.Colour;
 
 /**
  * Author:  Alireza Tizfahm Fard
@@ -155,7 +155,7 @@ public class ViewPagerIndicator extends LinearLayoutCompat implements ViewPager.
         final FrameLayout.LayoutParams indexParams = new FrameLayout.LayoutParams(itemSize, itemSize);
         indexParams.gravity = Gravity.CENTER;
         index.setLayoutParams(indexParams);
-        shapeView(index, Color.WHITE, Color.WHITE);
+        shapeView(index, Colour.WHITE, Colour.WHITE);
         index.setScaleType(ImageView.ScaleType.FIT_CENTER);
         return index;
     }
@@ -168,7 +168,7 @@ public class ViewPagerIndicator extends LinearLayoutCompat implements ViewPager.
     public void shapeView(ImageView imageView, int color, int colorStroke) {
         GradientDrawable shape = new GradientDrawable();
         shape.setShape(GradientDrawable.OVAL);
-        shape.setCornerRadii(new float[]{8, 8, 8, 8, 0, 0, 0, 0});
+        shape.setCornerRadii(new float[]{8, 8, 8, 8});
         shape.setColor(color);
         shape.setStroke(4, colorStroke);
         imageView.setBackgroundDrawable(shape);

@@ -13,7 +13,7 @@ import ir.acharkit.android.annotation.FragmentStack;
  * Email:   alirezat775@gmail.com
  */
 
-public abstract class AbstractFragment extends Fragment {
+public class AbstractFragment extends Fragment {
 
     public static final int TYPE_REPLACE = 0;
     public static final int TYPE_ADD = 1;

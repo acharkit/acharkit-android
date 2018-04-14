@@ -22,11 +22,11 @@ public class LineIndicatorProgress extends AbstractProgress {
     private boolean reverse = true;
 
     public LineIndicatorProgress(Context context) {
-        super(context, null);
+        this(context, null);
     }
 
     public LineIndicatorProgress(Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs, 0);
+        this(context, attrs, 0);
     }
 
     public LineIndicatorProgress(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
@@ -37,7 +37,7 @@ public class LineIndicatorProgress extends AbstractProgress {
     public void shapeView(ImageView imageView, int color, int colorStroke) {
         GradientDrawable shape = new GradientDrawable();
         shape.setShape(GradientDrawable.LINE);
-        shape.setCornerRadii(new float[]{8, 8, 8, 8, 0, 0, 0, 0});
+        shape.setCornerRadii(new float[]{8, 8, 8, 8});
         shape.setColor(color);
         shape.setStroke(4, colorStroke);
         imageView.setBackgroundDrawable(shape);

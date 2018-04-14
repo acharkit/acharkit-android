@@ -38,7 +38,7 @@ public class IndicatorPagerAdapter extends FragmentStatePagerAdapter {
 
     /**
      * @param position
-     * @return
+     * @return raw item model
      */
     public IndicatorPagerModel getRawItem(int position) {
         return items.get(position);

@@ -1,5 +1,6 @@
 package ir.acharkit.android.demo.test;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 
@@ -7,6 +8,7 @@ import ir.acharkit.android.app.AbstractActivity;
 import ir.acharkit.android.component.TabPager;
 import ir.acharkit.android.demo.R;
 import ir.acharkit.android.demo.UseFragment;
+import ir.acharkit.android.util.Colour;
 import ir.acharkit.android.util.Log;
 
 /**
@@ -41,14 +43,15 @@ public class TestViewPager extends AbstractActivity {
 
         final TabPager tab = new TabPager(this, R.id.viewPager, R.id.tabLayout);
         tab.setOffscreenPageLimit(3);
-        tab.setIndicatorColor(0xffffdd33);
+        tab.setIndicatorColor(Colour.BLUE);
         tab.setIndicatorHeight(4);
-        tab.setTabItemColor(0xffff0033, 0xff00ee11);
+        tab.setTabItemColor(Colour.BLUE, Colour.RED);
 
         tab.add(useFragment0, "One", R.mipmap.ic_launcher);
         tab.add(useFragment1, "Two", R.mipmap.ic_launcher);
         tab.add(useFragment2, "Three", R.mipmap.ic_launcher);
-        Log.d(TAG, "getVisibleFragment:" + getFragmentList());
+        tab.setFont("OpenSans.ttf", Typeface.NORMAL);
+        tab.addBadge(1, Colour.RED, Colour.WHITE, 1);
 
         tab.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -61,6 +64,10 @@ public class TestViewPager extends AbstractActivity {
             @Override
             public void onPageSelected(int position) {
                 Log.i(TAG, "onPageSelected : position: " + position);
+                if (position == 2)
+                    tab.removeBadge(1);
+                if (position == 0)
+                    tab.addBadge(1, Colour.RED, Colour.WHITE, 96);
             }
 
             @Override

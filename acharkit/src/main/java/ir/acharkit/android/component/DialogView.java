@@ -353,6 +353,7 @@ public abstract class DialogView {
          * @return
          */
         @CheckResult
+        @Deprecated
         public Builder addDismissButton(@Size(min = 2) String textButton, int textSize, @ColorInt int buttonBackgroundColor, @ColorInt int buttonTextColor) {
             addButton(textButton, textSize, buttonBackgroundColor, buttonTextColor, null, true, Gravity.CENTER, 0);
             return this;
@@ -367,6 +368,7 @@ public abstract class DialogView {
          * @return
          */
         @CheckResult
+        @Deprecated
         public Builder addDismissButton(@Size(min = 2) String textButton, int textSize, @ColorInt int buttonBackgroundColor, @ColorInt int buttonTextColor, @ViewGravity int gravity) {
             addButton(textButton, textSize, buttonBackgroundColor, buttonTextColor, null, true, gravity, 0);
             return this;
@@ -382,6 +384,7 @@ public abstract class DialogView {
          * @return
          */
         @CheckResult
+        @Deprecated
         public Builder addDismissButton(@Size(min = 2) String textButton, int textSize, @ColorInt int buttonBackgroundColor, @ColorInt int buttonTextColor, @ViewGravity int gravity, int cornerRadius) {
             addButton(textButton, textSize, buttonBackgroundColor, buttonTextColor, null, true, gravity, cornerRadius);
             return this;

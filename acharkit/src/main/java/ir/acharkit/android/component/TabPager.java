@@ -5,12 +5,12 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import ir.acharkit.android.component.tabPager.TabPagerView;
 import ir.acharkit.android.component.tabPager.adapter.TabPagerAdapter;
 import ir.acharkit.android.component.tabPager.model.TabPagerModel;
 import ir.acharkit.android.util.helper.ConvertHelper;
@@ -24,8 +24,9 @@ import ir.acharkit.android.util.helper.ConvertHelper;
 
 public class TabPager {
 
+    private static final String TAG = TabPager.class.getName();
     private ViewPager viewPager;
-    private TabLayout tabLayout;
+    private TabPagerView tabLayout;
     private TabPagerAdapter adapter;
     private AppCompatActivity activity;
     private ViewPager.OnPageChangeListener changeListener;
@@ -82,8 +83,16 @@ public class TabPager {
             if (itemIcon != 0) {
                 tabLayout.getTabAt(i).setIcon(adapter.getRawItem(i).getIcon());
             }
+
         }
     }
+
+    /*
+        tabViews.add(((ViewGroup) tabLayout.getChildAt(0)).getChildAt(i));
+        Log.d(TAG, tabViews.toString() + "\n" + tabViews.size());
+
+ */
+
 
     /**
      * @param fragmentClass fragment for show content
@@ -130,6 +139,31 @@ public class TabPager {
         adapter.getRawItem(index).setTitle(title);
         adapter.notifyDataSetChanged();
         refreshIcons();
+    }
+
+    /**
+     * @param index           add badge to index of bottomTab
+     * @param backgroundColor change badge backgroundColor
+     * @param textColor       change badge textColor
+     * @param number          change badge number
+     */
+    public void addBadge(int index, @ColorInt int backgroundColor, @ColorInt int textColor, int number) {
+        tabLayout.addBadge(index, backgroundColor, textColor, number);
+    }
+
+    /**
+     * @param index remove badge from index of bottomTab
+     */
+    public void removeBadge(int index) {
+        tabLayout.removeBadge(index);
+    }
+
+    /**
+     * @param pathFont font name from fonts folder in assets
+     * @param typeface type of typeface like BOLD, NORMAL
+     */
+    public void setFont(@NonNull String pathFont, int typeface) {
+        tabLayout.setFont(pathFont, typeface);
     }
 
     /**

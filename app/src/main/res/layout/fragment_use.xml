@@ -12,7 +12,7 @@
         android:layout_weight="1"
         android:gravity="center"
         android:text="One"
-        android:textSize="24dip" />
+        android:textSize="24dp" />
 
 
 </LinearLayout>

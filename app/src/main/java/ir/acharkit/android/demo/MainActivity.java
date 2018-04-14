@@ -26,6 +26,7 @@ import ir.acharkit.android.demo.test.TestGif;
 import ir.acharkit.android.demo.test.TestImageLoader;
 import ir.acharkit.android.demo.test.TestIntroPager;
 import ir.acharkit.android.demo.test.TestProgress;
+import ir.acharkit.android.demo.test.TestTag;
 import ir.acharkit.android.demo.test.TestUtils;
 import ir.acharkit.android.demo.test.TestViewPager;
 import ir.acharkit.android.downloader.Downloader;
@@ -53,6 +54,8 @@ public class MainActivity extends AbstractActivity {
         initDatabase();
         crypt();
         font();
+
+
         findViewById(R.id.start_activity_fragment).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -113,6 +116,13 @@ public class MainActivity extends AbstractActivity {
             @Override
             public void onClick(View view) {
                 startActivity(TestBottomTab.class);
+            }
+        });
+
+        findViewById(R.id.start_activity_tag).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(TestTag.class);
             }
         });
 

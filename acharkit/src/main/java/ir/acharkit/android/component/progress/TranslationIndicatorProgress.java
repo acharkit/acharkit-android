@@ -23,11 +23,11 @@ public class TranslationIndicatorProgress extends AbstractProgress {
     private boolean loop = true;
 
     public TranslationIndicatorProgress(Context context) {
-        super(context, null);
+        this(context, null);
     }
 
     public TranslationIndicatorProgress(Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs, 0);
+        this(context, attrs, 0);
     }
 
     public TranslationIndicatorProgress(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
@@ -38,7 +38,7 @@ public class TranslationIndicatorProgress extends AbstractProgress {
     public void shapeView(ImageView imageView, int color, int colorStroke) {
         GradientDrawable shape = new GradientDrawable();
         shape.setShape(GradientDrawable.OVAL);
-        shape.setCornerRadii(new float[]{8, 8, 8, 8, 0, 0, 0, 0});
+        shape.setCornerRadii(new float[]{8, 8, 8, 8});
         shape.setColor(color);
         shape.setStroke(4, colorStroke);
         imageView.setBackgroundDrawable(shape);

@@ -150,8 +150,7 @@ public class Carousel {
      */
     public void setCurrentPosition(int currentPosition) {
         this.currentPosition = currentPosition;
-        carouselView.setCurrentPosition(currentPosition);
-        carouselView.smoothScrollToPosition(currentPosition);
+        carouselView.scrollToPosition(currentPosition);
     }
 
     /**

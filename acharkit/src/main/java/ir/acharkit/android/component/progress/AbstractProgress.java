@@ -2,7 +2,6 @@ package ir.acharkit.android.component.progress;
 
 import android.animation.Animator;
 import android.content.Context;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutCompat;
@@ -58,11 +57,11 @@ public abstract class AbstractProgress extends LinearLayoutCompat {
     private int color;
 
     public AbstractProgress(Context context) {
-        super(context);
+        this(context, null);
     }
 
     public AbstractProgress(Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
+        this(context, null, 0);
     }
 
     public AbstractProgress(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {

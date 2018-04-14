@@ -6,7 +6,7 @@ import android.support.annotation.Size;
 import android.view.View;
 
 import ir.acharkit.android.component.progress.AbstractProgress;
-import ir.acharkit.android.util.Color;
+import ir.acharkit.android.util.Colour;
 
 /**
  * Author:  Alireza Tizfahm Fard
@@ -17,7 +17,7 @@ import ir.acharkit.android.util.Color;
 
 public class Progress {
 
-    public static final int DEFAULT_COLOR = Color.WHITE;
+    public static final int DEFAULT_COLOR = Colour.WHITE;
     private static final int DEFAULT_TIME_DURATION = 500;
     private AbstractProgress progress;
     private Context context;
@@ -94,6 +94,8 @@ public class Progress {
      * recommended use this instead changeVisibility
      */
     public void hide() {
+        if (getProgress().getVisibility() == View.GONE)
+            return;
         getProgress().setVisibility(View.GONE);
         getProgress().animator().end();
     }
@@ -103,6 +105,8 @@ public class Progress {
      * recommended use this instead changeVisibility
      */
     public void show() {
+        if (getProgress().getVisibility() == View.VISIBLE)
+            return;
         getProgress().setVisibility(View.VISIBLE);
         getProgress().animator().start();
     }

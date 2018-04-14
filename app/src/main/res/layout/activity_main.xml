@@ -70,6 +70,12 @@
                 android:text="Start Bottom Tab" />
 
             <Button
+                android:id="@+id/start_activity_tag"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Start Tag" />
+
+            <Button
                 android:id="@+id/start_activity_image_loader"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

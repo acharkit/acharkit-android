@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import ir.acharkit.android.app.AbstractFragment;
+import ir.acharkit.android.component.BottomTab;
 import ir.acharkit.android.demo.R;
 
 /**
@@ -35,6 +36,13 @@ public class UseFragmentOne extends AbstractFragment {
         test_fragment.setText(getTags());
         return layout;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        BottomTab.getBottomTab().setChangeResume(0);
+    }
+
 
     public String getTags() {
         return tags;

@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
+import android.os.PowerManager;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.view.Gravity;
@@ -34,13 +35,13 @@ import ir.acharkit.android.util.helper.ViewHelper;
 
 public class Util {
 
-    //    https://regex101.com/r/0VTTem/2
-    public static final String REGEX_PHONE_NUMBER_IRAN = "^[^\\d]*(?:|0|0098|\\+98|98)((9\\d{2})\\d{7})[^\\d]*$";
+    // https://regex101.com/r/0VTTem/2
+    private static final String REGEX_PHONE_NUMBER_IRAN = "^[^\\d]*(?:|0|0098|\\+98|98)((9\\d{2})\\d{7})[^\\d]*$";
     private static final String REGEX_EMAIL = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
     private static final String TAG = Util.class.getName();
 
     /**
-     * @param email
+     * @param email entered
      * @return validate email address
      */
     public static boolean isValidateEmail(@NonNull String email) {
@@ -55,7 +56,7 @@ public class Util {
 
 
     /**
-     * @param inputNumber
+     * @param inputNumber entered
      * @return validate phone number (specific for iran number)
      */
     public static String isValidPhoneNumberIran(@NonNull String inputNumber) {
@@ -221,5 +222,18 @@ public class Util {
         } catch (Exception e) {
             Log.w(TAG, e);
         }
+    }
+
+    public static boolean checkIfPowerSaverModeEnabled(Context context) {
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                final PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+                return pm.isPowerSaveMode();
+            }
+        } catch (Exception e) {
+            Log.w(TAG, e);
+        }
+
+        return false;
     }
 }

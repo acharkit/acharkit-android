@@ -32,7 +32,7 @@ public class Cache {
     /**
      * @return
      */
-    public static Context getContext() {
+    private static Context getContext() {
         return context;
     }
 

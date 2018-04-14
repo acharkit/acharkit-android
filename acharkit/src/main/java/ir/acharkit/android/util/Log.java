@@ -72,10 +72,10 @@ public class Log {
 
     /**
      * @param tag
-     * @param throwable
      * @param message
+     * @param throwable
      */
-    static public void e(@NonNull String tag, Throwable throwable, String message) {
+    public static void e(@NonNull String tag, String message, Throwable throwable) {
         if (Log.getDebugMode()) {
             if (Log.getAcharkitLog()) {
                 android.util.Log.e(tag, message, throwable);
@@ -89,10 +89,11 @@ public class Log {
 
     /**
      * @param tag
-     * @param throwable
      * @param message
+     * @param throwable
      */
-    static public void wtf(@NonNull String tag, Throwable throwable, String message) {
+
+    public static void wtf(@NonNull String tag, String message, Throwable throwable) {
         if (Log.getDebugMode()) {
             if (Log.getAcharkitLog()) {
                 android.util.Log.wtf(tag, message, throwable);
@@ -108,7 +109,7 @@ public class Log {
      * @param tag
      * @param throwable
      */
-    static public void wtf(@NonNull String tag, Throwable throwable) {
+    public static void wtf(@NonNull String tag, Throwable throwable) {
         if (Log.getDebugMode()) {
             if (Log.getAcharkitLog()) {
                 android.util.Log.wtf(tag, throwable);
@@ -124,7 +125,7 @@ public class Log {
      * @param tag
      * @param throwable
      */
-    static public void w(@NonNull String tag, Throwable throwable) {
+    public static void w(@NonNull String tag, Throwable throwable) {
         if (Log.getDebugMode()) {
             if (Log.getAcharkitLog()) {
                 android.util.Log.w(tag, throwable);
@@ -138,11 +139,11 @@ public class Log {
 
     /**
      * @param tag
-     * @param throwable
      * @param message
      * @param args
+     * @param throwable
      */
-    static public void e(@NonNull String tag, Throwable throwable, String message, Object args) {
+    public static void e(@NonNull String tag, String message, Object args, Throwable throwable) {
         if (Log.getDebugMode()) {
             if (Log.getAcharkitLog()) {
                 android.util.Log.e(tag, String.format(message, args), throwable);

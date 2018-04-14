@@ -310,7 +310,7 @@ public class CarouselView extends RecyclerView {
     /**
      * @param positionPlus scroll to new position from previous position
      */
-    private void scrolling(int positionPlus) {
+    public void scrolling(int positionPlus) {
         if (calculateSnapViewPosition() > -1) {
             int centerViewPosition = calculateSnapViewPosition() + (positionPlus);
             if (centerViewPosition <= 0)

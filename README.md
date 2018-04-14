@@ -6,12 +6,12 @@
   For more information, go to the site of [AcharKit](http://www.acharkit.ir)
 
 ```code
-    compile project(':acharkit-release-0.0.4')
+    compile project(':acharkit-release-0.0.5')
     or
-    implementation project(':acharkit-release-0.0.4')
+    implementation project(':acharkit-release-0.0.5')
 ```
 
-# [download version release-0.0.4](https://raw.githubusercontent.com/acharkit/acharkit-android/master/release/acharkit-release-0.0.4.aar)
+# [download version release-0.0.5](https://raw.githubusercontent.com/acharkit/acharkit-android/master/release/acharkit-release-0.0.5.aar)
 
 
 Note : Helper classes have many methods that may not be used here
@@ -52,6 +52,42 @@ Use TabPager
         tab.add(useFragment0.setTagId(0), "One", R.mipmap.ic_launcher);
         tab.add(useFragment1.setTagId(1), "Two", R.mipmap.ic_launcher);
         tab.add(useFragment2.setTagId(2), "Three", R.mipmap.ic_launcher);
+```
+
+
+Use Tag
+```code
+
+        TagView tagView = findViewById(R.id.tag_view);
+        tagView.setGravity(Gravity.LEFT);
+
+        TestTagAdapter testTagAdapter = new TestTagAdapter(this);
+        final Tag tag = new Tag(this, R.id.tag_view, testTagAdapter);
+        for (int i = 0; i < 15; i++) {
+            j = i;
+            TestTagModel tagModel = new TestTagModel();
+            tagModel.setId(i);
+            tagModel.setTitle("# " + i);
+            arrayList.add(tagModel);
+        }
+
+        tag.addAll(arrayList);
+        
+
+```
+
+Use BadgeView
+```code
+
+         badgeView = new BadgeView(context);
+                badgeView.setParentView(view);
+                badgeView.setNumber(54);
+                badgeView.setBadgeColor(Colour.RED, Colour.WHITE);
+                badgeView.setBadgePosition(BadgeView.POSITION_TOP_RIGHT);
+                badgeView.setFont("OpenSans.ttf", Typeface.NORMAL);
+                badgeView.show();
+        
+
 ```
 
 
