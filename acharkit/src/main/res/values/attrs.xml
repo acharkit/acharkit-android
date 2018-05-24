@@ -7,9 +7,13 @@
     </declare-styleable>
 
     <declare-styleable name="GifView">
-        <attr name="GifWidth" format="integer"/>
-        <attr name="GifHeight" format="integer"/>
+        <attr name="gifWidth" format="integer"/>
+        <attr name="gifHeight" format="integer"/>
         <attr name="repeatCount" format="integer"/>
         <attr name="src" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="bottomSheet">
+        <attr name="dragView" format="integer"/>
     </declare-styleable>
 </resources>

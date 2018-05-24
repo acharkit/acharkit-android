@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="bottom"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/show_collapse_bottom_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_gravity="center|bottom"
+        android:layout_margin="8dp"
+        android:gravity="center"
+        android:text="Show/Collapse"
+        android:textColor="@android:color/black"
+        android:textSize="16dp" />
+
+
+    <ir.acharkit.android.component.bottomSheet.BottomSheetView
+        android:id="@+id/bottom_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#e4e4e4">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_gravity="center|bottom"
+                android:layout_margin="8dp"
+                android:clickable="false"
+                android:gravity="center"
+                android:text="button one"
+                android:textColor="@android:color/black"
+                android:textSize="16dp" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_gravity="center|bottom"
+                android:layout_margin="8dp"
+                android:clickable="false"
+                android:gravity="center"
+                android:text="button two"
+                android:textColor="@android:color/black"
+                android:textSize="16dp" />
+
+            <ListView
+                android:id="@+id/list"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent">
+            </ListView>
+
+        </LinearLayout>
+
+    </ir.acharkit.android.component.bottomSheet.BottomSheetView>
+
+</LinearLayout>

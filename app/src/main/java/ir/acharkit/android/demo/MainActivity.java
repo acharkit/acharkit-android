@@ -18,6 +18,8 @@ import java.util.Map;
 import ir.acharkit.android.app.AbstractActivity;
 import ir.acharkit.android.connection.ConnectionRequest;
 import ir.acharkit.android.connection.OnRequestListener;
+import ir.acharkit.android.date.DateUtil;
+import ir.acharkit.android.demo.test.TestBottomSheet;
 import ir.acharkit.android.demo.test.TestBottomTab;
 import ir.acharkit.android.demo.test.TestCarouselPager;
 import ir.acharkit.android.demo.test.TestDialog;
@@ -54,6 +56,7 @@ public class MainActivity extends AbstractActivity {
         initDatabase();
         crypt();
         font();
+        calendar();
 
 
         findViewById(R.id.start_activity_fragment).setOnClickListener(new View.OnClickListener() {
@@ -119,6 +122,13 @@ public class MainActivity extends AbstractActivity {
             }
         });
 
+        findViewById(R.id.start_activity_bottom_sheet).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(TestBottomSheet.class);
+            }
+        });
+
         findViewById(R.id.start_activity_tag).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -148,6 +158,22 @@ public class MainActivity extends AbstractActivity {
         });
     }
 
+    private void calendar() {
+        Log.i(TAG, "getYear : " + DateUtil.getPersianDate().getYear());
+        Log.i(TAG, "getMonth : " + DateUtil.getPersianDate().getMonth());
+        Log.i(TAG, "getDayOfMonth : " + DateUtil.getPersianDate().getDayOfMonth());
+        Log.i(TAG, "isLeapYear : " + DateUtil.getPersianDate().isLeapYear());
+
+        Log.i(TAG, "getYear : " + DateUtil.getIslamicDate().getYear());
+        Log.i(TAG, "getMonth : " + DateUtil.getIslamicDate().getMonth());
+        Log.i(TAG, "getDayOfMonth : " + DateUtil.getIslamicDate().getDayOfMonth());
+
+        Log.i(TAG, "getYear : " + DateUtil.getCivilDate().getYear());
+        Log.i(TAG, "getMonth : " + DateUtil.getCivilDate().getMonth());
+        Log.i(TAG, "getDayOfMonth : " + DateUtil.getCivilDate().getDayOfMonth());
+
+    }
+
     private void font() {
         Font.fromAsset(this, "OpenSans.ttf", Typeface.BOLD_ITALIC, findViewById(R.id.start_activity_fragment));
         Font.fromAsset(this, "OpenSans.ttf", Typeface.BOLD_ITALIC, findViewById(R.id.start_activity_viewpager));
@@ -163,7 +189,8 @@ public class MainActivity extends AbstractActivity {
 
     private void initDatabase() {
         Database.init(this);
-        Database.getInstance().prepareDB("db.sqlite", 1);
+//        Database.getInstance().prepareDatabaseFile(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath(), "db.sqlite", 1);
+        Database.getInstance().prepareDatabaseAssets("db.sqlite", 1);
     }
 
     private void cache() {
@@ -178,7 +205,6 @@ public class MainActivity extends AbstractActivity {
     }
 
     private void log() {
-
         Log.setDebugMode(true);
         Log.setAcharkitLog(true);
     }

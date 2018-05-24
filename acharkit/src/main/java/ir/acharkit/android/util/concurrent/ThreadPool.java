@@ -53,7 +53,7 @@ public class ThreadPool {
     /**
      * cancel thread work
      */
-    public void cancel() {
+    public void onDestroy() {
         ThreadWorker.interrupted();
     }
 

@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -94,7 +95,12 @@ public class Database {
         closeDatabase();
     }
 
-    public boolean prepareDB(@NonNull String databaseName, int version) {
+    @Deprecated
+    public boolean prepareDB() throws NoSuchMethodException {
+        throw new NoSuchMethodException("This method was Deprecated, use prepareDatabase method");
+    }
+
+    public boolean prepareDatabaseAssets(@NonNull String databaseName, int version) {
         Cache.setContext(getContext());
         InputStream is = null;
         int currentVersion = Cache.get(getVersionDataBase(), 0);
@@ -104,6 +110,30 @@ public class Database {
         setDatabaseName(databaseName);
         try {
             is = context.getAssets().open(getDatabaseName());
+        } catch (IOException e) {
+            Log.w(TAG, e);
+            return false;
+        }
+        setFilePath();
+        if (currentVersion < version) {
+            Cache.put(getVersionDataBase(), version);
+            getFilePath().delete();
+            return checkDatabase(is);
+        } else {
+            return checkDatabase(is);
+        }
+    }
+
+    public boolean prepareDatabaseFile(@NonNull String path, @NonNull String databaseName, int version) {
+        Cache.setContext(getContext());
+        InputStream is = null;
+        int currentVersion = Cache.get(getVersionDataBase(), 0);
+        if (currentVersion > version) {
+            throw new RuntimeException("can't downgrade database version");
+        }
+        setDatabaseName(databaseName);
+        try {
+            is = new FileInputStream(path + "/" + databaseName);
         } catch (IOException e) {
             Log.w(TAG, e);
             return false;

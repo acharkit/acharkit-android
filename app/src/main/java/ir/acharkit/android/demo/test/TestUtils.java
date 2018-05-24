@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.view.View;
 import android.widget.Button;
@@ -183,7 +184,7 @@ public class TestUtils extends AbstractActivity {
                 Util.arabicToDecimal("٠١٢٣٤٥٦٧٨٩") + "\n" +
                 Util.isValidPhoneNumberIran("09101234567"));
         Util.copyToClipboard(TestUtils.this, "test", "clipboard copyToClipboard");
-
+        Util.copyFromAssets(this, Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath(), "db.sqlite.zip");
     }
 
     private void testConvertHelper() {

@@ -6,12 +6,12 @@
   For more information, go to the site of [AcharKit](http://www.acharkit.ir)
 
 ```code
-    compile project(':acharkit-release-0.0.5')
+    compile project(':acharkit-release-0.1.0')
     or
-    implementation project(':acharkit-release-0.0.5')
+    implementation project(':acharkit-release-0.1.0')
 ```
 
-# [download version release-0.0.5](https://raw.githubusercontent.com/acharkit/acharkit-android/master/release/acharkit-release-0.0.5.aar)
+# [download version release-0.1.0](https://raw.githubusercontent.com/acharkit/acharkit-android/master/release/acharkit-release-0.1.0.aar)
 
 
 Note : Helper classes have many methods that may not be used here

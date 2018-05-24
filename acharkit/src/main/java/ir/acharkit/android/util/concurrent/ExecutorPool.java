@@ -22,10 +22,10 @@ public class ExecutorPool {
     }
 
     /**
-     * @param runnable
+     * @param task
      */
-    public void submit(Runnable runnable) {
-        getExecutor().submit(runnable);
+    public void submit(Runnable task) {
+        getExecutor().submit(task);
     }
 
     /**

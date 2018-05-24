@@ -48,8 +48,8 @@ public class GifView extends View {
 
         final TypedArray attributes = context.getTheme().obtainStyledAttributes(attrs, R.styleable.GifView, 0, 0);
         try {
-            setGifViewWidth(attributes.getInteger(R.styleable.GifView_GifWidth, 0));
-            setGifViewHeight(attributes.getInteger(R.styleable.GifView_GifHeight, 0));
+            setGifViewWidth(attributes.getInteger(R.styleable.GifView_gifWidth, 0));
+            setGifViewHeight(attributes.getInteger(R.styleable.GifView_gifHeight, 0));
             setRepeatCount(attributes.getInteger(R.styleable.GifView_repeatCount, INFINITE));
             loadResource(attributes.getResourceId(R.styleable.GifView_src, 0));
         } finally {

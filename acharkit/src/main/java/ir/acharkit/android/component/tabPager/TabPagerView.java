@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import java.util.HashMap;
 
-import ir.acharkit.android.component.badgeView.BadgeView;
+import ir.acharkit.android.component.badge.BadgeView;
 import ir.acharkit.android.util.Font;
 import ir.acharkit.android.util.helper.StringHelper;
 import ir.acharkit.android.util.helper.ViewHelper;

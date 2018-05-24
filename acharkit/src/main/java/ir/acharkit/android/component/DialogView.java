@@ -111,7 +111,6 @@ public abstract class DialogView {
                 dialog.getWindow().setLayout(widthDialog, heightDialog);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             }
-
             return this;
         }
 

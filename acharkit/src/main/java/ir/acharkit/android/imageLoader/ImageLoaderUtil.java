@@ -17,6 +17,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import ir.acharkit.android.util.Log;
+import ir.acharkit.android.util.helper.MimeHelper;
 import ir.acharkit.android.util.helper.StringHelper;
 
 /**
@@ -29,6 +30,12 @@ public class ImageLoaderUtil {
 
     private static final String TAG = ImageLoaderUtil.class.getName();
     private static final int REQUIRED_SIZE = 160;
+
+    static boolean isImageFile(String url) {
+        String mimeType = MimeHelper.getFileExtensionFromUrl(url);
+        String type = MimeHelper.guessMimeTypeFromExtension(mimeType);
+        return type.startsWith("image");
+    }
 
     static Bitmap blur(Bitmap sentBitmap, float scale, int radius) {
         int width = Math.round(sentBitmap.getWidth() * scale);

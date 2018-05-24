@@ -5,7 +5,7 @@ import android.support.annotation.IntDef;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-import ir.acharkit.android.component.badgeView.BadgeView;
+import ir.acharkit.android.component.badge.BadgeView;
 
 /**
  * Author:  Alireza Tizfahm Fard

@@ -1,4 +1,4 @@
-package ir.acharkit.android.component.badgeView;
+package ir.acharkit.android.component.badge;
 
 import android.content.Context;
 import android.graphics.drawable.GradientDrawable;

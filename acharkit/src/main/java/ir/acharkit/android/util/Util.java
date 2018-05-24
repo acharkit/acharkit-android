@@ -16,13 +16,19 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import ir.acharkit.android.annotation.FontType;
 import ir.acharkit.android.annotation.ToastDuration;
+import ir.acharkit.android.util.concurrent.ThreadPool;
 import ir.acharkit.android.util.helper.ConvertHelper;
 import ir.acharkit.android.util.helper.StringHelper;
 import ir.acharkit.android.util.helper.ViewHelper;
@@ -53,7 +59,6 @@ public class Util {
             return false;
         }
     }
-
 
     /**
      * @param inputNumber entered
@@ -209,21 +214,39 @@ public class Util {
      * @param is
      * @param os
      */
-    public static void copyStream(InputStream is, OutputStream os) {
-        final int buffer_size = 8192;
+    public static boolean copyStream(@NonNull OutputStream os, @NonNull InputStream is) {
         try {
-            byte[] bytes = new byte[buffer_size];
-            while (true) {
-                int count = is.read(bytes, 0, buffer_size);
-                if (count == -1)
-                    break;
-                os.write(bytes, 0, count);
+            int readied = 0;
+            byte[] buffer = new byte[8 * 1024];
+            while ((readied = is.read(buffer)) > 0) {
+                os.write(buffer, 0, readied);
             }
+            try {
+                is.close();
+            } catch (Exception e) {
+                Log.w(TAG, e);
+            }
+            try {
+                os.flush();
+            } catch (Exception e) {
+                Log.w(TAG, e);
+            }
+            try {
+                os.close();
+            } catch (Exception e) {
+                Log.w(TAG, e);
+            }
+            return true;
         } catch (Exception e) {
             Log.w(TAG, e);
+            return false;
         }
     }
 
+    /**
+     * @param context
+     * @return
+     */
     public static boolean checkIfPowerSaverModeEnabled(Context context) {
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -235,5 +258,22 @@ public class Util {
         }
 
         return false;
+    }
+
+    /**
+     * @param context
+     * @param path
+     * @param assetName
+     * @return
+     */
+    public static boolean copyFromAssets(Context context, String path, String assetName) {
+        try {
+            InputStream is = context.getAssets().open(assetName);
+            File file = new File(path + "/" + assetName);
+            return copyStream(new FileOutputStream(file.getPath()), is);
+        } catch (IOException e) {
+            Log.w(TAG, e);
+            return false;
+        }
     }
 }

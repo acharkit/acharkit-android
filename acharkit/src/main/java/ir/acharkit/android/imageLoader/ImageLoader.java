@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import ir.acharkit.android.imageLoader.cache.DiskCache;
 import ir.acharkit.android.imageLoader.cache.MemoryCache;
 import ir.acharkit.android.imageLoader.cache.OnCacheListener;
+import ir.acharkit.android.util.Log;
 
 /**
  * Author:  Alireza Tizfahm Fard

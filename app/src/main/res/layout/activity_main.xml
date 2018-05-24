@@ -70,6 +70,12 @@
                 android:text="Start Bottom Tab" />
 
             <Button
+                android:id="@+id/start_activity_bottom_sheet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Start Bottom Sheet" />
+
+            <Button
                 android:id="@+id/start_activity_tag"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

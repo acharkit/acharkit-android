@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import ir.acharkit.android.component.BottomTab;
-import ir.acharkit.android.component.badgeView.BadgeView;
+import ir.acharkit.android.component.badge.BadgeView;
 import ir.acharkit.android.util.Colour;
 import ir.acharkit.android.util.Font;
 import ir.acharkit.android.util.helper.ConvertHelper;
