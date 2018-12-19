@@ -4,6 +4,8 @@ import android.Manifest;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -23,6 +25,7 @@ import ir.acharkit.android.demo.test.TestBottomSheet;
 import ir.acharkit.android.demo.test.TestBottomTab;
 import ir.acharkit.android.demo.test.TestCarouselPager;
 import ir.acharkit.android.demo.test.TestDialog;
+import ir.acharkit.android.demo.test.TestDownloader;
 import ir.acharkit.android.demo.test.TestFragment;
 import ir.acharkit.android.demo.test.TestGif;
 import ir.acharkit.android.demo.test.TestImageLoader;
@@ -153,7 +156,7 @@ public class MainActivity extends AbstractActivity {
         findViewById(R.id.start_request_download).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                requestDownload();
+                startActivity(TestDownloader.class);
             }
         });
     }
@@ -189,7 +192,7 @@ public class MainActivity extends AbstractActivity {
 
     private void initDatabase() {
         Database.init(this);
-//        Database.getInstance().prepareDatabaseFile(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath(), "db.sqlite", 1);
+        Database.getInstance().prepareDatabaseFile(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath(), "db.sqlite", 1);
         Database.getInstance().prepareDatabaseAssets("db.sqlite", 1);
     }
 
@@ -212,18 +215,18 @@ public class MainActivity extends AbstractActivity {
     private void requestConnection() {
         JSONObject parameter = new JSONObject();
         try {
-            parameter.put("test1", 1);
-            parameter.put("test2", "value");
+            parameter.put("title", "foo");
+            parameter.put("body", "bar");
+            parameter.put("userId", 1);
         } catch (JSONException e) {
             Log.w(TAG, e);
         }
 
         Map<String, String> header = new HashMap<>();
-        header.put("Access-Token", "1234567890ABC");
+        header.put("Content-type", "application/json");
 
         if (checkNetworkAvailable(this)) {
-            new ConnectionRequest.Builder(this, ConnectionRequest.Method.POST, "http://www.test.com/api")
-                    .trustSSL(true)
+            new ConnectionRequest.Builder(this, ConnectionRequest.Method.POST, "https://jsonplaceholder.typicode.com/posts")
                     .setHeader(header)
                     .setParameters(parameter)
                     .setTimeOut(60 * 2000)
@@ -240,37 +243,6 @@ public class MainActivity extends AbstractActivity {
                             Util.showToast(getApplicationContext(), response, Toast.LENGTH_SHORT);
                         }
                     }).sendRequest();
-        }
-    }
-
-    private void requestDownload() {
-        Map<String, String> header = new HashMap<>();
-        header.put("Access-Token", "1234567890ABC");
-
-        if (checkNetworkAvailable(this)) {
-            new Downloader.Builder(getApplicationContext(), "http://www.xsjjys.com/data/out/60/WHDQ-512049955.png")
-                    .setDownloadDir(String.valueOf(getExternalFilesDir("download")))
-                    .setTimeOut(60 * 2000)
-                    .setFileName("image", "png")
-                    .trustSSL(true)
-                    .setHeader(header)
-                    .setDownloadListener(new OnDownloadListener() {
-                        @Override
-                        public void onCompleted(File file) {
-                            Log.d(TAG, "onCompleted:");
-                        }
-
-                        @Override
-                        public void onFailure(String reason) {
-                            Log.d(TAG, "onFailure:" + reason);
-                        }
-
-                        @Override
-                        public void progressUpdate(int percent, int downloadedSize, int totalSize) {
-                            Log.d(TAG, "progressUpdate:" + percent);
-                        }
-                    }).download();
-
         }
     }
 

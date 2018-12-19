@@ -183,16 +183,17 @@ public abstract class ConnectionRequest {
          * @param trust
          * @return
          */
+        @Deprecated
         public Builder trustSSL(boolean trust) {
-            this.trust = trust;
             return this;
         }
 
         /**
          * @return
          */
+        @Deprecated
         private boolean isTrust() {
-            return trust;
+            return false;
         }
 
         private class Request extends AsyncTask<Void, Void, Void> {
@@ -214,18 +215,7 @@ public abstract class ConnectionRequest {
                         throw new MalformedURLException("The entered URL is not valid");
                     }
                     url = new URL(getUrl());
-                    if (isTrust()) {
-                        if (url.getProtocol().toLowerCase().equals("https")) {
-                            ConnectionUtil.trustHosts();
-                            HttpsURLConnection https = (HttpsURLConnection) url.openConnection();
-                            https.setHostnameVerifier(ConnectionUtil.DO_NOT_VERIFY);
-                            connection = https;
-                        } else {
-                            connection = (HttpURLConnection) url.openConnection();
-                        }
-                    } else {
-                        connection = (HttpURLConnection) url.openConnection();
-                    }
+                    connection = (HttpURLConnection) url.openConnection();
                     connection.setRequestMethod(getMethod());
                     connection.setReadTimeout(getTimeOut() == 0 ? ConnectionUtil.TIME_OUT_CONNECTION : getTimeOut());
                     connection.setConnectTimeout(getTimeOut() == 0 ? ConnectionUtil.TIME_OUT_CONNECTION : getTimeOut());

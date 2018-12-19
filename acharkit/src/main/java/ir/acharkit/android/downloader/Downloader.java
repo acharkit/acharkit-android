@@ -17,10 +17,11 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.util.Map;
 
-import javax.net.ssl.HttpsURLConnection;
-
 import ir.acharkit.android.connection.ConnectionRequest;
 import ir.acharkit.android.connection.ConnectionUtil;
+import ir.acharkit.android.downloader.cacheDatabase.DownloaderDao;
+import ir.acharkit.android.downloader.cacheDatabase.DownloaderModel;
+import ir.acharkit.android.util.Log;
 import ir.acharkit.android.util.helper.MimeHelper;
 
 /**
@@ -28,10 +29,12 @@ import ir.acharkit.android.util.helper.MimeHelper;
  * Date:    11/6/2017
  * Email:   alirezat775@gmail.com
  */
+
 public abstract class Downloader {
     private static final String TAG = Downloader.class.getSimpleName();
 
     public static class Builder {
+        private DownloaderDao dao;
         private DownloadRequest downloadRequest;
         private Context context;
         private String downloadDir;
@@ -39,9 +42,10 @@ public abstract class Downloader {
         private String extension;
         private String url;
         private int timeOut;
+        private int percent;
+        private boolean resume = false;
         private OnDownloadListener downloadListener;
         private Map<String, String> header;
-        private boolean trust = false;
 
         /**
          * @param context
@@ -51,6 +55,7 @@ public abstract class Downloader {
             this.context = context;
             this.url = url;
             downloadRequest = new DownloadRequest();
+            dao = new DownloaderDao(context);
         }
 
         /**
@@ -162,22 +167,44 @@ public abstract class Downloader {
         }
 
         /**
+         * @return
+         */
+        private int getPercent() {
+            return percent;
+        }
+
+        /**
+         * @return
+         */
+        private void setPercent(int percent) {
+            this.percent = percent;
+        }
+
+        private void setResume(boolean resume) {
+            this.resume = resume;
+        }
+
+        private boolean isResume() {
+            return resume;
+        }
+
+        /**
          * @param trust
          * @return
          */
+        @Deprecated
         @CheckResult
         public Builder trustSSL(boolean trust) {
-            this.trust = trust;
             return this;
         }
 
         /**
          * @return
          */
+        @Deprecated
         private boolean isTrust() {
-            return trust;
+            return false;
         }
-
 
         /**
          * @return
@@ -187,6 +214,22 @@ public abstract class Downloader {
             return this;
         }
 
+        /**
+         * @return
+         */
+        public Builder pauseDownload() {
+            downloadRequest.cancel(true);
+            return this;
+        }
+
+        /**
+         * @return
+         */
+        public Builder resumeDownload() {
+            setResume(true);
+            download();
+            return this;
+        }
 
         @RequiresPermission(Manifest.permission.INTERNET)
         public Builder download() {
@@ -205,30 +248,20 @@ public abstract class Downloader {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
+                if (!isResume()) {
+                    dao.insertNewDownload(new DownloaderModel(0, getUrl(), getFileName(), DownloaderModel.Status.NEW, 0));
+                }
             }
 
             @Override
             protected Void doInBackground(Void... voids) {
-
                 try {
                     if (getUrl().trim().isEmpty()) {
                         throw new MalformedURLException("The entered URL is not valid");
                     }
                     url = new URL(getUrl());
                     String cookie = CookieManager.getInstance().getCookie(getUrl());
-                    if (isTrust()) {
-                        if (url.getProtocol().toLowerCase().equals("https")) {
-                            ConnectionUtil.trustHosts();
-                            HttpsURLConnection https = (HttpsURLConnection) url.openConnection();
-                            https.setHostnameVerifier(ConnectionUtil.DO_NOT_VERIFY);
-                            connection = https;
-                        } else {
-                            connection = (HttpURLConnection) url.openConnection();
-                        }
-                    } else {
-                        connection = (HttpURLConnection) url.openConnection();
-                    }
-
+                    connection = (HttpURLConnection) url.openConnection();
                     connection.setRequestProperty("Cookie", cookie);
                     connection.setReadTimeout(getTimeOut() == 0 ? ConnectionUtil.TIME_OUT_CONNECTION : getTimeOut());
                     connection.setConnectTimeout(getTimeOut() == 0 ? ConnectionUtil.TIME_OUT_CONNECTION : getTimeOut());
@@ -239,7 +272,6 @@ public abstract class Downloader {
                     }
 
                     connection.connect();
-
                     connection.setInstanceFollowRedirects(false);
                     totalSize = connection.getContentLength();
 
@@ -252,7 +284,7 @@ public abstract class Downloader {
                             setFileName(String.valueOf(System.currentTimeMillis()), "unknown");
                     }
                     file = new File(getDownloadDir() + "/" + getFileName() + "." + getExtension());
-                    if (file.exists()) {
+                    if (file.exists() && !isResume()) {
                         file.delete();
                     }
                     FileOutputStream outputStream = new FileOutputStream(getDownloadDir() + "/" + getFileName() + "." + getExtension());
@@ -264,9 +296,19 @@ public abstract class Downloader {
                         downloadedSize += len;
 
                         percent = (int) (100.0f * (float) downloadedSize / totalSize);
+                        setPercent(percent);
 
                         if (getDownloadListener() != null)
                             getDownloadListener().progressUpdate(percent, downloadedSize, totalSize);
+
+                        dao.updateDownload(getUrl(), DownloaderModel.Status.DOWNLOADING, getPercent());
+
+                        Log.d(TAG, "dao: url --> "
+                                + dao.getDownload(getUrl()).getUrl()
+                                + " id --> " + dao.getDownload(getUrl()).getId()
+                                + " name --> " + dao.getDownload(getUrl()).getFileName()
+                                + " status --> " + dao.getDownload(getUrl()).getStatus()
+                                + " percent --> " + dao.getDownload(getUrl()).getPercent());
                     }
                     outputStream.flush();
                     outputStream.close();
@@ -284,13 +326,21 @@ public abstract class Downloader {
                 return null;
             }
 
-
             @Override
             protected void onPostExecute(Void aVoid) {
                 super.onPostExecute(aVoid);
 
                 if (getDownloadListener() != null)
                     getDownloadListener().onCompleted(file);
+
+                dao.updateDownload(getUrl(), DownloaderModel.Status.SUCCESS, getPercent());
+
+                Log.d(TAG, "dao: url --> "
+                        + dao.getDownload(getUrl()).getUrl()
+                        + " id --> " + dao.getDownload(getUrl()).getId()
+                        + " name --> " + dao.getDownload(getUrl()).getFileName()
+                        + " status --> " + dao.getDownload(getUrl()).getStatus()
+                        + " percent --> " + dao.getDownload(getUrl()).getPercent());
             }
 
             @Override
@@ -301,6 +351,10 @@ public abstract class Downloader {
                 if (getDownloadListener() != null) {
                     getDownloadListener().onFailure("Request cancelled");
                 }
+                if (file != null && file.exists()) {
+                    file.delete();
+                }
+                dao.updateDownload(getUrl(), DownloaderModel.Status.FAIL, percent);
             }
         }
     }

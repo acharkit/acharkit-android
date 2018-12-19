@@ -114,32 +114,6 @@ public class ConnectionUtil {
         }
     }
 
-    /**
-     * Trust every server - do not check for any certificate
-     */
-    public static void trustHosts() {
-        TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
-            public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-                return new java.security.cert.X509Certificate[]{};
-            }
-
-            public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-            }
-
-            public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-            }
-        }};
-
-        // Install the all-trusting trust manager
-        try {
-            SSLContext sc = SSLContext.getInstance("TLS");
-            sc.init(null, trustAllCerts, new java.security.SecureRandom());
-            HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-        } catch (Exception e) {
-            Log.w(TAG, e);
-        }
-    }
-
     public static void copyStream(InputStream input, OutputStream output) {
         byte[] buffer = new byte[1024]; // Adjust if you want
         int bytesRead;

@@ -64,6 +64,9 @@
         <activity
             android:name=".test.TestBottomSheet"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".test.TestDownloader"
+            android:screenOrientation="portrait" />
 
     </application>
 </manifest>
