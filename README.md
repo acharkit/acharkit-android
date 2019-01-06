@@ -3,7 +3,6 @@
   AcharKit Framework
   
   
-  For more information, go to the site of [AcharKit](http://www.acharkit.ir)
 
 ```code
     compile project(':acharkit-release-0.1.0')
