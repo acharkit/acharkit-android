@@ -3,6 +3,7 @@ package ir.acharkit.android.demo.test;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import java.io.File;
@@ -26,40 +27,56 @@ import ir.acharkit.android.util.Util;
 public class TestDownloader extends AbstractActivity {
 
     public static final String TAG = TestDownloader.class.getSimpleName();
+    private Downloader downloader;
+    private Button startDownload;
+    private Button stopDownload;
+    private Button pauseDownload;
+    private Button resumeDownload;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_donwloader);
 
-        findViewById(R.id.start_download).setOnClickListener(new View.OnClickListener() {
+        startDownload = findViewById(R.id.start_download);
+        stopDownload = findViewById(R.id.stop_download);
+        pauseDownload = findViewById(R.id.pause_download);
+        resumeDownload = findViewById(R.id.resume_download);
+
+        startDownload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (checkNetworkAvailable(getActivity())) {
-                    getDownloader().download();
+                    enableDownload();
+                    initDownloader();
+                    downloader.download();
                 }
             }
         });
 
-        findViewById(R.id.stop_download).setOnClickListener(new View.OnClickListener() {
+        stopDownload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getDownloader().cancelDownload();
+                disableDownload();
+                if (downloader != null) downloader.cancelDownload();
             }
         });
 
-        findViewById(R.id.pause_download).setOnClickListener(new View.OnClickListener() {
+        pauseDownload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                getDownloader().pauseDownload();
+                disableDownload();
+                if (downloader != null) downloader.pauseDownload();
             }
         });
 
-        findViewById(R.id.resume_download).setOnClickListener(new View.OnClickListener() {
+        resumeDownload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (checkNetworkAvailable(getActivity())) {
-//                    getDownloader().resumeDownload();
+                    initDownloader();
+                    downloader.resumeDownload();
+                    enableDownload();
                 }
             }
         });
@@ -69,25 +86,41 @@ public class TestDownloader extends AbstractActivity {
         return ConnectChecker.isInternetAvailable(context);
     }
 
-    private Downloader getDownloader() {
+    private void enableDownload() {
+        startDownload.setEnabled(false);
+        resumeDownload.setEnabled(false);
+        stopDownload.setEnabled(true);
+        pauseDownload.setEnabled(true);
+    }
+
+    private void disableDownload() {
+        startDownload.setEnabled(true);
+        resumeDownload.setEnabled(true);
+        stopDownload.setEnabled(false);
+        pauseDownload.setEnabled(false);
+    }
+
+    private void initDownloader() {
         Map<String, String> header = new HashMap<>();
         header.put("Access-Token", "1234567890ABC");
-        Downloader.Builder builder = new Downloader.Builder(getApplicationContext(), "https://static.approo.ir/apk/com.vada.hafezproject-v100081.apk")
+        downloader = new Downloader.Builder(getApplicationContext(), "https://dl3.android30t.com/apps/Q-U/Instagram-v79.0.0.21.101(Android30t.Com).apk")
                 .setDownloadDir(String.valueOf(getExternalFilesDir("download")))
                 .setTimeOut(60 * 2000)
-                .setFileName("test_app", "apk")
+                .setFileName("test_application", "apk")
                 .setHeader(header)
                 .setDownloadListener(new OnDownloadListener() {
                     @Override
                     public void onCompleted(File file) {
                         Logger.d(TAG, "onCompleted:");
                         Util.showToast(getApplicationContext(), "onCompleted", Toast.LENGTH_LONG);
+                        enableDownload();
                     }
 
                     @Override
                     public void onFailure(String reason) {
                         Logger.d(TAG, "onFailure:" + reason);
                         Util.showToast(getApplicationContext(), "onFailure:" + reason, Toast.LENGTH_LONG);
+                        enableDownload();
                     }
 
                     @Override
@@ -99,9 +132,8 @@ public class TestDownloader extends AbstractActivity {
                     public void onCancel() {
                         Logger.d(TAG, "onCancel:" + "canceled");
                         Util.showToast(getApplicationContext(), "onCancel:" + "canceled", Toast.LENGTH_LONG);
+                        enableDownload();
                     }
-                });
-
-        return builder.build();
+                }).build();
     }
 }

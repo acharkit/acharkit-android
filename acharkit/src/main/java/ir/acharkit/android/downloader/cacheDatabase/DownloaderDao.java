@@ -23,20 +23,26 @@ public class DownloaderDao {
                 DownloaderModel.Column.URL + "," +
                 DownloaderModel.Column.FILE_NAME + "," +
                 DownloaderModel.Column.STATUS + "," +
-                DownloaderModel.Column.PERCENT
+                DownloaderModel.Column.PERCENT + "," +
+                DownloaderModel.Column.SIZE + "," +
+                DownloaderModel.Column.TOTAL_SIZE
                 + ")" +
                 " VALUES(" + "\"" + downloaderModel.getUrl() + "\"" + ","
-                + "" + "\"" + downloaderModel.getFileName() + "\"" + ","
-                + "" + downloaderModel.getStatus() + ","
-                + "" + downloaderModel.getPercent() + ")";
+                + " " + "\"" + downloaderModel.getFileName() + "\"" + ","
+                + " " + downloaderModel.getStatus() + ","
+                + " " + downloaderModel.getPercent() + ","
+                + " " + downloaderModel.getSize() + ","
+                + " " + downloaderModel.getTotalSize() + ")";
         database.getWritableDatabase().execSQL(query);
         database.close();
     }
 
-    public void updateDownload(String url, int status, int percent) {
+    public void updateDownload(String url, int status, int percent, int size, int totalSize) {
         String query = "update " + DownloaderModel.TABLE_NAME + " " +
                 " set " + DownloaderModel.Column.STATUS + " = " + status +
                 " , " + DownloaderModel.Column.PERCENT + " = " + percent +
+                " , " + DownloaderModel.Column.SIZE + " = " + size +
+                " , " + DownloaderModel.Column.TOTAL_SIZE + " = " + totalSize +
                 " where " + DownloaderModel.Column.URL + " = " + "\"" + url + "\"";
         database.getWritableDatabase().execSQL(query);
         database.close();
@@ -52,7 +58,9 @@ public class DownloaderDao {
             String itemFileName = cursor.getString(cursor.getColumnIndex(DownloaderModel.Column.FILE_NAME));
             int itemStatus = cursor.getInt(cursor.getColumnIndex(DownloaderModel.Column.STATUS));
             int itemPercent = cursor.getInt(cursor.getColumnIndex(DownloaderModel.Column.PERCENT));
-            model = new DownloaderModel(itemId, itemUrl, itemFileName, itemStatus, itemPercent);
+            int itemSize = cursor.getInt(cursor.getColumnIndex(DownloaderModel.Column.SIZE));
+            int itemTotalSize = cursor.getInt(cursor.getColumnIndex(DownloaderModel.Column.TOTAL_SIZE));
+            model = new DownloaderModel(itemId, itemUrl, itemFileName, itemStatus, itemPercent, itemSize, itemTotalSize);
         }
         cursor.close();
         database.close();

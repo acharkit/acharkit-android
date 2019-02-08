@@ -30,12 +30,6 @@ public class ConnectionUtil {
     public static final String boundary = DateTimeHelper.currentDateTime("UTC");
     public static final String DEFAULT_PARAMS_ENCODING = "UTF-8";
 
-    // always verify the host - dont check for certificate
-    public final static HostnameVerifier DO_NOT_VERIFY = new HostnameVerifier() {
-        public boolean verify(String hostname, SSLSession session) {
-            return true;
-        }
-    };
     private static final String TAG = ConnectionUtil.class.getName();
     private static final String LINE_FEED = "\r\n"; //;
     private static PrintWriter writer;
@@ -48,7 +42,6 @@ public class ConnectionUtil {
     public static void setHeaderParams(HttpURLConnection connection, Map<String, String> header) throws UnsupportedEncodingException {
         connection.setRequestProperty("Content-Type", "application/json");
         connection.setRequestProperty("Accept", "application/json");
-
         connection.setRequestProperty("Accept-Charset", DEFAULT_PARAMS_ENCODING);
         if (header != null) {
             for (Map.Entry<String, String> entry : header.entrySet()) {

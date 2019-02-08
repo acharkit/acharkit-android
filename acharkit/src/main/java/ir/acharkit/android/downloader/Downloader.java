@@ -8,9 +8,10 @@ import android.support.annotation.NonNull;
 import android.support.annotation.RequiresPermission;
 import android.util.Pair;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.lang.ref.SoftReference;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -37,22 +38,19 @@ public class Downloader {
     private DownloadTask downloadTask;
 
     private Downloader(DownloadTask downloadTask) {
-        this.downloadTask = downloadTask;
+        if (this.downloadTask == null) {
+            this.downloadTask = downloadTask;
+        }
     }
 
-    /**
-     * start download
-     */
     @RequiresPermission(Manifest.permission.INTERNET)
     public void download() {
-        if (downloadTask == null)
-            downloadTask = new DownloadTask();
+        if (downloadTask == null) {
+            throw new IllegalStateException("rebuild new instance after \"pause or cancel\" download");
+        }
         downloadTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    /**
-     * cancel download
-     */
     public void cancelDownload() {
         if (downloadTask != null) {
             downloadTask.cancel();
@@ -60,28 +58,21 @@ public class Downloader {
         }
     }
 
-    /**
-     * resume download
-     */
-    public void resumeDownload() {
+    public void pauseDownload() {
         if (downloadTask != null) {
-            downloadTask.resume = true;
-            download();
+            downloadTask.pause();
+            downloadTask = null;
         }
     }
 
-    /**
-     * pause download
-     */
-    public void pauseDownload() {
-        if (downloadTask != null) {
-            downloadTask.resume = false;
-            downloadTask.pause();
-        }
+    public void resumeDownload() {
+        if (downloadTask != null) downloadTask.resume = true;
+        download();
     }
 
     private static class DownloadTask extends AsyncTask<Void, Void, Pair<Boolean, Exception>> {
         public SoftReference<Context> context;
+        boolean resume = false;
         private DownloaderDao dao;
         private String downloadDir;
         private String fileName;
@@ -93,15 +84,14 @@ public class Downloader {
         private HttpURLConnection connection;
         private File downloadedFile;
         private int downloadedSize;
-        private int finalPercent;
-        private boolean resume = false;
-        private boolean cancel = false;
+        private int percent;
+        private int totalSize;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             if (!resume)
-                dao.insertNewDownload(new DownloaderModel(0, stringURL, fileName, DownloaderModel.Status.NEW, 0));
+                dao.insertNewDownload(new DownloaderModel(0, stringURL, fileName, DownloaderModel.Status.NEW, 0, 0, 0));
         }
 
         @Override
@@ -112,35 +102,26 @@ public class Downloader {
                 }
                 URL url = new URL(stringURL);
                 connection = (HttpURLConnection) url.openConnection();
-
                 connection.setReadTimeout(timeOut == 0 ? ConnectionUtil.TIME_OUT_CONNECTION : timeOut);
                 connection.setConnectTimeout(timeOut == 0 ? ConnectionUtil.TIME_OUT_CONNECTION : timeOut);
                 connection.setRequestMethod(ConnectionRequest.Method.GET);
 
-                ConnectionUtil.setHeaderParams(connection, header);
+                if (header != null) {
+                    for (Map.Entry<String, String> entry : header.entrySet()) {
+                        connection.setRequestProperty(entry.getKey(), entry.getValue());
+                    }
+                }
+
+                if (resume) {
+                    DownloaderModel model = dao.getDownload(stringURL);
+                    percent = model.getPercent();
+                    downloadedSize = model.getSize();
+                    totalSize = model.getTotalSize();
+                    connection.setAllowUserInteraction(true);
+                    connection.setRequestProperty("Range", "bytes=" + model.getSize() + "-");
+                }
 
                 connection.connect();
-                connection.setInstanceFollowRedirects(false);
-                int totalSize = connection.getContentLength();
-
-                File fileDownloadDir = new File(downloadDir);
-                if (!fileDownloadDir.exists()) {
-                    boolean createdDir = fileDownloadDir.mkdirs();
-                    Logger.d(TAG, "download directory is " + (createdDir ? "created" : "not created"));
-                }
-
-                downloadedFile = new File(downloadDir +
-                        File.separator +
-                        fileName +
-                        "." +
-                        extension);
-                Logger.d(TAG, "downloading file path: " + downloadedFile.getPath());
-                /* checking existing downloaded file previously
-                   and checking length downloaded file vs new file from webservice
-                 */
-                if (downloadedFile.exists() && downloadedFile.length() == totalSize) {
-                    return new Pair<>(true, null);
-                }
 
                 String contentType = String.valueOf(connection.getHeaderField("Content-Type"));
                 if (contentType != null) {
@@ -155,57 +136,54 @@ public class Downloader {
                     }
                 }
 
-                /*
-                  using openFileOutput for internal storage (because it needs to readable by every body)
-                 */
-                boolean onInternalStorage = downloadDir.startsWith("/data/data");
-                FileOutputStream outputStream = onInternalStorage ?
-                        context.get().openFileOutput(downloadedFile.getName(), Context.MODE_WORLD_READABLE) : new FileOutputStream(downloadedFile);
+                if (!resume) totalSize = connection.getContentLength();
+                File fileDownloadDir = new File(downloadDir);
+                if (!fileDownloadDir.exists()) {
+                    boolean createdDir = fileDownloadDir.mkdirs();
+                    Logger.d(TAG, "download directory is " + (createdDir ? "created" : "not created"));
+                }
 
-                InputStream inputStream = connection.getInputStream();
+                downloadedFile = new File(downloadDir + File.separator + fileName + "." + extension);
+                Logger.d(TAG, "downloading file path: " + downloadedFile.getPath());
+                if (downloadedFile.exists() && downloadedFile.length() == totalSize) {
+                    return new Pair<>(true, null);
+                }
+
+                BufferedInputStream bufferedInputStream = new BufferedInputStream(connection.getInputStream());
+                FileOutputStream fileOutputStream = (downloadedSize == 0) ? new FileOutputStream(downloadedFile) : new FileOutputStream(downloadedFile, true);
+                BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(fileOutputStream, 1024);
+
                 byte[] buffer = new byte[32 * 1024];
                 int len = 0;
                 int previousPercent = -1;
-
-                while ((len = inputStream.read(buffer)) > 0) {
-                    if (isCancelled() || cancel)
-                        return null;
-
-                    outputStream.write(buffer, 0, len);
+                while ((len = bufferedInputStream.read(buffer, 0, 1024)) >= 0 && !isCancelled()) {
+                    bufferedOutputStream.write(buffer, 0, len);
                     downloadedSize += len;
-
-                    int percent = (int) (100.0f * (float) downloadedSize / totalSize);
-                    Logger.d(TAG, "Downloading " + percent + "%");
-
+                    percent = (int) (100.0f * (float) downloadedSize / totalSize);
                     if (downloadListener != null && previousPercent != percent) {
                         downloadListener.progressUpdate(percent, downloadedSize, totalSize);
                         previousPercent = percent;
-                        finalPercent = percent;
-
-                        dao.updateDownload(stringURL, DownloaderModel.Status.DOWNLOADING, finalPercent);
-
+                        Logger.d(TAG, "Downloading " + percent + "%");
                         DownloaderModel model = dao.getDownload(stringURL);
-                        Logger.d(TAG, "dao: url --> "
-                                + model.getUrl()
-                                + " id --> " + model.getId()
-                                + " name --> " + model.getFileName()
-                                + " status --> " + model.getStatus()
+                        dao.updateDownload(stringURL, DownloaderModel.Status.DOWNLOADING, percent, downloadedSize, totalSize);
+                        Logger.d(TAG, "dao:"
+                                + " url     --> " + model.getUrl()
+                                + " id      --> " + model.getId()
+                                + " name    --> " + model.getFileName()
+                                + " status  --> " + model.getStatus()
                                 + " percent --> " + model.getPercent());
+
                     }
                 }
-                outputStream.flush();
-                outputStream.close();
-                inputStream.close();
-                if (connection != null)
-                    connection.disconnect();
+                bufferedOutputStream.flush();
+                bufferedOutputStream.close();
+                bufferedInputStream.close();
+                if (connection != null) connection.disconnect();
                 return new Pair<>(true, null);
             } catch (Exception e) {
                 Logger.w(TAG, e);
-                if (connection != null)
-                    connection.disconnect();
-                if (downloadedFile != null)
-                    downloadedFile.delete();
-
+                if (connection != null) connection.disconnect();
+                if (downloadedFile != null) downloadedFile.delete();
                 return new Pair<>(false, e);
             }
         }
@@ -218,12 +196,18 @@ public class Downloader {
             if (downloadListener != null) {
                 if (result.first) {
                     downloadListener.onCompleted(downloadedFile);
-                    dao.updateDownload(stringURL, DownloaderModel.Status.SUCCESS, finalPercent);
+                    dao.updateDownload(stringURL, DownloaderModel.Status.SUCCESS, percent, downloadedSize, totalSize);
+                    DownloaderModel model = dao.getDownload(stringURL);
+                    Logger.d(TAG, "dao:"
+                            + " url     --> " + model.getUrl()
+                            + " id      --> " + model.getId()
+                            + " name    --> " + model.getFileName()
+                            + " status  --> " + model.getStatus()
+                            + " percent --> " + model.getPercent());
                 } else {
                     if (result.second instanceof ProtocolException || result.second instanceof MalformedURLException) {
                         Logger.w(TAG, result.second);
                     }
-                    dao.updateDownload(stringURL, DownloaderModel.Status.FAIL, finalPercent);
                     downloadListener.onFailure(String.valueOf(result.second));
                 }
             }
@@ -232,47 +216,48 @@ public class Downloader {
         @Override
         protected void onCancelled() {
             super.onCancelled();
+            if (connection != null) connection.disconnect();
+        }
+
+        @Override
+        protected void onCancelled(Pair<Boolean, Exception> booleanExceptionPair) {
+            super.onCancelled(booleanExceptionPair);
+            if (connection != null) connection.disconnect();
         }
 
         void cancel() {
             Logger.d(TAG, "download is cancelled");
-            dao.updateDownload(stringURL, DownloaderModel.Status.FAIL, finalPercent);
-            cancel = true;
-            if (downloadedFile != null)
-                downloadedFile.delete();
-            if (downloadListener != null) {
-                downloadListener.onCancel();
-            }
-            this.cancel(true);
+            if (downloadedFile != null) downloadedFile.delete();
+            downloadListener.onCancel();
+            cancel(true);
+            dao.updateDownload(stringURL, DownloaderModel.Status.FAIL, percent, downloadedSize, totalSize);
         }
 
         void pause() {
-            Logger.d(TAG, "download pause");
-            dao.updateDownload(stringURL, DownloaderModel.Status.PAUSE, finalPercent);
-            this.cancel(true);
-            cancel = true;
+            Logger.d(TAG, "download is pause");
+            cancel(true);
+            dao.updateDownload(stringURL, DownloaderModel.Status.PAUSE, percent, downloadedSize, totalSize);
         }
     }
 
     public static class Builder {
-        private final Context context;
-        private final String url;
-        private int timeOut;
-        private String downloadDir;
-        private String fileName;
-        private String extension;
-        private OnDownloadListener downloadListener;
-        private Map<String, String> header;
-        private boolean resume = false;
-        private boolean pause = false;
+
+        private final Context mContext;
+        private final String mUrl;
+        private int mTimeOut;
+        private String mDownloadDir;
+        private String mFileName;
+        private String mExtension;
+        private OnDownloadListener mDownloadListener;
+        private Map<String, String> mHeader;
 
         /**
          * @param context the best practice is passing application context
          * @param url     passing url of the download file
          */
         public Builder(@NonNull Context context, @NonNull String url) {
-            this.context = context;
-            this.url = url;
+            this.mContext = context;
+            this.mUrl = url;
         }
 
         /**
@@ -281,9 +266,10 @@ public class Downloader {
          */
         @CheckResult
         public Builder setDownloadDir(@NonNull String downloadDir) {
-            this.downloadDir = downloadDir;
+            this.mDownloadDir = downloadDir;
             return this;
         }
+
 
         /**
          * @param downloadListener an event listener for tracking download events
@@ -291,7 +277,7 @@ public class Downloader {
          */
         @CheckResult
         public Builder setDownloadListener(@NonNull OnDownloadListener downloadListener) {
-            this.downloadListener = downloadListener;
+            this.mDownloadListener = downloadListener;
             return this;
         }
 
@@ -302,8 +288,8 @@ public class Downloader {
          */
         @CheckResult
         public Builder setFileName(@NonNull String fileName, @NonNull String extension) {
-            this.fileName = fileName;
-            this.extension = extension;
+            this.mFileName = fileName;
+            this.mExtension = extension;
             return this;
         }
 
@@ -313,7 +299,7 @@ public class Downloader {
          */
         @CheckResult
         public Builder setHeader(@NonNull Map<String, String> header) {
-            this.header = header;
+            this.mHeader = header;
             return this;
         }
 
@@ -323,357 +309,29 @@ public class Downloader {
          */
         @CheckResult
         public Builder setTimeOut(int timeOut) {
-            this.timeOut = timeOut;
+            this.mTimeOut = timeOut;
             return this;
         }
 
-        /**
-         * build downloader instance
-         *
-         * @return downloader instance
-         */
         public Downloader build() {
             DownloadTask downloadTask = new DownloadTask();
-            downloadTask.dao = new DownloaderDao(context);
-            downloadTask.timeOut = timeOut;
-            downloadTask.downloadListener = downloadListener;
-            downloadTask.fileName = fileName;
-            downloadTask.header = header;
-            downloadTask.extension = extension;
-            downloadTask.resume = resume;
-            downloadTask.context = new SoftReference<>(context);
-            if (downloadDir == null || downloadDir.trim().isEmpty())
-                downloadTask.downloadDir = String.valueOf(context.getExternalFilesDir(null));
-            else downloadTask.downloadDir = downloadDir;
-            downloadTask.stringURL = url;
+            downloadTask.dao = new DownloaderDao(mContext);
+            ;
+            downloadTask.timeOut = mTimeOut;
+            downloadTask.downloadListener = mDownloadListener;
+            downloadTask.fileName = mFileName;
+            downloadTask.header = mHeader;
+            downloadTask.extension = mExtension;
+            downloadTask.context = new SoftReference<>(mContext);
+            if (mDownloadDir == null || mDownloadDir.trim().isEmpty()) {
+                downloadTask.downloadDir = String.valueOf(mContext.getExternalFilesDir(null));
+            } else
+                downloadTask.downloadDir = mDownloadDir;
+            downloadTask.stringURL = mUrl;
 
             return new Downloader(downloadTask);
         }
     }
-//
-//    public static class Builder {
-//        private DownloaderDao dao;
-//        private DownloadRequest downloadRequest;
-//        private Context context;
-//        private String downloadDir;
-//        private String fileName;
-//        private String extension;
-//        private String url;
-//        private int timeOut;
-//        private int percent;
-//        private boolean resume = false;
-//        private OnDownloadListener downloadListener;
-//        private Map<String, String> header;
-//
-//        /**
-//         * @param context
-//         * @param url
-//         */
-//        public Builder(@NonNull Context context, @NonNull String url) {
-//            this.context = context;
-//            this.url = url;
-//            downloadRequest = new DownloadRequest();
-//            dao = new DownloaderDao(context);
-//        }
-//
-//        /**
-//         * @return
-//         */
-//        public String getDownloadDir() {
-//            return downloadDir;
-//        }
-//
-//        /**
-//         * @param downloadDir
-//         * @return
-//         */
-//        @CheckResult
-//        public Builder setDownloadDir(@NonNull String downloadDir) {
-//            this.downloadDir = downloadDir;
-//            return this;
-//        }
-//
-//        /**
-//         * @return
-//         */
-//        private String getFileName() {
-//            return fileName;
-//        }
-//
-//        /**
-//         * @return
-//         */
-//        private String getExtension() {
-//            return extension;
-//        }
-//
-//        /**
-//         * @return
-//         */
-//        private String getUrl() {
-//            return url;
-//        }
-//
-//        /**
-//         * @return
-//         */
-//        private OnDownloadListener getDownloadListener() {
-//            return downloadListener;
-//        }
-//
-//        /**
-//         * @param downloadListener
-//         * @return
-//         */
-//        @CheckResult
-//        public Builder setDownloadListener(@NonNull OnDownloadListener downloadListener) {
-//            this.downloadListener = downloadListener;
-//            return this;
-//        }
-//
-//        /**
-//         * @param fileName
-//         * @param extension
-//         * @return
-//         */
-//        @CheckResult
-//        public Builder setFileName(@NonNull String fileName, @NonNull String extension) {
-//            this.fileName = fileName;
-//            this.extension = extension;
-//            return this;
-//        }
-//
-//        /**
-//         * @return
-//         */
-//        private Context getContext() {
-//            return context;
-//        }
-//
-//        /**
-//         * @return
-//         */
-//        private Map<String, String> getHeader() {
-//            return header;
-//        }
-//
-//        /**
-//         * @param header
-//         * @return
-//         */
-//        @CheckResult
-//        public Builder setHeader(@NonNull Map<String, String> header) {
-//            this.header = header;
-//            return this;
-//        }
-//
-//        /**
-//         * @return
-//         */
-//        private int getTimeOut() {
-//            return timeOut;
-//        }
-//
-//        /**
-//         * @param timeOut
-//         * @return
-//         */
-//        @CheckResult
-//        public Builder setTimeOut(int timeOut) {
-//            this.timeOut = timeOut;
-//            return this;
-//        }
-//
-//        /**
-//         * @return
-//         */
-//        private int getPercent() {
-//            return percent;
-//        }
-//
-//        /**
-//         * @return
-//         */
-//        private void setPercent(int percent) {
-//            this.percent = percent;
-//        }
-//
-//        private void setResume(boolean resume) {
-//            this.resume = resume;
-//        }
-//
-//        private boolean isResume() {
-//            return resume;
-//        }
-//
-//        /**
-//         * @param trust
-//         * @return
-//         */
-//        @Deprecated
-//        @CheckResult
-//        public Builder trustSSL(boolean trust) {
-//            return this;
-//        }
-//
-//        /**
-//         * @return
-//         */
-//        @Deprecated
-//        private boolean isTrust() {
-//            return false;
-//        }
-//
-//        /**
-//         * @return
-//         */
-//        public Builder cancelDownload() {
-//            downloadRequest.cancel(true);
-//            return this;
-//        }
-//
-//        /**
-//         * @return
-//         */
-//        public Builder pauseDownload() {
-//            downloadRequest.cancel(true);
-//            return this;
-//        }
-//
-//        /**
-//         * @return
-//         */
-//        public Builder resumeDownload() {
-//            setResume(true);
-//            download();
-//            return this;
-//        }
-//
-//        @RequiresPermission(Manifest.permission.INTERNET)
-//        public Builder download() {
-//            downloadRequest.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-//            return this;
-//        }
-//
-//        private class DownloadRequest extends AsyncTask<Void, Void, Void> {
-//            private HttpURLConnection connection;
-//            private int percent;
-//            private int totalSize;
-//            private File file;
-//            private int downloadedSize;
-//            private URL url;
-//
-//            @Override
-//            protected void onPreExecute() {
-//                super.onPreExecute();
-//                if (!isResume()) {
-//                    dao.insertNewDownload(new DownloaderModel(0, getUrl(), getFileName(), DownloaderModel.Status.NEW, 0));
-//                }
-//            }
-//
-//            @Override
-//            protected Void doInBackground(Void... voids) {
-//                try {
-//                    if (getUrl().trim().isEmpty()) {
-//                        throw new MalformedURLException("The entered URL is not valid");
-//                    }
-//                    url = new URL(getUrl());
-//                    String cookie = CookieManager.getInstance().getCookie(getUrl());
-//                    connection = (HttpURLConnection) url.openConnection();
-//                    connection.setRequestProperty("Cookie", cookie);
-//                    connection.setReadTimeout(getTimeOut() == 0 ? ConnectionUtil.TIME_OUT_CONNECTION : getTimeOut());
-//                    connection.setConnectTimeout(getTimeOut() == 0 ? ConnectionUtil.TIME_OUT_CONNECTION : getTimeOut());
-//                    connection.setRequestMethod(ConnectionRequest.Method.GET);
-//
-//                    if (getDownloadDir() == null || getDownloadDir().trim().isEmpty()) {
-//                        setDownloadDir(String.valueOf(getContext().getExternalFilesDir("download")));
-//                    }
-//
-//                    connection.connect();
-//                    connection.setInstanceFollowRedirects(false);
-//                    totalSize = connection.getContentLength();
-//
-//                    String contentType = String.valueOf(connection.getHeaderField("Content-Type"));
-//                    if (contentType != null) {
-//                        if (getFileName() == null || getFileName().trim().isEmpty())
-//                            setFileName(String.valueOf(System.currentTimeMillis()), MimeHelper.guessExtensionFromMimeType(contentType));
-//                    } else {
-//                        if (getFileName() == null || getFileName().trim().isEmpty())
-//                            setFileName(String.valueOf(System.currentTimeMillis()), "unknown");
-//                    }
-//                    file = new File(getDownloadDir() + "/" + getFileName() + "." + getExtension());
-//                    if (file.exists() && !isResume()) {
-//                        file.delete();
-//                    }
-//                    FileOutputStream outputStream = new FileOutputStream(getDownloadDir() + "/" + getFileName() + "." + getExtension());
-//                    InputStream inputStream = connection.getInputStream();
-//                    byte[] buffer = new byte[32 * 1024];
-//                    int len = 0;
-//                    while ((len = inputStream.read(buffer)) > 0) {
-//                        outputStream.write(buffer, 0, len);
-//                        downloadedSize += len;
-//
-//                        percent = (int) (100.0f * (float) downloadedSize / totalSize);
-//                        setPercent(percent);
-//
-//                        if (getDownloadListener() != null)
-//                            getDownloadListener().progressUpdate(percent, downloadedSize, totalSize);
-//
-//                        dao.updateDownload(getUrl(), DownloaderModel.Status.DOWNLOADING, getPercent());
-//
-//                        Logger.d(TAG, "dao: url --> "
-//                                + dao.getDownload(getUrl()).getUrl()
-//                                + " id --> " + dao.getDownload(getUrl()).getId()
-//                                + " name --> " + dao.getDownload(getUrl()).getFileName()
-//                                + " status --> " + dao.getDownload(getUrl()).getStatus()
-//                                + " percent --> " + dao.getDownload(getUrl()).getPercent());
-//                    }
-//                    outputStream.flush();
-//                    outputStream.close();
-//                    inputStream.close();
-//                } catch (Exception e) {
-//                    if (e instanceof ProtocolException || e instanceof MalformedURLException) {
-//                        throw new RuntimeException("The entered protocol is not valid");
-//                    }
-//                    if (getDownloadListener() != null)
-//                        getDownloadListener().onFailure(String.valueOf(e));
-//
-//                    connection.disconnect();
-//                }
-//                connection.disconnect();
-//                return null;
-//            }
-//
-//            @Override
-//            protected void onPostExecute(Void aVoid) {
-//                super.onPostExecute(aVoid);
-//
-//                if (getDownloadListener() != null)
-//                    getDownloadListener().onCompleted(file);
-//
-//                dao.updateDownload(getUrl(), DownloaderModel.Status.SUCCESS, getPercent());
-//
-//                Logger.d(TAG, "dao: url --> "
-//                        + dao.getDownload(getUrl()).getUrl()
-//                        + " id --> " + dao.getDownload(getUrl()).getId()
-//                        + " name --> " + dao.getDownload(getUrl()).getFileName()
-//                        + " status --> " + dao.getDownload(getUrl()).getStatus()
-//                        + " percent --> " + dao.getDownload(getUrl()).getPercent());
-//            }
-//
-//            @Override
-//            protected void onCancelled(Void aVoid) {
-//                super.onCancelled(aVoid);
-//                if (connection != null)
-//                    connection.disconnect();
-//                if (getDownloadListener() != null) {
-//                    getDownloadListener().onFailure("Request cancelled");
-//                }
-//                if (file != null && file.exists()) {
-//                    file.delete();
-//                }
-//                dao.updateDownload(getUrl(), DownloaderModel.Status.FAIL, percent);
-//            }
-//        }
-//    }
+
 }
+

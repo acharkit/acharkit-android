@@ -24,6 +24,8 @@ public class DownloaderModel {
         static final String FILE_NAME = "file_name";
         static final String STATUS = "status";
         static final String PERCENT = "percent";
+        static final String SIZE = "size";
+        static final String TOTAL_SIZE = "total_size";
     }
 
     static final String CREATE_TABLE =
@@ -32,7 +34,9 @@ public class DownloaderModel {
                     + Column.URL + " TEXT,"
                     + Column.FILE_NAME + " TEXT,"
                     + Column.STATUS + " INTEGER,"
-                    + Column.PERCENT + " INTEGER"
+                    + Column.PERCENT + " INTEGER,"
+                    + Column.SIZE + " INTEGER,"
+                    + Column.TOTAL_SIZE + " INTEGER"
                     + ")";
 
     private int id;
@@ -40,13 +44,17 @@ public class DownloaderModel {
     private String fileName;
     private int status;
     private int percent;
+    private int size;
+    private int totalSize;
 
-    public DownloaderModel(int id, String url, String fileName, int status, int percent) {
+    public DownloaderModel(int id, String url, String fileName, int status, int percent, int size, int totalSize) {
         this.id = id;
         this.url = url;
         this.fileName = fileName;
         this.status = status;
         this.percent = percent;
+        this.size = size;
+        this.totalSize = totalSize;
     }
 
     public int getId() {
@@ -67,5 +75,13 @@ public class DownloaderModel {
 
     public int getPercent() {
         return percent;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public int getTotalSize() {
+        return totalSize;
     }
 }
