@@ -12,18 +12,12 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
 import java.util.Map;
 
 import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 
-import ir.acharkit.android.util.Log;
+import ir.acharkit.android.util.Logger;
 import ir.acharkit.android.util.helper.DateTimeHelper;
 
 /**
@@ -83,14 +77,14 @@ public class ConnectionUtil {
             if (e instanceof FileNotFoundException) {
                 return null;
             }
-            Log.w(TAG, e);
+            Logger.w(TAG, e);
             result = null;
         } finally {
             if (is != null) {
                 try {
                     is.close();
                 } catch (IOException e) {
-                    Log.w(TAG, e);
+                    Logger.w(TAG, e);
                 }
             }
         }
@@ -122,7 +116,7 @@ public class ConnectionUtil {
                 output.write(buffer, 0, bytesRead);
             }
         } catch (IOException e) {
-            Log.w(TAG, e);
+            Logger.w(TAG, e);
         }
     }
 }

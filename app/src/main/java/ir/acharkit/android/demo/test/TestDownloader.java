@@ -14,7 +14,7 @@ import ir.acharkit.android.demo.R;
 import ir.acharkit.android.downloader.Downloader;
 import ir.acharkit.android.downloader.OnDownloadListener;
 import ir.acharkit.android.util.ConnectChecker;
-import ir.acharkit.android.util.Log;
+import ir.acharkit.android.util.Logger;
 import ir.acharkit.android.util.Util;
 
 /**
@@ -51,7 +51,7 @@ public class TestDownloader extends AbstractActivity {
         findViewById(R.id.pause_download).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getDownloader().pauseDownload();
+//                getDownloader().pauseDownload();
             }
         });
 
@@ -59,42 +59,49 @@ public class TestDownloader extends AbstractActivity {
             @Override
             public void onClick(View view) {
                 if (checkNetworkAvailable(getActivity())) {
-                    getDownloader().resumeDownload();
+//                    getDownloader().resumeDownload();
                 }
             }
         });
-
     }
 
     public boolean checkNetworkAvailable(Context context) {
         return ConnectChecker.isInternetAvailable(context);
     }
 
-    private Downloader.Builder getDownloader() {
+    private Downloader getDownloader() {
         Map<String, String> header = new HashMap<>();
         header.put("Access-Token", "1234567890ABC");
-        return new Downloader.Builder(getApplicationContext(), "https://4.img-dpreview.com/files/p/E~TS590x0~articles/3925134721/0266554465.jpeg")
+        Downloader.Builder builder = new Downloader.Builder(getApplicationContext(), "https://static.approo.ir/apk/com.vada.hafezproject-v100081.apk")
                 .setDownloadDir(String.valueOf(getExternalFilesDir("download")))
                 .setTimeOut(60 * 2000)
-                .setFileName("image", "jpeg")
+                .setFileName("test_app", "apk")
                 .setHeader(header)
                 .setDownloadListener(new OnDownloadListener() {
                     @Override
                     public void onCompleted(File file) {
-                        Log.d(TAG, "onCompleted:");
+                        Logger.d(TAG, "onCompleted:");
                         Util.showToast(getApplicationContext(), "onCompleted", Toast.LENGTH_LONG);
                     }
 
                     @Override
                     public void onFailure(String reason) {
-                        Log.d(TAG, "onFailure:" + reason);
+                        Logger.d(TAG, "onFailure:" + reason);
                         Util.showToast(getApplicationContext(), "onFailure:" + reason, Toast.LENGTH_LONG);
                     }
 
                     @Override
                     public void progressUpdate(int percent, int downloadedSize, int totalSize) {
-                        Log.d(TAG, "progressUpdate:" + percent);
+                        Logger.d(TAG, "progressUpdate:" + percent);
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        Logger.d(TAG, "onCancel:" + "canceled");
+                        Util.showToast(getApplicationContext(), "onCancel:" + "canceled", Toast.LENGTH_LONG);
                     }
                 });
+
+        return builder.build();
     }
 }

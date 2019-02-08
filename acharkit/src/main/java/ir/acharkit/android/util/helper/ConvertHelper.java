@@ -6,7 +6,7 @@ import android.util.DisplayMetrics;
 
 import java.io.UnsupportedEncodingException;
 
-import ir.acharkit.android.util.Log;
+import ir.acharkit.android.util.Logger;
 
 
 /**
@@ -105,7 +105,7 @@ public class ConvertHelper {
         try {
             string = new String(data, "UTF-8");
         } catch (UnsupportedEncodingException e) {
-            Log.w(TAG, e);
+            Logger.w(TAG, e);
         }
         return string;
     }
@@ -119,7 +119,7 @@ public class ConvertHelper {
         try {
             bytes = data.getBytes("UTF-8");
         } catch (UnsupportedEncodingException e) {
-            Log.w(TAG, e);
+            Logger.w(TAG, e);
         }
         return bytes;
     }

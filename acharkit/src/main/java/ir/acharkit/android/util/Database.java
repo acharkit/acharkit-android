@@ -111,7 +111,7 @@ public class Database {
         try {
             is = context.getAssets().open(getDatabaseName());
         } catch (IOException e) {
-            Log.w(TAG, e);
+            Logger.w(TAG, e);
             return false;
         }
         setFilePath();
@@ -135,7 +135,7 @@ public class Database {
         try {
             is = new FileInputStream(path + "/" + databaseName);
         } catch (IOException e) {
-            Log.w(TAG, e);
+            Logger.w(TAG, e);
             return false;
         }
         setFilePath();
@@ -175,21 +175,21 @@ public class Database {
     private boolean checkDatabase(InputStream is) {
         if (getFilePath().exists()) {
             database = SQLiteDatabase.openOrCreateDatabase(getFilePath(), null);
-            Log.d(TAG, "db path exists");
+            Logger.d(TAG, "db path exists");
             closeDatabase();
             return true;
         } else {
             try {
                 if (copy(new FileOutputStream(getFilePath()), is)) {
                     database = SQLiteDatabase.openOrCreateDatabase(getFilePath(), null);
-                    Log.d(TAG, "db path copy");
+                    Logger.d(TAG, "db path copy");
                     closeDatabase();
                     return true;
                 } else {
                     return false;
                 }
             } catch (FileNotFoundException e) {
-                Log.w(TAG, e);
+                Logger.w(TAG, e);
                 return false;
             }
         }
@@ -210,21 +210,21 @@ public class Database {
             try {
                 is.close();
             } catch (Exception e) {
-                Log.w(TAG, e);
+                Logger.w(TAG, e);
             }
             try {
                 os.flush();
             } catch (Exception e) {
-                Log.w(TAG, e);
+                Logger.w(TAG, e);
             }
             try {
                 os.close();
             } catch (Exception e) {
-                Log.w(TAG, e);
+                Logger.w(TAG, e);
             }
             return true;
         } catch (Exception e) {
-            Log.w(TAG, e);
+            Logger.w(TAG, e);
             return false;
         }
     }

@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -13,7 +12,6 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,14 +32,12 @@ import ir.acharkit.android.demo.test.TestProgress;
 import ir.acharkit.android.demo.test.TestTag;
 import ir.acharkit.android.demo.test.TestUtils;
 import ir.acharkit.android.demo.test.TestViewPager;
-import ir.acharkit.android.downloader.Downloader;
-import ir.acharkit.android.downloader.OnDownloadListener;
 import ir.acharkit.android.util.Cache;
 import ir.acharkit.android.util.ConnectChecker;
 import ir.acharkit.android.util.Crypt;
 import ir.acharkit.android.util.Database;
 import ir.acharkit.android.util.Font;
-import ir.acharkit.android.util.Log;
+import ir.acharkit.android.util.Logger;
 import ir.acharkit.android.util.PermissionRequest;
 import ir.acharkit.android.util.Util;
 
@@ -162,18 +158,18 @@ public class MainActivity extends AbstractActivity {
     }
 
     private void calendar() {
-        Log.i(TAG, "getYear : " + DateUtil.getPersianDate().getYear());
-        Log.i(TAG, "getMonth : " + DateUtil.getPersianDate().getMonth());
-        Log.i(TAG, "getDayOfMonth : " + DateUtil.getPersianDate().getDayOfMonth());
-        Log.i(TAG, "isLeapYear : " + DateUtil.getPersianDate().isLeapYear());
+        Logger.i(TAG, "getYear : " + DateUtil.getPersianDate().getYear());
+        Logger.i(TAG, "getMonth : " + DateUtil.getPersianDate().getMonth());
+        Logger.i(TAG, "getDayOfMonth : " + DateUtil.getPersianDate().getDayOfMonth());
+        Logger.i(TAG, "isLeapYear : " + DateUtil.getPersianDate().isLeapYear());
 
-        Log.i(TAG, "getYear : " + DateUtil.getIslamicDate().getYear());
-        Log.i(TAG, "getMonth : " + DateUtil.getIslamicDate().getMonth());
-        Log.i(TAG, "getDayOfMonth : " + DateUtil.getIslamicDate().getDayOfMonth());
+        Logger.i(TAG, "getYear : " + DateUtil.getIslamicDate().getYear());
+        Logger.i(TAG, "getMonth : " + DateUtil.getIslamicDate().getMonth());
+        Logger.i(TAG, "getDayOfMonth : " + DateUtil.getIslamicDate().getDayOfMonth());
 
-        Log.i(TAG, "getYear : " + DateUtil.getCivilDate().getYear());
-        Log.i(TAG, "getMonth : " + DateUtil.getCivilDate().getMonth());
-        Log.i(TAG, "getDayOfMonth : " + DateUtil.getCivilDate().getDayOfMonth());
+        Logger.i(TAG, "getYear : " + DateUtil.getCivilDate().getYear());
+        Logger.i(TAG, "getMonth : " + DateUtil.getCivilDate().getMonth());
+        Logger.i(TAG, "getDayOfMonth : " + DateUtil.getCivilDate().getDayOfMonth());
 
     }
 
@@ -208,8 +204,8 @@ public class MainActivity extends AbstractActivity {
     }
 
     private void log() {
-        Log.setDebugMode(true);
-        Log.setAcharkitLog(true);
+        Logger.setDebugMode(true);
+        Logger.setAcharkitLog(true);
     }
 
     private void requestConnection() {
@@ -219,7 +215,7 @@ public class MainActivity extends AbstractActivity {
             parameter.put("body", "bar");
             parameter.put("userId", 1);
         } catch (JSONException e) {
-            Log.w(TAG, e);
+            Logger.w(TAG, e);
         }
 
         Map<String, String> header = new HashMap<>();
@@ -233,13 +229,13 @@ public class MainActivity extends AbstractActivity {
                     .setOnRequestListener(new OnRequestListener() {
                         @Override
                         public void error(String error) {
-                            Log.d(TAG, "error:" + error);
+                            Logger.d(TAG, "error:" + error);
                             Util.showToast(getApplicationContext(), error, Toast.LENGTH_SHORT);
                         }
 
                         @Override
                         public void success(String response) {
-                            Log.d(TAG, "response:" + response);
+                            Logger.d(TAG, "response:" + response);
                             Util.showToast(getApplicationContext(), response, Toast.LENGTH_SHORT);
                         }
                     }).sendRequest();

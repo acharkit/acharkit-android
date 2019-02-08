@@ -16,7 +16,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import ir.acharkit.android.util.Log;
+import ir.acharkit.android.util.Logger;
 import ir.acharkit.android.util.helper.MimeHelper;
 import ir.acharkit.android.util.helper.StringHelper;
 
@@ -256,7 +256,7 @@ public class ImageLoaderUtil {
             return bitmap;
 
         } catch (Exception e) {
-            Log.w(TAG, e);
+            Logger.w(TAG, e);
         }
         return null;
     }

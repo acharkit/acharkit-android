@@ -22,7 +22,7 @@ import android.widget.FrameLayout;
 import ir.acharkit.android.annotation.BadgeViewPosition;
 import ir.acharkit.android.util.Colour;
 import ir.acharkit.android.util.Font;
-import ir.acharkit.android.util.Log;
+import ir.acharkit.android.util.Logger;
 import ir.acharkit.android.util.helper.ConvertHelper;
 
 /**
@@ -255,7 +255,7 @@ public class BadgeView extends AppCompatTextView {
      */
     public void setNumber(int number) {
         if (number < 1)
-            Log.e(TAG, "Number must be bigger than zero", null);
+            Logger.e(TAG, "Number must be bigger than zero", null);
         this.number = number;
     }
 

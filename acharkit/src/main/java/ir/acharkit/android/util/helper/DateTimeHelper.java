@@ -9,7 +9,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import ir.acharkit.android.util.Log;
+import ir.acharkit.android.util.Logger;
 
 /**
  * Author:  Alireza Tizfahm Fard
@@ -48,7 +48,7 @@ public class DateTimeHelper {
         try {
             return format.parse(time).getTime();
         } catch (ParseException e) {
-            Log.w(TAG, e);
+            Logger.w(TAG, e);
         }
         return -1;
     }

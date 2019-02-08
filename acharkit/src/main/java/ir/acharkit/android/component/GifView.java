@@ -14,7 +14,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 import ir.acharkit.android.R;
-import ir.acharkit.android.util.Log;
+import ir.acharkit.android.util.Logger;
 import ir.acharkit.android.util.helper.ViewHelper;
 
 /**
@@ -76,7 +76,7 @@ public class GifView extends View {
         try {
             gif = Movie.decodeStream(new FileInputStream(file));
         } catch (FileNotFoundException e) {
-            Log.w(TAG, e);
+            Logger.w(TAG, e);
         }
         requestLayout();
         return this;
@@ -90,7 +90,7 @@ public class GifView extends View {
         try {
             gif = Movie.decodeStream(new FileInputStream(file));
         } catch (FileNotFoundException e) {
-            Log.w(TAG, e);
+            Logger.w(TAG, e);
         }
         requestLayout();
         return this;

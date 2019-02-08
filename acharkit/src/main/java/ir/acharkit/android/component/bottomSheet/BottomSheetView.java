@@ -9,7 +9,7 @@ import android.widget.LinearLayout;
 
 import ir.acharkit.android.component.BottomSheet;
 import ir.acharkit.android.util.Colour;
-import ir.acharkit.android.util.Log;
+import ir.acharkit.android.util.Logger;
 import ir.acharkit.android.util.helper.SwipeHelper;
 
 /**
@@ -53,17 +53,17 @@ public class BottomSheetView extends LinearLayoutCompat {
         setOnTouchListener(new SwipeHelper(context) {
             @Override
             public void onSwipeRight() {
-                Log.d(TAG, "onSwipeRight");
+                Logger.d(TAG, "onSwipeRight");
             }
 
             @Override
             public void onSwipeLeft() {
-                Log.d(TAG, "onSwipeLeft");
+                Logger.d(TAG, "onSwipeLeft");
             }
 
             @Override
             public void onSwipeTop() {
-                Log.d(TAG, "onSwipeTop");
+                Logger.d(TAG, "onSwipeTop");
                 if (!isCollapsed) {
                 } else {
                     show();
@@ -72,7 +72,7 @@ public class BottomSheetView extends LinearLayoutCompat {
 
             @Override
             public void onSwipeBottom() {
-                Log.d(TAG, "onSwipeBottom");
+                Logger.d(TAG, "onSwipeBottom");
                 collapse();
             }
         });

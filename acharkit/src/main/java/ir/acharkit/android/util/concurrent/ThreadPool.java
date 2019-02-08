@@ -2,7 +2,7 @@ package ir.acharkit.android.util.concurrent;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
-import ir.acharkit.android.util.Log;
+import ir.acharkit.android.util.Logger;
 
 /**
  * Author:  Alireza Tizfahm Fard
@@ -69,7 +69,7 @@ public class ThreadPool {
                         try {
                             queue.wait();
                         } catch (InterruptedException e) {
-                            Log.w(TAG, e);
+                            Logger.w(TAG, e);
 
                         }
                     }
@@ -78,7 +78,7 @@ public class ThreadPool {
                 try {
                     task.run();
                 } catch (RuntimeException e) {
-                    Log.w(TAG, e);
+                    Logger.w(TAG, e);
                 }
             }
         }

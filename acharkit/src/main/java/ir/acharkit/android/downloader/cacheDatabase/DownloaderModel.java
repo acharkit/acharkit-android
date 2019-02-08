@@ -8,7 +8,7 @@ package ir.acharkit.android.downloader.cacheDatabase;
 
 public class DownloaderModel {
 
-    public static final String TABLE_NAME = "downloader";
+    static final String TABLE_NAME = "downloader";
 
     public static class Status {
         public static final int NEW = 1;
@@ -18,7 +18,7 @@ public class DownloaderModel {
         public static final int PAUSE = 5;
     }
 
-    public static class Column {
+    static class Column {
         static final String ID = "id";
         static final String URL = "url";
         static final String FILE_NAME = "file_name";
@@ -26,7 +26,7 @@ public class DownloaderModel {
         static final String PERCENT = "percent";
     }
 
-    public static final String CREATE_TABLE =
+    static final String CREATE_TABLE =
             "CREATE TABLE " + TABLE_NAME + "("
                     + Column.ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                     + Column.URL + " TEXT,"

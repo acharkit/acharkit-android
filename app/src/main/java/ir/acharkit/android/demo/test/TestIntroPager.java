@@ -7,7 +7,7 @@ import ir.acharkit.android.component.IndicatorPager;
 import ir.acharkit.android.component.indicator.OnPageChangeListener;
 import ir.acharkit.android.demo.R;
 import ir.acharkit.android.demo.UseFragment;
-import ir.acharkit.android.util.Log;
+import ir.acharkit.android.util.Logger;
 
 /**
  * Author:  Alireza Tizfahm Fard
@@ -48,19 +48,19 @@ public class TestIntroPager extends AbstractActivity {
         indicatorPager.addOnPageChangeListener(new OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                Log.i(TAG, "position: " + position);
-                Log.i(TAG, "positionOffset: " + positionOffset);
-                Log.i(TAG, "positionOffsetPixels: " + positionOffsetPixels);
+                Logger.i(TAG, "position: " + position);
+                Logger.i(TAG, "positionOffset: " + positionOffset);
+                Logger.i(TAG, "positionOffsetPixels: " + positionOffsetPixels);
             }
 
             @Override
             public void onPageSelected(int position) {
-                Log.i(TAG, "onPageSelected : position: " + position);
+                Logger.i(TAG, "onPageSelected : position: " + position);
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
-                Log.i(TAG, "state: " + state);
+                Logger.i(TAG, "state: " + state);
             }
         });
     }

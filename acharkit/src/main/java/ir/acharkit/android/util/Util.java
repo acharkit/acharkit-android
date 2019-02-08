@@ -23,12 +23,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 import ir.acharkit.android.annotation.FontType;
 import ir.acharkit.android.annotation.ToastDuration;
-import ir.acharkit.android.util.concurrent.ThreadPool;
 import ir.acharkit.android.util.helper.ConvertHelper;
 import ir.acharkit.android.util.helper.StringHelper;
 import ir.acharkit.android.util.helper.ViewHelper;
@@ -175,7 +172,7 @@ public class Util {
             manager.getPackageInfo(PackageName, PackageManager.GET_ACTIVITIES);
             isAppInstalled = true;
         } catch (PackageManager.NameNotFoundException e) {
-            Log.w(TAG, e);
+            Logger.w(TAG, e);
         }
         return isAppInstalled;
     }
@@ -194,7 +191,7 @@ public class Util {
                 }
             }
         } catch (Exception e) {
-            Log.w(TAG, e);
+            Logger.w(TAG, e);
         }
         return false;
     }
@@ -224,21 +221,21 @@ public class Util {
             try {
                 is.close();
             } catch (Exception e) {
-                Log.w(TAG, e);
+                Logger.w(TAG, e);
             }
             try {
                 os.flush();
             } catch (Exception e) {
-                Log.w(TAG, e);
+                Logger.w(TAG, e);
             }
             try {
                 os.close();
             } catch (Exception e) {
-                Log.w(TAG, e);
+                Logger.w(TAG, e);
             }
             return true;
         } catch (Exception e) {
-            Log.w(TAG, e);
+            Logger.w(TAG, e);
             return false;
         }
     }
@@ -254,7 +251,7 @@ public class Util {
                 return pm.isPowerSaveMode();
             }
         } catch (Exception e) {
-            Log.w(TAG, e);
+            Logger.w(TAG, e);
         }
 
         return false;
@@ -272,7 +269,7 @@ public class Util {
             File file = new File(path + "/" + assetName);
             return copyStream(new FileOutputStream(file.getPath()), is);
         } catch (IOException e) {
-            Log.w(TAG, e);
+            Logger.w(TAG, e);
             return false;
         }
     }

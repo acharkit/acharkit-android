@@ -6,7 +6,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import ir.acharkit.android.util.Log;
+import ir.acharkit.android.util.Logger;
 
 /**
  * Author:  Alireza Tizfahm Fard
@@ -79,7 +79,7 @@ public class StringHelper {
             textBytes = text.getBytes("iso-8859-1");
 
         } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
-             Log.w(TAG, e);
+             Logger.w(TAG, e);
         }
         if (md != null) {
             md.update(textBytes, 0, textBytes.length);

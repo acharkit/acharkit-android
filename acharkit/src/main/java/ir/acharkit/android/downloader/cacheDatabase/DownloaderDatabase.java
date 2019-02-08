@@ -4,7 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import ir.acharkit.android.util.Log;
+import ir.acharkit.android.util.Logger;
 
 /**
  * Author:  Alireza Tizfahm Fard
@@ -32,7 +32,7 @@ class DownloaderDatabase extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        Log.d(TAG, "database created!!!");
+        Logger.d(TAG, "onCreate SQLiteDatabase!!!");
         sqLiteDatabase.execSQL(DownloaderModel.CREATE_TABLE);
     }
 

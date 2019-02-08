@@ -30,7 +30,7 @@ public class Font {
         try {
             font = Typeface.createFromAsset(context.getAssets(), "fonts/" + path);
         } catch (RuntimeException e) {
-            Log.w(TAG, e);
+            Logger.w(TAG, e);
         }
         setFont(font, typeface, view);
     }
