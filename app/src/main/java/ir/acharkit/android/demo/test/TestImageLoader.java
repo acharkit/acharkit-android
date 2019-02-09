@@ -68,14 +68,14 @@ public class TestImageLoader extends AbstractActivity {
                     public void onFailure(String reason) {
                         Logger.d(TAG, "onFailure:-- " + reason);
                     }
-                }).load(image, list.get(index));
+                }).build().load(image, list.get(index));
             }
         });
 
         random.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                imageLoader.clearCache(new OnCacheListener() {
+                imageLoader.build().clearCache(new OnCacheListener() {
                     @Override
                     public void onCompleted() {
                         Logger.d(TAG, "onCompleted: -- clearCache");

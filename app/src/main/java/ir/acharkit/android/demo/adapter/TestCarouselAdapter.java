@@ -65,7 +65,7 @@ public class TestCarouselAdapter extends CarouselAdapter {
             public void onFailure(String reason) {
                 Logger.d(TAG, "onFailure:-- " + reason);
             }
-        }).load(((MyViewHolder) holder).imageView, model.getImageUri());
+        }).build().load(((MyViewHolder) holder).imageView, model.getImageUri());
     }
 
     @Override

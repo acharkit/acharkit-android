@@ -316,7 +316,6 @@ public class Downloader {
         public Downloader build() {
             DownloadTask downloadTask = new DownloadTask();
             downloadTask.dao = new DownloaderDao(mContext);
-            ;
             downloadTask.timeOut = mTimeOut;
             downloadTask.downloadListener = mDownloadListener;
             downloadTask.fileName = mFileName;
