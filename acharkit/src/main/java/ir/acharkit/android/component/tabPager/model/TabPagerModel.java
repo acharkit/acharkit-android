@@ -1,9 +1,9 @@
 package ir.acharkit.android.component.tabPager.model;
 
-import android.support.annotation.DrawableRes;
-import android.support.annotation.NonNull;
+import androidx.annotation.DrawableRes;
+import androidx.annotation.NonNull;
 
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 
 /**
  * Author:  Alireza Tizfahm Fard

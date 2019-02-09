@@ -1,8 +1,8 @@
 package ir.acharkit.android.imageLoader;
 
 import android.content.Context;
-import android.support.annotation.CheckResult;
-import android.support.annotation.NonNull;
+import androidx.annotation.CheckResult;
+import androidx.annotation.NonNull;
 import android.widget.ImageView;
 
 import ir.acharkit.android.imageLoader.cache.DiskCache;

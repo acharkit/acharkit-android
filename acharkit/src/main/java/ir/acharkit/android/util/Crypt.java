@@ -1,7 +1,7 @@
 package ir.acharkit.android.util;
 
 
-import android.support.annotation.Size;
+import androidx.annotation.Size;
 import android.util.Base64;
 
 import java.io.UnsupportedEncodingException;

@@ -1,9 +1,9 @@
 package ir.acharkit.android.component;
 
-import android.support.annotation.IdRes;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
-import android.view.Gravity;
+import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.view.View;
 import android.view.ViewGroup;
 

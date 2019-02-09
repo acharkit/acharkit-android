@@ -3,9 +3,9 @@ package ir.acharkit.android.connection;
 import android.Manifest;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.support.annotation.NonNull;
-import android.support.annotation.RequiresPermission;
-import android.support.annotation.Size;
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresPermission;
+import androidx.annotation.Size;
 import android.util.Pair;
 
 import org.json.JSONObject;

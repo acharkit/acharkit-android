@@ -1,7 +1,7 @@
 package ir.acharkit.android.component.bottomSheet;
 
 import android.content.Context;
-import android.support.v7.widget.LinearLayoutCompat;
+import androidx.appcompat.widget.LinearLayoutCompat;
 import android.util.AttributeSet;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;

@@ -1,8 +1,8 @@
 package ir.acharkit.android.component.tabPager;
 
 import android.content.Context;
-import android.support.design.widget.TabLayout;
-import android.support.v7.widget.LinearLayoutCompat;
+import com.google.android.material.tabs.TabLayout;
+import androidx.appcompat.widget.LinearLayoutCompat;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
