@@ -6,6 +6,7 @@ package ir.acharkit.android.connection;
  * Email:   alirezat775@gmail.com
  */
 public interface OnRequestListener {
-    void success(String response);
-    void error(String error);
+    void onSuccess(String response);
+    void onError(String error);
+    void onCancel();
 }

@@ -129,7 +129,7 @@ class ImageLoaderManager {
     /**
      * @return
      */
-    public Context getContext() {
+    private Context getContext() {
         return context;
     }
 

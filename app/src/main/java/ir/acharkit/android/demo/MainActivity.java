@@ -228,17 +228,23 @@ public class MainActivity extends AbstractActivity {
                     .setTimeOut(60 * 2000)
                     .setOnRequestListener(new OnRequestListener() {
                         @Override
-                        public void error(String error) {
-                            Logger.d(TAG, "error:" + error);
+                        public void onSuccess(String response) {
+                            Logger.d(TAG, "onSuccess: " + response);
+                            Util.showToast(getApplicationContext(), response, Toast.LENGTH_SHORT);
+                        }
+
+                        @Override
+                        public void onError(String error) {
+                            Logger.d(TAG, "onError: " + error);
                             Util.showToast(getApplicationContext(), error, Toast.LENGTH_SHORT);
                         }
 
                         @Override
-                        public void success(String response) {
-                            Logger.d(TAG, "response:" + response);
-                            Util.showToast(getApplicationContext(), response, Toast.LENGTH_SHORT);
+                        public void onCancel() {
+                            Logger.d(TAG, "onCancel: " + "request cancelled");
+                            Util.showToast(getApplicationContext(), "request cancelled", Toast.LENGTH_SHORT);
                         }
-                    }).sendRequest();
+                    }).build().sendRequest();
         }
     }
 
