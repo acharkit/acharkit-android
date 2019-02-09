@@ -9,7 +9,7 @@ import ir.acharkit.android.component.TabPager;
 import ir.acharkit.android.demo.R;
 import ir.acharkit.android.demo.UseFragment;
 import ir.acharkit.android.util.Colour;
-import ir.acharkit.android.util.Log;
+import ir.acharkit.android.util.Logger;
 
 /**
  * Author:  Alireza Tizfahm Fard
@@ -56,14 +56,14 @@ public class TestViewPager extends AbstractActivity {
         tab.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                Log.i(TAG, "position: " + position);
-                Log.i(TAG, "positionOffset: " + positionOffset);
-                Log.i(TAG, "positionOffsetPixels: " + positionOffsetPixels);
+                Logger.i(TAG, "position: " + position);
+                Logger.i(TAG, "positionOffset: " + positionOffset);
+                Logger.i(TAG, "positionOffsetPixels: " + positionOffsetPixels);
             }
 
             @Override
             public void onPageSelected(int position) {
-                Log.i(TAG, "onPageSelected : position: " + position);
+                Logger.i(TAG, "onPageSelected : position: " + position);
                 if (position == 2)
                     tab.removeBadge(1);
                 if (position == 0)
@@ -72,7 +72,7 @@ public class TestViewPager extends AbstractActivity {
 
             @Override
             public void onPageScrollStateChanged(int state) {
-                Log.i(TAG, "state: " + state);
+                Logger.i(TAG, "state: " + state);
             }
         });
     }

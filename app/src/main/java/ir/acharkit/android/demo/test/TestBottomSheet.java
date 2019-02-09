@@ -9,7 +9,7 @@ import ir.acharkit.android.app.AbstractActivity;
 import ir.acharkit.android.component.BottomSheet;
 import ir.acharkit.android.demo.R;
 import ir.acharkit.android.util.Colour;
-import ir.acharkit.android.util.Log;
+import ir.acharkit.android.util.Logger;
 
 /**
  * Author:  Alireza Tizfahm Fard
@@ -31,12 +31,12 @@ public class TestBottomSheet extends AbstractActivity {
         bottomSheet.setStateChangeListener(new BottomSheet.Callback() {
             @Override
             public void collapse() {
-                Log.d(TAG, "collapse");
+                Logger.d(TAG, "collapse");
             }
 
             @Override
             public void show() {
-                Log.d(TAG, "show");
+                Logger.d(TAG, "show");
             }
         });
 

@@ -13,7 +13,7 @@ import ir.acharkit.android.demo.R;
 import ir.acharkit.android.demo.model.TestCarouselModel;
 import ir.acharkit.android.imageLoader.ImageLoader;
 import ir.acharkit.android.imageLoader.OnImageLoaderListener;
-import ir.acharkit.android.util.Log;
+import ir.acharkit.android.util.Logger;
 
 /**
  * Author:  Alireza Tizfahm Fard
@@ -46,24 +46,24 @@ public class TestCarouselAdapter extends CarouselAdapter {
         vh = (MyViewHolder) holder;
         final TestCarouselModel model = (TestCarouselModel) getItems().get(position);
 
-        Log.d(TAG, "ID : " + model.getId());
-        Log.d(TAG, "TITLE : " + model.getTitle());
+        Logger.d(TAG, "ID : " + model.getId());
+        Logger.d(TAG, "TITLE : " + model.getTitle());
         vh.id.setText("ID: " + model.getId());
 
         imageLoader.setPlaceHolder(R.mipmap.ic_launcher).setImageLoaderListener(new OnImageLoaderListener() {
             @Override
             public void onStart(ImageView imageView, String url) {
-                Log.d(TAG, "onStart:-- " + "imageView: " + imageView + "url: " + url);
+                Logger.d(TAG, "onStart:-- " + "imageView: " + imageView + "url: " + url);
             }
 
             @Override
             public void onCompleted(ImageView imageView, String url, Bitmap bitmap) {
-                Log.d(TAG, "onCompleted:-- " + "image: " + imageView.toString());
+                Logger.d(TAG, "onCompleted:-- " + "image: " + imageView.toString());
             }
 
             @Override
             public void onFailure(String reason) {
-                Log.d(TAG, "onFailure:-- " + reason);
+                Logger.d(TAG, "onFailure:-- " + reason);
             }
         }).load(((MyViewHolder) holder).imageView, model.getImageUri());
     }

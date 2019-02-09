@@ -12,18 +12,12 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
 import java.util.Map;
 
 import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 
-import ir.acharkit.android.util.Log;
+import ir.acharkit.android.util.Logger;
 import ir.acharkit.android.util.helper.DateTimeHelper;
 
 /**
@@ -36,12 +30,6 @@ public class ConnectionUtil {
     public static final String boundary = DateTimeHelper.currentDateTime("UTC");
     public static final String DEFAULT_PARAMS_ENCODING = "UTF-8";
 
-    // always verify the host - dont check for certificate
-    public final static HostnameVerifier DO_NOT_VERIFY = new HostnameVerifier() {
-        public boolean verify(String hostname, SSLSession session) {
-            return true;
-        }
-    };
     private static final String TAG = ConnectionUtil.class.getName();
     private static final String LINE_FEED = "\r\n"; //;
     private static PrintWriter writer;
@@ -54,7 +42,6 @@ public class ConnectionUtil {
     public static void setHeaderParams(HttpURLConnection connection, Map<String, String> header) throws UnsupportedEncodingException {
         connection.setRequestProperty("Content-Type", "application/json");
         connection.setRequestProperty("Accept", "application/json");
-
         connection.setRequestProperty("Accept-Charset", DEFAULT_PARAMS_ENCODING);
         if (header != null) {
             for (Map.Entry<String, String> entry : header.entrySet()) {
@@ -83,14 +70,14 @@ public class ConnectionUtil {
             if (e instanceof FileNotFoundException) {
                 return null;
             }
-            Log.w(TAG, e);
+            Logger.w(TAG, e);
             result = null;
         } finally {
             if (is != null) {
                 try {
                     is.close();
                 } catch (IOException e) {
-                    Log.w(TAG, e);
+                    Logger.w(TAG, e);
                 }
             }
         }
@@ -114,32 +101,6 @@ public class ConnectionUtil {
         }
     }
 
-    /**
-     * Trust every server - do not check for any certificate
-     */
-    public static void trustHosts() {
-        TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
-            public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-                return new java.security.cert.X509Certificate[]{};
-            }
-
-            public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-            }
-
-            public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-            }
-        }};
-
-        // Install the all-trusting trust manager
-        try {
-            SSLContext sc = SSLContext.getInstance("TLS");
-            sc.init(null, trustAllCerts, new java.security.SecureRandom());
-            HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-        } catch (Exception e) {
-            Log.w(TAG, e);
-        }
-    }
-
     public static void copyStream(InputStream input, OutputStream output) {
         byte[] buffer = new byte[1024]; // Adjust if you want
         int bytesRead;
@@ -148,7 +109,7 @@ public class ConnectionUtil {
                 output.write(buffer, 0, bytesRead);
             }
         } catch (IOException e) {
-            Log.w(TAG, e);
+            Logger.w(TAG, e);
         }
     }
 }

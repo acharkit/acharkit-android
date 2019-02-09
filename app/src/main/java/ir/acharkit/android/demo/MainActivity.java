@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -11,7 +12,6 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,6 +23,7 @@ import ir.acharkit.android.demo.test.TestBottomSheet;
 import ir.acharkit.android.demo.test.TestBottomTab;
 import ir.acharkit.android.demo.test.TestCarouselPager;
 import ir.acharkit.android.demo.test.TestDialog;
+import ir.acharkit.android.demo.test.TestDownloader;
 import ir.acharkit.android.demo.test.TestFragment;
 import ir.acharkit.android.demo.test.TestGif;
 import ir.acharkit.android.demo.test.TestImageLoader;
@@ -31,14 +32,12 @@ import ir.acharkit.android.demo.test.TestProgress;
 import ir.acharkit.android.demo.test.TestTag;
 import ir.acharkit.android.demo.test.TestUtils;
 import ir.acharkit.android.demo.test.TestViewPager;
-import ir.acharkit.android.downloader.Downloader;
-import ir.acharkit.android.downloader.OnDownloadListener;
 import ir.acharkit.android.util.Cache;
 import ir.acharkit.android.util.ConnectChecker;
 import ir.acharkit.android.util.Crypt;
 import ir.acharkit.android.util.Database;
 import ir.acharkit.android.util.Font;
-import ir.acharkit.android.util.Log;
+import ir.acharkit.android.util.Logger;
 import ir.acharkit.android.util.PermissionRequest;
 import ir.acharkit.android.util.Util;
 
@@ -153,24 +152,24 @@ public class MainActivity extends AbstractActivity {
         findViewById(R.id.start_request_download).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                requestDownload();
+                startActivity(TestDownloader.class);
             }
         });
     }
 
     private void calendar() {
-        Log.i(TAG, "getYear : " + DateUtil.getPersianDate().getYear());
-        Log.i(TAG, "getMonth : " + DateUtil.getPersianDate().getMonth());
-        Log.i(TAG, "getDayOfMonth : " + DateUtil.getPersianDate().getDayOfMonth());
-        Log.i(TAG, "isLeapYear : " + DateUtil.getPersianDate().isLeapYear());
+        Logger.i(TAG, "getYear : " + DateUtil.getPersianDate().getYear());
+        Logger.i(TAG, "getMonth : " + DateUtil.getPersianDate().getMonth());
+        Logger.i(TAG, "getDayOfMonth : " + DateUtil.getPersianDate().getDayOfMonth());
+        Logger.i(TAG, "isLeapYear : " + DateUtil.getPersianDate().isLeapYear());
 
-        Log.i(TAG, "getYear : " + DateUtil.getIslamicDate().getYear());
-        Log.i(TAG, "getMonth : " + DateUtil.getIslamicDate().getMonth());
-        Log.i(TAG, "getDayOfMonth : " + DateUtil.getIslamicDate().getDayOfMonth());
+        Logger.i(TAG, "getYear : " + DateUtil.getIslamicDate().getYear());
+        Logger.i(TAG, "getMonth : " + DateUtil.getIslamicDate().getMonth());
+        Logger.i(TAG, "getDayOfMonth : " + DateUtil.getIslamicDate().getDayOfMonth());
 
-        Log.i(TAG, "getYear : " + DateUtil.getCivilDate().getYear());
-        Log.i(TAG, "getMonth : " + DateUtil.getCivilDate().getMonth());
-        Log.i(TAG, "getDayOfMonth : " + DateUtil.getCivilDate().getDayOfMonth());
+        Logger.i(TAG, "getYear : " + DateUtil.getCivilDate().getYear());
+        Logger.i(TAG, "getMonth : " + DateUtil.getCivilDate().getMonth());
+        Logger.i(TAG, "getDayOfMonth : " + DateUtil.getCivilDate().getDayOfMonth());
 
     }
 
@@ -189,7 +188,7 @@ public class MainActivity extends AbstractActivity {
 
     private void initDatabase() {
         Database.init(this);
-//        Database.getInstance().prepareDatabaseFile(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath(), "db.sqlite", 1);
+        Database.getInstance().prepareDatabaseFile(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath(), "db.sqlite", 1);
         Database.getInstance().prepareDatabaseAssets("db.sqlite", 1);
     }
 
@@ -205,72 +204,41 @@ public class MainActivity extends AbstractActivity {
     }
 
     private void log() {
-        Log.setDebugMode(true);
-        Log.setAcharkitLog(true);
+        Logger.setDebugMode(true);
+        Logger.setAcharkitLog(true);
     }
 
     private void requestConnection() {
         JSONObject parameter = new JSONObject();
         try {
-            parameter.put("test1", 1);
-            parameter.put("test2", "value");
+            parameter.put("title", "foo");
+            parameter.put("body", "bar");
+            parameter.put("userId", 1);
         } catch (JSONException e) {
-            Log.w(TAG, e);
+            Logger.w(TAG, e);
         }
 
         Map<String, String> header = new HashMap<>();
-        header.put("Access-Token", "1234567890ABC");
+        header.put("Content-type", "application/json");
 
         if (checkNetworkAvailable(this)) {
-            new ConnectionRequest.Builder(this, ConnectionRequest.Method.POST, "http://www.test.com/api")
-                    .trustSSL(true)
+            new ConnectionRequest.Builder(this, ConnectionRequest.Method.POST, "https://jsonplaceholder.typicode.com/posts")
                     .setHeader(header)
                     .setParameters(parameter)
                     .setTimeOut(60 * 2000)
                     .setOnRequestListener(new OnRequestListener() {
                         @Override
                         public void error(String error) {
-                            Log.d(TAG, "error:" + error);
+                            Logger.d(TAG, "error:" + error);
                             Util.showToast(getApplicationContext(), error, Toast.LENGTH_SHORT);
                         }
 
                         @Override
                         public void success(String response) {
-                            Log.d(TAG, "response:" + response);
+                            Logger.d(TAG, "response:" + response);
                             Util.showToast(getApplicationContext(), response, Toast.LENGTH_SHORT);
                         }
                     }).sendRequest();
-        }
-    }
-
-    private void requestDownload() {
-        Map<String, String> header = new HashMap<>();
-        header.put("Access-Token", "1234567890ABC");
-
-        if (checkNetworkAvailable(this)) {
-            new Downloader.Builder(getApplicationContext(), "http://www.xsjjys.com/data/out/60/WHDQ-512049955.png")
-                    .setDownloadDir(String.valueOf(getExternalFilesDir("download")))
-                    .setTimeOut(60 * 2000)
-                    .setFileName("image", "png")
-                    .trustSSL(true)
-                    .setHeader(header)
-                    .setDownloadListener(new OnDownloadListener() {
-                        @Override
-                        public void onCompleted(File file) {
-                            Log.d(TAG, "onCompleted:");
-                        }
-
-                        @Override
-                        public void onFailure(String reason) {
-                            Log.d(TAG, "onFailure:" + reason);
-                        }
-
-                        @Override
-                        public void progressUpdate(int percent, int downloadedSize, int totalSize) {
-                            Log.d(TAG, "progressUpdate:" + percent);
-                        }
-                    }).download();
-
         }
     }
 

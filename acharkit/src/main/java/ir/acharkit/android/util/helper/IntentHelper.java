@@ -8,7 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.RequiresPermission;
 import android.support.annotation.Size;
 
-import ir.acharkit.android.util.Log;
+import ir.acharkit.android.util.Logger;
 import ir.acharkit.android.util.Util;
 
 
@@ -66,7 +66,7 @@ public class IntentHelper {
      */
     public static void emailIntent(@NonNull Context context, @NonNull String to, @NonNull String subject, @NonNull String body) {
         if (!Util.isValidateEmail(to)) {
-            Log.d(TAG, "invalid mail");
+            Logger.d(TAG, "invalid mail");
             return;
         }
         StringBuilder builder = new StringBuilder("mailto:" + Uri.encode(to));

@@ -18,7 +18,7 @@ import java.util.Locale;
 
 import ir.acharkit.android.app.AbstractActivity;
 import ir.acharkit.android.util.Font;
-import ir.acharkit.android.util.Log;
+import ir.acharkit.android.util.Logger;
 import ir.acharkit.android.util.PermissionRequest;
 import ir.acharkit.android.util.Util;
 import ir.acharkit.android.util.helper.ConvertHelper;
@@ -149,7 +149,7 @@ public class TestUtils extends AbstractActivity {
     }
 
     private void testViewHelper() {
-        Log.i(TAG, "ViewHelper" + "\n" +
+        Logger.i(TAG, "ViewHelper" + "\n" +
                 Arrays.toString(ViewHelper.getScreenSize(this)) + "\n" +
                 ViewHelper.getScreenHeight() + "\n" +
                 ViewHelper.getScreenWidth() + "\n" +
@@ -162,7 +162,7 @@ public class TestUtils extends AbstractActivity {
     }
 
     private void testDateTimeHelper() {
-        Log.i(TAG, "DateTimeHelper" + "\n" +
+        Logger.i(TAG, "DateTimeHelper" + "\n" +
                 DateTimeHelper.currentDateTime("UTC") + "\n" +
                 DateTimeHelper.millisToStringDate(1509663266000L) + "\n" +
                 DateTimeHelper.dateStringToMillis("2017/11/02 22:54:26"));
@@ -170,7 +170,7 @@ public class TestUtils extends AbstractActivity {
     }
 
     private void testMimeHelper() {
-        Log.i(TAG, "MimeHelper" + "\n" +
+        Logger.i(TAG, "MimeHelper" + "\n" +
                 MimeHelper.getFileExtensionFromUrl("image.fromyesterday.test.jpg") + "\n" +
                 MimeHelper.hasExtension("jpg") + "\n" +
                 MimeHelper.hasMimeType("audio/aac") + "\n" +
@@ -179,7 +179,7 @@ public class TestUtils extends AbstractActivity {
     }
 
     private void testUtil() {
-        Log.i(TAG, "UtilsConnection" + "\n" +
+        Logger.i(TAG, "UtilsConnection" + "\n" +
                 Util.isValidateEmail("test@example.com") + "\n" +
                 Util.arabicToDecimal("٠١٢٣٤٥٦٧٨٩") + "\n" +
                 Util.isValidPhoneNumberIran("09101234567"));
@@ -188,7 +188,7 @@ public class TestUtils extends AbstractActivity {
     }
 
     private void testConvertHelper() {
-        Log.i(TAG, "ConvertHelper" + "\n" +
+        Logger.i(TAG, "ConvertHelper" + "\n" +
                 ConvertHelper.dpToPx(this, 5) + "\n" +
                 ConvertHelper.pixelsToDp(this, 5) + "\n" +
                 ConvertHelper.pxToSp(this, 5) + "\n" +
@@ -199,7 +199,7 @@ public class TestUtils extends AbstractActivity {
     }
 
     private void testStringHelper() {
-        Log.i(TAG, "StringHelper" + "\n" +
+        Logger.i(TAG, "StringHelper" + "\n" +
                 StringHelper.capitalizeString("this is test") + "\n" +
                 StringHelper.isEmpty("this is test") + "\n" +
                 StringHelper.isEmpty("") + "\n" +

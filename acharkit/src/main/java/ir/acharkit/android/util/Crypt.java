@@ -41,7 +41,7 @@ public class Crypt {
             cipher = Cipher.getInstance(myEncryptionScheme);
             secretKey = skf.generateSecret(ks);
         } catch (UnsupportedEncodingException | NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeySpecException | InvalidKeyException e) {
-            Log.w(TAG, e);
+            Logger.w(TAG, e);
         }
     }
 
@@ -73,7 +73,7 @@ public class Crypt {
             byte[] encryptedText = cipher.doFinal(plainText);
             encryptedString = encode(encryptedText);
         } catch (Exception e) {
-            Log.w(TAG, e);
+            Logger.w(TAG, e);
         }
         return encryptedString;
     }
@@ -90,7 +90,7 @@ public class Crypt {
             byte[] plainText = cipher.doFinal(encryptedText);
             decryptedText = new String(plainText);
         } catch (Exception e) {
-            Log.w(TAG, e);
+            Logger.w(TAG, e);
         }
         return decryptedText;
     }

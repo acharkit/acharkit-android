@@ -5,7 +5,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
-import ir.acharkit.android.util.Log;
+import ir.acharkit.android.util.Logger;
 
 /**
  * Author:  Alireza Tizfahm Fard
@@ -68,7 +68,7 @@ public abstract class SwipeHelper implements View.OnTouchListener {
                     result = true;
                 }
             } catch (Exception exception) {
-                Log.w(TAG, exception);
+                Logger.w(TAG, exception);
             }
             return result;
         }

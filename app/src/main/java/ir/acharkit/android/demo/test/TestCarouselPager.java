@@ -14,7 +14,7 @@ import ir.acharkit.android.component.carousel.CarouselView;
 import ir.acharkit.android.demo.R;
 import ir.acharkit.android.demo.adapter.TestCarouselAdapter;
 import ir.acharkit.android.demo.model.TestCarouselModel;
-import ir.acharkit.android.util.Log;
+import ir.acharkit.android.util.Logger;
 
 /**
  * Author:  Alireza Tizfahm Fard
@@ -111,12 +111,12 @@ public class TestCarouselPager extends AbstractActivity {
         carousel.setSnappingListener(new CarouselListener() {
             @Override
             public void onPositionChange(int position) {
-                Log.d(TAG, "position: " + position);
+                Logger.d(TAG, "position: " + position);
             }
 
             @Override
             public void onScroll(int dx, int dy) {
-                Log.d(TAG, "dx: " + dx + " dy: " + dy);
+                Logger.d(TAG, "dx: " + dx + " dy: " + dy);
             }
         });
 

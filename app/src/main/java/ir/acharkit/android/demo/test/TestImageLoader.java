@@ -14,7 +14,7 @@ import ir.acharkit.android.imageLoader.OnImageLoaderListener;
 import ir.acharkit.android.imageLoader.cache.OnCacheListener;
 import ir.acharkit.android.app.AbstractActivity;
 import ir.acharkit.android.demo.R;
-import ir.acharkit.android.util.Log;
+import ir.acharkit.android.util.Logger;
 
 /**
  * Author:  Alireza Tizfahm Fard
@@ -56,17 +56,17 @@ public class TestImageLoader extends AbstractActivity {
                 imageLoader.setImageLoaderListener(new OnImageLoaderListener() {
                     @Override
                     public void onStart(ImageView imageView, String url) {
-                        Log.d(TAG, "onStart:-- " + "imageView: " + imageView + "url: " + url);
+                        Logger.d(TAG, "onStart:-- " + "imageView: " + imageView + "url: " + url);
                     }
 
                     @Override
                     public void onCompleted(ImageView imageView, String url, Bitmap bitmap) {
-                        Log.d(TAG, "onCompleted:-- " + "image: " + image.toString() + "response: " + imageView.toString());
+                        Logger.d(TAG, "onCompleted:-- " + "image: " + image.toString() + "response: " + imageView.toString());
                     }
 
                     @Override
                     public void onFailure(String reason) {
-                        Log.d(TAG, "onFailure:-- " + reason);
+                        Logger.d(TAG, "onFailure:-- " + reason);
                     }
                 }).load(image, list.get(index));
             }
@@ -78,7 +78,7 @@ public class TestImageLoader extends AbstractActivity {
                 imageLoader.clearCache(new OnCacheListener() {
                     @Override
                     public void onCompleted() {
-                        Log.d(TAG, "onCompleted: -- clearCache");
+                        Logger.d(TAG, "onCompleted: -- clearCache");
                     }
                 });
                 return false;

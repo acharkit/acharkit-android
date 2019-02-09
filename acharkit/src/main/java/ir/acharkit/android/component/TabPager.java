@@ -89,7 +89,7 @@ public class TabPager {
 
     /*
         tabViews.add(((ViewGroup) tabLayout.getChildAt(0)).getChildAt(i));
-        Log.d(TAG, tabViews.toString() + "\n" + tabViews.size());
+        Logger.d(TAG, tabViews.toString() + "\n" + tabViews.size());
 
  */
 

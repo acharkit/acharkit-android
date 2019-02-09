@@ -13,7 +13,7 @@ import ir.acharkit.android.component.tag.model.TagModel;
 import ir.acharkit.android.demo.R;
 import ir.acharkit.android.demo.adapter.TestTagAdapter;
 import ir.acharkit.android.demo.model.TestTagModel;
-import ir.acharkit.android.util.Log;
+import ir.acharkit.android.util.Logger;
 
 /**
  * Author:  Alireza Tizfahm Fard
@@ -48,8 +48,8 @@ public class TestTag extends AbstractActivity {
 
         tag.addAll(arrayList);
 
-        Log.d(TAG, "tagList : " + tag.getTagList());
-        Log.d(TAG, "tagList size : " + tag.getItemCount());
+        Logger.d(TAG, "tagList : " + tag.getTagList());
+        Logger.d(TAG, "tagList size : " + tag.getItemCount());
 
         findViewById(R.id.add_tag).setOnClickListener(new View.OnClickListener() {
             @Override
