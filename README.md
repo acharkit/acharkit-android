@@ -5,12 +5,12 @@
   
 
 ```code
-    compile project(':acharkit-release-0.1.0')
+    compile project(':acharkit-release-0.1.1')
     or
-    implementation project(':acharkit-release-0.1.0')
+    implementation project(':acharkit-release-0.1.1')
 ```
 
-# [download version release-0.1.0](https://raw.githubusercontent.com/acharkit/acharkit-android/master/release/acharkit-release-0.1.0.aar)
+# [download version release-0.1.1](https://raw.githubusercontent.com/acharkit/acharkit-android/master/release/acharkit-release-0.1.1.aar)
 
 
 Note : Helper classes have many methods that may not be used here
@@ -166,72 +166,121 @@ Use Crypt
 
 Use Connection Request
 ```code
-    ConnectionRequest.Builder builder = new ConnectionRequest.Builder(this, ConnectionRequest.Method.POST, "https://example.com/")
-                        .setHeader(header)
-                        .trustSSL(true)
-                        .setParameters(jsonObject)
-                        .setOnRequestListener(new OnRequestListener() {
-                            @Override
-                            public void success(String response) {
-                                Log.d(TAG, "response:" + response);
-                            }
-                            @Override
-                            public void error(String error) {
-                                Log.d(TAG, "error:" + error);
-                            }
-    
-                        });
-                builder.sendRequest();
+
+            new ConnectionRequest.Builder(this, ConnectionRequest.Method.POST, "https://jsonplaceholder.typicode.com/posts")
+                    .setHeader(header)
+                    .setParameters(parameter)
+                    .setTimeOut(60 * 2000)
+                    .setOnRequestListener(new OnRequestListener() {
+                        @Override
+                        public void onSuccess(String response) {
+                            Logger.d(TAG, "onSuccess: " + response);
+                            Util.showToast(getApplicationContext(), response, Toast.LENGTH_SHORT);
+                        }
+
+                        @Override
+                        public void onError(String error) {
+                            Logger.d(TAG, "onError: " + error);
+                            Util.showToast(getApplicationContext(), error, Toast.LENGTH_SHORT);
+                        }
+
+                        @Override
+                        public void onCancel() {
+                            Logger.d(TAG, "onCancel: " + "request cancelled");
+                            Util.showToast(getApplicationContext(), "request cancelled", Toast.LENGTH_SHORT);
+                        }
+                    }).build().sendRequest();
 ```
 
 Use Downloader
 ```code
-    Downloader.Builder builder = new Downloader.Builder(getApplicationContext(), "http://www.xsjjys.com/data/out/60/WHDQ-512049955.png")
-                        .setDownloadDir(String.valueOf(getExternalFilesDir("download")))
-                        .setTimeOut(60 * 1000)
-                        .setFileName("image","png")
-                        .trustSSL(true)
-                        .setHeader(header)
-                        .setDownloadListener(new OnDownloadListener() {
+
+        Map<String, String> header = new HashMap<>();
+        header.put("Access-Token", "1234567890ABC");
+        downloader = new Downloader.Builder(getApplicationContext(), "https://dl3.android30t.com/apps/Q-U/Instagram-v79.0.0.21.101(Android30t.Com).apk")
+                .setDownloadDir(String.valueOf(getExternalFilesDir("download")))
+                .setTimeOut(60 * 2000)
+                .setFileName("test_application", "apk")
+                .setHeader(header)
+                .setDownloadListener(new OnDownloadListener() {
+                    @Override
+                    public void onCompleted(File file) {
+                        Logger.d(TAG, "onCompleted:");
+                        Util.showToast(getApplicationContext(), "onCompleted", Toast.LENGTH_LONG);
+                    }
+
+                    @Override
+                    public void onFailure(String reason) {
+                        Logger.d(TAG, "onFailure:" + reason);
+                        Util.showToast(getApplicationContext(), "onFailure:" + reason, Toast.LENGTH_LONG);
+                    }
+
+                    @Override
+                    public void progressUpdate(int percent, int downloadedSize, int totalSize) {
+                        Logger.d(TAG, "progressUpdate:" + percent);
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        Logger.d(TAG, "onCancel:" + "canceled");
+                        Util.showToast(getApplicationContext(), "onCancel:" + "canceled", Toast.LENGTH_LONG);
+                    }
+                }).build();
+                
+                  startDownload.setOnClickListener(new View.OnClickListener() {
                             @Override
-                            public void onCompleted() {
-                                Log.d(TAG, "onCompleted:");
-                            }
-    
-                            @Override
-                            public void onFailure(String reason) {
-                                Log.d(TAG, "onFailure:" + reason);
-                            }
-    
-                            @Override
-                            public void progressUpdate(int percent, int downloadedSize, int totalSize) {
-                                Log.d(TAG, "progressUpdate:" + percent);
+                            public void onClick(View view) {
+                                if (checkNetworkAvailable(getActivity())) {
+                                    downloader.download();
+                                }
                             }
                         });
-                builder.download();
+                
+                        stopDownload.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if (downloader != null) downloader.cancelDownload();
+                            }
+                        });
+                
+                        pauseDownload.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if (downloader != null) downloader.pauseDownload();
+                            }
+                        });
+                
+                        resumeDownload.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if (checkNetworkAvailable(getActivity())) {
+                                    downloader.resumeDownload();
+                                }
+                            }
+                        });
+    
 ```
 
 Use ImageLoader
 ```code
 
-        imageLoader = new ImageLoader.Builder(this, cacheDir);
-                .setPlaceHolder(R.mipmap.ic_launcher)
-                .imageLoader.setImageLoaderListener(new OnImageLoaderListener() {
-                    @Override
-                    public void onStart(ImageView imageView, String url) {
-                        Log.d(TAG, "onStart:-- " + "imageView: " + imageView + "url: " + url);
-                    }
-
-                    @Override
-                    public void onCompleted(ImageView imageView, String url, Bitmap bitmap) {
-                        Log.d(TAG, "onCompleted:-- " + "image: " + image.toString() + "response: " + imageView.toString());
-                    }
-
-                    @Override
-                    public void onFailure(String reason) {
-                        Log.d(TAG, "onFailure:-- " + reason);
-                    }
-                }).load(image, "http://www.xsjjys.com/data/out/60/WHDQ-512049955.png");
+        mageLoader.setImageLoaderListener(new OnImageLoaderListener() {
+                            @Override
+                            public void onStart(ImageView imageView, String url) {
+                                Logger.d(TAG, "onStart:-- " + "imageView: " + imageView + "url: " + url);
+                            }
+        
+                            @Override
+                            public void onCompleted(ImageView imageView, String url, Bitmap bitmap) {
+                                Logger.d(TAG, "onCompleted:-- " + "image: " + image.toString() + "response: " + imageView.toString());
+                            }
+        
+                            @Override
+                            public void onFailure(String reason) {
+                                Logger.d(TAG, "onFailure:-- " + reason);
+                            }
+                        }).build().load(image, "http://www.xsjjys.com/data/out/60/WHDQ-512049955.png");
+                        
 
 ```
 
