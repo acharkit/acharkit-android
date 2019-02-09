@@ -6,18 +6,15 @@ import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresPermission;
 import android.support.annotation.Size;
+import android.util.Pair;
 
 import org.json.JSONObject;
 
-import java.io.File;
+import java.lang.ref.SoftReference;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.util.Map;
-
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLHandshakeException;
 
 import ir.acharkit.android.annotation.RequestMethod;
 
@@ -26,8 +23,24 @@ import ir.acharkit.android.annotation.RequestMethod;
  * Date:    11/7/2017
  * Email:   alirezat775@gmail.com
  */
-public abstract class ConnectionRequest {
+
+public class ConnectionRequest {
+
     private static final String TAG = ConnectionRequest.class.getName();
+    private final Request request;
+
+    private ConnectionRequest(Request request) {
+        this.request = request;
+    }
+
+    @RequiresPermission(Manifest.permission.INTERNET)
+    public void sendRequest() {
+        request.execute();
+    }
+
+    public void cancelRequest() {
+        request.cancel(true);
+    }
 
     public interface Method {
         String GET = "GET";
@@ -39,17 +52,14 @@ public abstract class ConnectionRequest {
     }
 
     public static class Builder {
-        private final Request request;
-        private Context context;
-        private String url;
-        private String method;
+
+        private final Context context;
+        private final String url;
+        private final String method;
         private int timeOut;
         private OnRequestListener onRequestListener;
         private Map<String, String> header;
         private String parameters;
-        private boolean trust = false;
-        private File file;
-        private String fileName;
 
         /**
          * @param context
@@ -60,35 +70,6 @@ public abstract class ConnectionRequest {
             this.context = context;
             this.method = method;
             this.url = url;
-            request = new Request();
-        }
-
-        /**
-         * @return
-         */
-        private Context getContext() {
-            return context;
-        }
-
-        /**
-         * @return
-         */
-        private String getUrl() {
-            return url;
-        }
-
-        /**
-         * @return
-         */
-        private String getMethod() {
-            return method;
-        }
-
-        /**
-         * @return
-         */
-        private int getTimeOut() {
-            return timeOut;
         }
 
         /**
@@ -101,13 +82,6 @@ public abstract class ConnectionRequest {
         }
 
         /**
-         * @return
-         */
-        private OnRequestListener getOnRequestListener() {
-            return onRequestListener;
-        }
-
-        /**
          * @param onRequestListener
          * @return
          */
@@ -117,26 +91,12 @@ public abstract class ConnectionRequest {
         }
 
         /**
-         * @return
-         */
-        private Map<String, String> getHeader() {
-            return header;
-        }
-
-        /**
          * @param header
          * @return
          */
         public Builder setHeader(Map<String, String> header) {
             this.header = header;
             return this;
-        }
-
-        /**
-         * @return
-         */
-        private String getParameters() {
-            return parameters;
         }
 
         /**
@@ -153,126 +113,92 @@ public abstract class ConnectionRequest {
          * @return
          */
         public Builder setParameters(String parameters) {
-            if (getMethod().equalsIgnoreCase(Method.GET) || getMethod().equalsIgnoreCase(Method.HEAD)) {
+            if (method.equalsIgnoreCase(Method.GET) || method.equalsIgnoreCase(Method.HEAD)) {
                 this.parameters = parameters;
                 throw new RuntimeException("The GET / HEAD request does not have a body");
-            } else if (getMethod().equalsIgnoreCase(Method.PATCH) || getMethod().equalsIgnoreCase(Method.POST) || getMethod().equalsIgnoreCase(Method.PUT) || getMethod().equalsIgnoreCase(Method.DELETE)) {
+            } else if (method.equalsIgnoreCase(Method.PATCH) || method.equalsIgnoreCase(Method.POST) || method.equalsIgnoreCase(Method.PUT) || method.equalsIgnoreCase(Method.DELETE)) {
                 this.parameters = parameters;
             }
             return this;
         }
 
-        /**
-         * @return
-         */
-        @RequiresPermission(Manifest.permission.INTERNET)
-        public Builder sendRequest() {
-            request.execute();
-            return this;
+        public ConnectionRequest build() {
+            Request request = new Request();
+            request.context = new SoftReference<>(context);
+            request.stringUrl = url;
+            request.method = method;
+            request.header = header;
+            request.timeOut = timeOut;
+            request.parameters = parameters;
+            request.onRequestListener = onRequestListener;
+            return new ConnectionRequest(request);
         }
+    }
 
-        /**
-         * @return
-         */
-        public Builder cancelRequest() {
-            request.cancel(true);
-            return this;
-        }
+    private static class Request extends AsyncTask<Void, Void, Pair<Boolean, String>> {
 
-        /**
-         * @param trust
-         * @return
-         */
-        @Deprecated
-        public Builder trustSSL(boolean trust) {
-            return this;
-        }
+        public SoftReference<Context> context;
+        private String stringUrl;
+        private String method;
+        private int timeOut;
+        private OnRequestListener onRequestListener;
+        private Map<String, String> header;
+        private String parameters;
+        private HttpURLConnection connection;
+        private URL url = null;
+        private String responseRequest = "";
 
-        /**
-         * @return
-         */
-        @Deprecated
-        private boolean isTrust() {
-            return false;
-        }
-
-        private class Request extends AsyncTask<Void, Void, Void> {
-
-            private HttpURLConnection connection;
-            private URL url = null;
-            private String responseRequest = "";
-
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-
-            }
-
-            @Override
-            protected Void doInBackground(Void... voids) {
-                try {
-                    if (getUrl().trim().isEmpty()) {
-                        throw new MalformedURLException("The entered URL is not valid");
-                    }
-                    url = new URL(getUrl());
-                    connection = (HttpURLConnection) url.openConnection();
-                    connection.setRequestMethod(getMethod());
-                    connection.setReadTimeout(getTimeOut() == 0 ? ConnectionUtil.TIME_OUT_CONNECTION : getTimeOut());
-                    connection.setConnectTimeout(getTimeOut() == 0 ? ConnectionUtil.TIME_OUT_CONNECTION : getTimeOut());
-                    if (getMethod().equals(Method.GET) || getMethod().equals(Method.HEAD)) {
-                        connection.setDoOutput(false);
-                    } else if (getMethod().equalsIgnoreCase(Method.PATCH) || getMethod().equalsIgnoreCase(Method.POST) || getMethod().equalsIgnoreCase(Method.PUT) || getMethod().equalsIgnoreCase(Method.DELETE)) {
-                        connection.setDoOutput(true);
-                    }
-
-                    ConnectionUtil.setHeaderParams(connection, getHeader());
-                    ConnectionUtil.setParams(connection, getParameters());
-
-                    connection.connect();
-
-                    if (connection.getResponseCode() > 400 && connection.getResponseCode() < 600) {
-                        if (getOnRequestListener() != null)
-                            getOnRequestListener().error(connection.getResponseCode() + " : " + connection.getResponseMessage());
-                        connection.disconnect();
-                        return null;
-                    }
-
-                    responseRequest = ConnectionUtil.inputStreamToString(connection);
-
-                } catch (Exception e) {
-                    if (e instanceof ProtocolException || e instanceof MalformedURLException) {
-                        throw new RuntimeException("The entered protocol is not valid");
-                    } else if (e instanceof SSLHandshakeException) {
-                        throw new RuntimeException("Trust anchor for certification path not found");
-                    }
-
-                    if (getOnRequestListener() != null)
-                        getOnRequestListener().error(String.valueOf(e));
-
-                    connection.disconnect();
+        @Override
+        protected Pair<Boolean, String> doInBackground(Void... voids) {
+            try {
+                if (stringUrl.trim().isEmpty()) {
+                    throw new MalformedURLException("The entered URL is not valid");
                 }
+                URL url = new URL(stringUrl);
+                connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod(method);
+                connection.setReadTimeout(timeOut == 0 ? ConnectionUtil.TIME_OUT_CONNECTION : timeOut);
+                connection.setConnectTimeout(timeOut == 0 ? ConnectionUtil.TIME_OUT_CONNECTION : timeOut);
+                if (method.equals(Method.GET) || method.equals(Method.HEAD)) {
+                    connection.setDoOutput(false);
+                } else if (method.equalsIgnoreCase(Method.PATCH) || method.equalsIgnoreCase(Method.POST) || method.equalsIgnoreCase(Method.PUT) || method.equalsIgnoreCase(Method.DELETE)) {
+                    connection.setDoOutput(true);
+                }
+                ConnectionUtil.setHeaderParams(connection, header);
+                ConnectionUtil.setParams(connection, parameters);
+                connection.connect();
+
+                if (connection.getResponseCode() > 400 && connection.getResponseCode() < 600) {
+                    connection.disconnect();
+                    return new Pair<>(false, connection.getResponseCode() + " : " + connection.getResponseMessage());
+                }
+
+                responseRequest = ConnectionUtil.inputStreamToString(connection);
                 connection.disconnect();
-                return null;
+                return new Pair<>(true, responseRequest);
+            } catch (Exception e) {
+                if (connection != null) connection.disconnect();
+                return new Pair<>(false, e.getMessage());
             }
+        }
 
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-                if (responseRequest != null) {
-                    if (getOnRequestListener() != null)
-                        getOnRequestListener().success(responseRequest);
+        @Override
+        protected void onPostExecute(Pair<Boolean, String> result) {
+            super.onPreExecute();
+            if (onRequestListener != null) {
+                if (result.first) {
+                    onRequestListener.onSuccess(result.second);
+                } else {
+                    onRequestListener.onError(result.second);
                 }
             }
+        }
 
-            @Override
-            protected void onCancelled(Void aVoid) {
-                super.onCancelled(aVoid);
-                if (connection != null)
-                    connection.disconnect();
-                if (getOnRequestListener() != null) {
-                    getOnRequestListener().error("Request cancelled");
-                }
-            }
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+            if (connection != null) connection.disconnect();
+            if (onRequestListener != null) onRequestListener.onCancel();
         }
     }
 }
