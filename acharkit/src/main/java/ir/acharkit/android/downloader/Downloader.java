@@ -46,7 +46,7 @@ public class Downloader {
     @RequiresPermission(Manifest.permission.INTERNET)
     public void download() {
         if (downloadTask == null) {
-            throw new IllegalStateException("rebuild new instance after \"pause or cancel\" download");
+            throw new IllegalStateException("rebuild new instance after \"pause or cancel\"");
         }
         downloadTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }

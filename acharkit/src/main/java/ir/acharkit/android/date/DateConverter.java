@@ -1,20 +1,15 @@
 package ir.acharkit.android.date;
 
-import java.util.Calendar;
-
 /**
- * Author:  Alireza Tizfahm Fard
- * Date:    5/4/18
- * Email:   alirezat775@gmail.com
+ * <p>
+ * Functions in this class are translated from a VB code I sometime found
+ * somewhere in the internet. I can't remember where it was. Anyway I thank
+ * him/her greatly!
  * <p>
  * Forked from https://github.com/ebraminio/DroidPersianCalendar/tree/master/PersianCalendar/src/main/java/calendar
  *
  * @author Amir
  * @author ebraminio
- *         <p>
- *         Functions in this class are translated from a VB code I sometime found
- *         somewhere in the internet. I can't remember where it was. Anyway I thank
- *         him/her greatly!
  */
 public class DateConverter {
 

@@ -5,12 +5,12 @@
   
 
 ```code
-    compile project(':acharkit-release-0.1.1')
+    compile project(':acharkit-release-x.x.x')
     or
-    implementation project(':acharkit-release-0.1.1')
+    implementation project(':acharkit-release-x.x.x')
 ```
 
-# [download version release-0.1.1](https://raw.githubusercontent.com/acharkit/acharkit-android/master/release/acharkit-release-0.1.1.aar)
+# [download last version](https://github.com/acharkit/acharkit-android/releases)
 
 
 Note : Helper classes have many methods that may not be used here

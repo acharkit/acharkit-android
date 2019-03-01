@@ -6,27 +6,42 @@
     android:orientation="vertical">
 
     <Button
-        android:text="Start Download"
         android:id="@+id/start_download"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text="Start Download" />
 
     <Button
-        android:text="Stop Download"
         android:id="@+id/stop_download"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text="Stop Download" />
 
     <Button
-        android:text="Pause Download"
         android:id="@+id/pause_download"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text="Pause Download" />
 
     <Button
-        android:text="Resume Download"
         android:id="@+id/resume_download"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Resume Download" />
+
+    <TextView
+        android:layout_margin="18dp"
+        android:layout_marginTop="50dp"
+        android:id="@+id/percent_txt"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
+    <ProgressBar
+        android:layout_margin="18dp"
+        android:id="@+id/percent_progress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indeterminateOnly="false" />
 
 </LinearLayout>

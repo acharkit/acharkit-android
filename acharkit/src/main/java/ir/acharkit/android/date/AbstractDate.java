@@ -1,9 +1,6 @@
 package ir.acharkit.android.date;
 
 /**
- * Author:  Alireza Tizfahm Fard
- * Date:    5/4/18
- * Email:   alirezat775@gmail.com
  * <p>
  * Abstract class representing a date. Instances of this class should be
  * mutable. Varios getters and setters are provided so that date manipulation is

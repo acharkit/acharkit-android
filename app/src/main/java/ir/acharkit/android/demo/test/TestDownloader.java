@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -32,6 +34,8 @@ public class TestDownloader extends AbstractActivity {
     private Button stopDownload;
     private Button pauseDownload;
     private Button resumeDownload;
+    private ProgressBar percentProgress;
+    private TextView percentTxt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,13 +46,15 @@ public class TestDownloader extends AbstractActivity {
         stopDownload = findViewById(R.id.stop_download);
         pauseDownload = findViewById(R.id.pause_download);
         resumeDownload = findViewById(R.id.resume_download);
+        percentTxt = findViewById(R.id.percent_txt);
+        percentProgress = findViewById(R.id.percent_progress);
 
         startDownload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (checkNetworkAvailable(getActivity())) {
                     enableDownload();
-                    initDownloader();
+                    buildDownloader();
                     downloader.download();
                 }
             }
@@ -74,7 +80,7 @@ public class TestDownloader extends AbstractActivity {
             @Override
             public void onClick(View view) {
                 if (checkNetworkAvailable(getActivity())) {
-                    initDownloader();
+                    buildDownloader();
                     downloader.resumeDownload();
                     enableDownload();
                 }
@@ -100,7 +106,7 @@ public class TestDownloader extends AbstractActivity {
         pauseDownload.setEnabled(false);
     }
 
-    private void initDownloader() {
+    private void buildDownloader() {
         Map<String, String> header = new HashMap<>();
         header.put("Access-Token", "1234567890ABC");
         downloader = new Downloader.Builder(getApplicationContext(), "https://dl3.android30t.com/apps/Q-U/Instagram-v79.0.0.21.101(Android30t.Com).apk")
@@ -126,6 +132,7 @@ public class TestDownloader extends AbstractActivity {
                     @Override
                     public void progressUpdate(int percent, int downloadedSize, int totalSize) {
                         Logger.d(TAG, "progressUpdate:" + percent);
+                        updateUi(percent);
                     }
 
                     @Override
@@ -135,5 +142,15 @@ public class TestDownloader extends AbstractActivity {
                         enableDownload();
                     }
                 }).build();
+    }
+
+    private void updateUi(final int percent) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                percentTxt.setText(percent + " %");
+                percentProgress.setProgress(percent);
+            }
+        });
     }
 }
