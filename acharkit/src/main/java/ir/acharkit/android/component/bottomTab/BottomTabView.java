@@ -2,9 +2,10 @@ package ir.acharkit.android.component.bottomTab;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutCompat;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.LinearLayoutCompat;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -124,6 +125,7 @@ public class BottomTabView extends LinearLayout {
     /**
      * @return
      */
+    @SuppressLint("WrongConstant")
     private LinearLayoutCompat item() {
         final LinearLayoutCompat layoutCompat = new LinearLayoutCompat(getContext());
         LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1.0f);
@@ -308,6 +310,7 @@ public class BottomTabView extends LinearLayout {
      * @param title
      * @return
      */
+    @SuppressLint("WrongConstant")
     private TextView addText(final String title) {
         final TextView textView = new TextView(getContext());
         textView.post(new Runnable() {

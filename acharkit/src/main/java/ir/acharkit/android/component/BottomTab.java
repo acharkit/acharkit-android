@@ -1,14 +1,14 @@
 package ir.acharkit.android.component;
 
-import android.support.annotation.ColorInt;
-import android.support.annotation.IdRes;
-import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 
 import java.util.ArrayList;
 
+import androidx.annotation.ColorInt;
+import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
 import ir.acharkit.android.app.AbstractActivity;
 import ir.acharkit.android.app.AbstractFragment;
 import ir.acharkit.android.component.bottomTab.BottomTabView;
@@ -132,6 +132,20 @@ public class BottomTab {
             public void run() {
                 bottomTabView.setSelected(defaultTab);
                 AbstractFragment fragment = tabList.get(defaultTab).getFragment();
+                presentTabFragment(fragment, container);
+            }
+        });
+    }
+
+    /**
+     * @param tab got to tab
+     */
+    public void goTab(final int tab) {
+        bottomTabView.post(new Runnable() {
+            @Override
+            public void run() {
+                bottomTabView.setSelected(tab);
+                AbstractFragment fragment = tabList.get(tab).getFragment();
                 presentTabFragment(fragment, container);
             }
         });

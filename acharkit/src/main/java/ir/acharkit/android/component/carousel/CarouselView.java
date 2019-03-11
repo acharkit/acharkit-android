@@ -1,10 +1,11 @@
 package ir.acharkit.android.component.carousel;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.CountDownTimer;
-import android.support.annotation.Nullable;
-import android.support.v4.view.ViewCompat;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.Nullable;
+import androidx.core.view.ViewCompat;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
@@ -330,6 +331,7 @@ public class CarouselView extends RecyclerView {
     /**
      * @return position fit in screen for parent list
      */
+    @SuppressLint("WrongConstant")
     private int getParentAnchor() {
         return (getManager().getOrientation() == VERTICAL ? getHeight() : getWidth()) / 2;
     }
@@ -338,6 +340,7 @@ public class CarouselView extends RecyclerView {
      * @param view item view
      * @return position fit in screen specific view in parent
      */
+    @SuppressLint("WrongConstant")
     private int getViewAnchor(View view) {
         return (getManager().getOrientation() == VERTICAL ? view.getTop() + (view.getHeight() / 2) : view.getLeft() + (view.getWidth() / 2));
     }

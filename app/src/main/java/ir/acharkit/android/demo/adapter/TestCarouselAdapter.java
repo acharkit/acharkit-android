@@ -20,6 +20,7 @@ import ir.acharkit.android.util.Logger;
  * Date:    12/7/17
  * Email:   alirezat775@gmail.com
  */
+
 public class TestCarouselAdapter extends CarouselAdapter {
 
     private static final String TAG = TestCarouselAdapter.class.getSimpleName();

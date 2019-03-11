@@ -1,6 +1,6 @@
 package ir.acharkit.android.util.helper;
 
-import android.support.annotation.Size;
+import androidx.annotation.Size;
 
 import java.util.HashMap;
 import java.util.Map;

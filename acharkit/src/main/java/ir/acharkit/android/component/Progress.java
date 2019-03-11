@@ -1,8 +1,8 @@
 package ir.acharkit.android.component;
 
 import android.content.Context;
-import android.support.annotation.CheckResult;
-import android.support.annotation.Size;
+import androidx.annotation.CheckResult;
+import androidx.annotation.Size;
 import android.view.View;
 
 import ir.acharkit.android.component.progress.AbstractProgress;

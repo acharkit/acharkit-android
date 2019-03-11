@@ -1,13 +1,14 @@
 package ir.acharkit.android.component.carousel.adapter;
 
-import android.support.annotation.CallSuper;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.CallSuper;
+import androidx.recyclerview.widget.RecyclerView;
 import ir.acharkit.android.component.carousel.model.CarouselModel;
+import ir.acharkit.android.util.helper.ViewHelper;
 
 /**
  * Author:  Alireza Tizfahm Fard
@@ -18,7 +19,15 @@ public abstract class CarouselAdapter extends RecyclerView.Adapter<CarouselAdapt
 
     public static final int ADD = 0;
     public static final int REMOVE = 1;
+    private boolean enableSlider = false;
     private List<CarouselModel> items = new ArrayList<>();
+
+
+    private void imageOption(View view) {
+        view.getLayoutParams().width = Math.round(ViewHelper.getScreenWidth());
+        view.getLayoutParams().height = (int) Math.round(view.getLayoutParams().width * 0.70);
+        view.requestLayout();
+    }
 
     /**
      * @return list items
@@ -51,7 +60,7 @@ public abstract class CarouselAdapter extends RecyclerView.Adapter<CarouselAdapt
         }
     }
 
-    public void addAll(ArrayList items) {
+    public void addAll(List items) {
         this.items = items;
     }
 
@@ -75,10 +84,19 @@ public abstract class CarouselAdapter extends RecyclerView.Adapter<CarouselAdapt
         notifyDataSetChanged();
     }
 
+    private boolean isEnableSlider() {
+        return enableSlider;
+    }
+
+    public void setEnableSlider(boolean enableSlider) {
+        this.enableSlider = enableSlider;
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public ViewHolder(View itemView) {
             super(itemView);
+            if (isEnableSlider()) imageOption(itemView);
         }
     }
 }

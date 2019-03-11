@@ -3,9 +3,9 @@ package ir.acharkit.android.downloader;
 import android.Manifest;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.support.annotation.CheckResult;
-import android.support.annotation.NonNull;
-import android.support.annotation.RequiresPermission;
+import androidx.annotation.CheckResult;
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresPermission;
 import android.util.Pair;
 
 import java.io.BufferedInputStream;

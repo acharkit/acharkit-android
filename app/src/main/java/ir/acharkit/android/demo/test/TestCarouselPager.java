@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.Button;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import ir.acharkit.android.app.AbstractActivity;
@@ -43,7 +44,7 @@ public class TestCarouselPager extends AbstractActivity {
     private String url13 = "@drawable/ic_android";
 
     private ArrayList<String> list = new ArrayList<>();
-    private ArrayList<TestCarouselModel> testCarouselModels = new ArrayList<>();
+    private List<TestCarouselModel> testCarouselModels = new ArrayList<>();
     private Carousel carousel;
 
     @Override
@@ -95,7 +96,6 @@ public class TestCarouselPager extends AbstractActivity {
         carousel = new Carousel(this, R.id.carousel, carouselPagerAdapter);
         carousel.setOrientation(CarouselView.HORIZONTAL, true);
         carousel.setAutoScroll(true, 5000, true);
-        carousel.setScaleView(true);
         for (int i = 0; i < 14; i++) {
             count = i;
             TestCarouselModel model = new TestCarouselModel();
@@ -105,7 +105,9 @@ public class TestCarouselPager extends AbstractActivity {
             testCarouselModels.add(model);
         }
 
+        carousel.setScaleView(true);
         carousel.setCurrentPosition(3);
+        carousel.setEnableSlider(true);
         carousel.addAll(testCarouselModels);
 
         carousel.setSnappingListener(new CarouselListener() {

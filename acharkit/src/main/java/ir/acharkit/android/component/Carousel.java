@@ -1,13 +1,14 @@
 package ir.acharkit.android.component;
 
 
-import android.support.annotation.IdRes;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import ir.acharkit.android.annotation.CarouselOrientation;
 import ir.acharkit.android.component.carousel.CarouselLayoutManager;
 import ir.acharkit.android.component.carousel.CarouselListener;
@@ -15,7 +16,6 @@ import ir.acharkit.android.component.carousel.CarouselView;
 import ir.acharkit.android.component.carousel.adapter.CarouselAdapter;
 import ir.acharkit.android.component.carousel.model.CarouselModel;
 import ir.acharkit.android.util.helper.ViewHelper;
-
 
 /**
  * Author:  Alireza Tizfahm Fard
@@ -33,7 +33,7 @@ public class Carousel {
     private int currentPosition;
     private boolean autoScroll = false;
     private boolean snapping;
-
+    private boolean enableSlider = false;
 
     /**
      * @param activity
@@ -110,7 +110,16 @@ public class Carousel {
     /**
      * @param items
      */
+    @Deprecated
     public void addAll(@NonNull ArrayList items) {
+        adapter.addAll(items);
+        adapter.notifyDataSetChanged();
+    }
+
+    /**
+     * @param items
+     */
+    public void addAll(@NonNull List items) {
         adapter.addAll(items);
         adapter.notifyDataSetChanged();
     }
@@ -207,6 +216,13 @@ public class Carousel {
      */
     public void setSnapping(boolean snapping) {
         this.snapping = snapping;
+    }
 
+    /**
+     * @param enableSlider
+     */
+    public void setEnableSlider(boolean enableSlider) {
+        this.enableSlider = enableSlider;
+        adapter.setEnableSlider(enableSlider);
     }
 }
