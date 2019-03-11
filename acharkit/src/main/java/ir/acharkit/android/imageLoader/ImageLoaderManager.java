@@ -172,6 +172,7 @@ class ImageLoaderManager {
             // load from resources
             if (url.startsWith("@")) {
                 int imageResource = getContext().getResources().getIdentifier(url, null, getContext().getPackageName());
+                if (imageResource == 0) throw new NullPointerException("cannot find image from resource");
                 bmp = ImageLoaderUtil.getBitmapVectorDrawable(getContext(), imageResource);
                 return null;
             }
