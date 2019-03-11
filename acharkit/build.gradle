@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 
 android {
     lintOptions {
-      abortOnError true
+        abortOnError true
     }
 
     compileSdkVersion 28
