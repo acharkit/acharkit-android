@@ -1,5 +1,6 @@
 package ir.acharkit.android.component.tabPager;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import com.google.android.material.tabs.TabLayout;
 import androidx.appcompat.widget.LinearLayoutCompat;
@@ -88,6 +89,7 @@ public class TabPagerView extends TabLayout {
     /**
      * @param tab for which custom title is created
      */
+    @SuppressLint("WrongConstant")
     private TextView addTitle(Tab tab) {
         if (StringHelper.isEmpty(tab.getText()))
             return null;

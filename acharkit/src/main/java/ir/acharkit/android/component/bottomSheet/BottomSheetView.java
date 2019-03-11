@@ -1,5 +1,6 @@
 package ir.acharkit.android.component.bottomSheet;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import androidx.appcompat.widget.LinearLayoutCompat;
 import android.util.AttributeSet;
@@ -46,6 +47,7 @@ public class BottomSheetView extends LinearLayoutCompat {
     /**
      *
      */
+    @SuppressLint("WrongConstant")
     private void init() {
         setSize(1f, 0.5f);
         setBackgroundColor(getBottomSheetColor());
