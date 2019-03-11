@@ -1,4 +1,4 @@
-package ir.acharkit.android.component.carousel.adapter;
+package ir.acharkit.android.component.roster.adapter;
 
 import android.view.View;
 
@@ -7,7 +7,7 @@ import java.util.List;
 
 import androidx.annotation.CallSuper;
 import androidx.recyclerview.widget.RecyclerView;
-import ir.acharkit.android.component.carousel.model.CarouselModel;
+import ir.acharkit.android.component.roster.model.RosterModel;
 import ir.acharkit.android.util.helper.ViewHelper;
 
 /**
@@ -15,16 +15,14 @@ import ir.acharkit.android.util.helper.ViewHelper;
  * Date:    12/7/17
  * Email:   alirezat775@gmail.com
  */
-
-@Deprecated
-public abstract class CarouselAdapter extends RecyclerView.Adapter<CarouselAdapter.ViewHolder> {
+public abstract class RosterAdapter extends RecyclerView.Adapter<RosterAdapter.ViewHolder> {
 
     public static final int ADD = 0;
     public static final int REMOVE = 1;
     private boolean enableSlider = false;
-    private List<CarouselModel> items = new ArrayList<>();
+    private List<RosterModel> items = new ArrayList<>();
 
-    @Deprecated
+
     private void imageOption(View view) {
         view.getLayoutParams().width = Math.round(ViewHelper.getScreenWidth());
         view.getLayoutParams().height = (int) Math.round(view.getLayoutParams().width * 0.70);
@@ -34,8 +32,7 @@ public abstract class CarouselAdapter extends RecyclerView.Adapter<CarouselAdapt
     /**
      * @return list items
      */
-    @Deprecated
-    public List<CarouselModel> getItems() {
+    public List<RosterModel> getItems() {
         return items;
     }
 
@@ -49,11 +46,10 @@ public abstract class CarouselAdapter extends RecyclerView.Adapter<CarouselAdapt
     }
 
     /**
-     * @param item      instance CarouselModel
+     * @param item      instance RosterModel
      * @param operation action add or remove
      */
-    @Deprecated
-    public synchronized void operation(CarouselModel item, int operation) {
+    public synchronized void operation(RosterModel item, int operation) {
         switch (operation) {
             case ADD:
                 add(item);
@@ -64,7 +60,6 @@ public abstract class CarouselAdapter extends RecyclerView.Adapter<CarouselAdapt
         }
     }
 
-    @Deprecated
     public void addAll(List items) {
         this.items = items;
     }
@@ -72,10 +67,9 @@ public abstract class CarouselAdapter extends RecyclerView.Adapter<CarouselAdapt
     /**
      * add item to list and notifyDataSetChanged adapter
      *
-     * @param item instance CarouselModel
+     * @param item instance RosterModel
      */
-    @Deprecated
-    private void add(CarouselModel item) {
+    private void add(RosterModel item) {
         getItems().add(item);
         notifyDataSetChanged();
     }
@@ -83,28 +77,23 @@ public abstract class CarouselAdapter extends RecyclerView.Adapter<CarouselAdapt
     /**
      * remove item from list and notifyDataSetChanged adapter
      *
-     * @param item instance CarouselModel
+     * @param item instance RosterModel
      */
-    @Deprecated
-    private void remove(CarouselModel item) {
+    private void remove(RosterModel item) {
         getItems().remove(item);
         notifyDataSetChanged();
     }
 
-    @Deprecated
     private boolean isEnableSlider() {
         return enableSlider;
     }
 
-    @Deprecated
     public void setEnableSlider(boolean enableSlider) {
         this.enableSlider = enableSlider;
     }
 
-    @Deprecated
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        @Deprecated
         public ViewHolder(View itemView) {
             super(itemView);
             if (isEnableSlider()) imageOption(itemView);

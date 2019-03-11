@@ -21,7 +21,7 @@ import ir.acharkit.android.connection.OnRequestListener;
 import ir.acharkit.android.date.DateUtil;
 import ir.acharkit.android.demo.test.TestBottomSheet;
 import ir.acharkit.android.demo.test.TestBottomTab;
-import ir.acharkit.android.demo.test.TestCarouselPager;
+import ir.acharkit.android.demo.test.TestRosterPager;
 import ir.acharkit.android.demo.test.TestDialog;
 import ir.acharkit.android.demo.test.TestDownloader;
 import ir.acharkit.android.demo.test.TestFragment;
@@ -75,7 +75,7 @@ public class MainActivity extends AbstractActivity {
         findViewById(R.id.start_activity_carousel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(TestCarouselPager.class);
+                startActivity(TestRosterPager.class);
             }
         });
 

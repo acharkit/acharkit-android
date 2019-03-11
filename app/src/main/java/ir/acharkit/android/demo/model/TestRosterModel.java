@@ -1,19 +1,19 @@
 package ir.acharkit.android.demo.model;
 
-import ir.acharkit.android.component.carousel.model.CarouselModel;
+import ir.acharkit.android.component.roster.model.RosterModel;
 
 /**
  * Author:  Alireza Tizfahm Fard
  * Date:    12/7/17
  * Email:   alirezat775@gmail.com
  */
-public class TestCarouselModel extends CarouselModel {
+public class TestRosterModel extends RosterModel {
 
     private int id;
     private String title;
     private String imageUri;
 
-    public TestCarouselModel() {
+    public TestRosterModel() {
     }
 
     public int getId() {

@@ -1,4 +1,4 @@
-package ir.acharkit.android.component.carousel;
+package ir.acharkit.android.component.roster;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -16,9 +16,7 @@ import android.view.View;
  * Date:    12/7/17
  * Email:   alirezat775@gmail.com
  */
-
-@Deprecated
-public class CarouselView extends RecyclerView {
+public class RosterView extends RecyclerView {
 
     //carousel orientation
     public static final int HORIZONTAL = 0;
@@ -27,8 +25,8 @@ public class CarouselView extends RecyclerView {
     //anchor default
     private static final int CENTER = 0;
 
-    private final static String TAG = CarouselView.class.getName();
-    private CarouselListener listener;
+    private final static String TAG = RosterView.class.getName();
+    private RosterListener listener;
     private VelocityTracker velocityTracker = null;
     private int anchor;
     private float scrollSpeed;
@@ -44,8 +42,7 @@ public class CarouselView extends RecyclerView {
     /**
      * @param context current context, will be used to access resources
      */
-    @Deprecated
-    public CarouselView(Context context) {
+    public RosterView(Context context) {
         this(context, null);
     }
 
@@ -53,8 +50,7 @@ public class CarouselView extends RecyclerView {
      * @param context current context, will be used to access resources
      * @param attrs   attributeSet
      */
-    @Deprecated
-    public CarouselView(Context context, @Nullable AttributeSet attrs) {
+    public RosterView(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
@@ -63,8 +59,7 @@ public class CarouselView extends RecyclerView {
      * @param attrs    attributeSet
      * @param defStyle defStyle
      */
-    @Deprecated
-    public CarouselView(Context context, @Nullable AttributeSet attrs, int defStyle) {
+    public RosterView(Context context, @Nullable AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
 
@@ -82,7 +77,6 @@ public class CarouselView extends RecyclerView {
     /**
      * initialize cardListView
      */
-    @Deprecated
     private synchronized void initSnap() {
         setClipToPadding(false);
         setOverScrollMode(View.OVER_SCROLL_NEVER);
@@ -102,7 +96,6 @@ public class CarouselView extends RecyclerView {
     /**
      * @return scheduler scroll item
      */
-    @Deprecated
     public Scheduler getScheduler() {
         if (scheduler == null) {
             scheduler = new Scheduler(getDelayMillis(), 1);
@@ -113,7 +106,6 @@ public class CarouselView extends RecyclerView {
     /**
      * pause auto scroll
      */
-    @Deprecated
     public void setAutoScrollPause() {
         if (getScheduler() != null) {
             getScheduler().cancel();
@@ -125,7 +117,6 @@ public class CarouselView extends RecyclerView {
     /**
      * resume auto scroll
      */
-    @Deprecated
     public void setAutoScrollResume() {
         if (getScheduler() != null) {
             getScheduler().start();
@@ -137,15 +128,13 @@ public class CarouselView extends RecyclerView {
     /**
      * @return support RTL view
      */
-    @Deprecated
     private boolean isRTL() {
-        return ViewCompat.getLayoutDirection(CarouselView.this) == ViewCompat.LAYOUT_DIRECTION_RTL;
+        return ViewCompat.getLayoutDirection(RosterView.this) == ViewCompat.LAYOUT_DIRECTION_RTL;
     }
 
     /**
      * @return onItemTouchListener for calculate velocity and position fix view center
      */
-    @Deprecated
     private OnItemTouchListener onItemTouchListener() {
         return new OnItemTouchListener() {
             @Override
@@ -217,7 +206,6 @@ public class CarouselView extends RecyclerView {
     /**
      * @return support RTL view
      */
-    @Deprecated
     private boolean isTrustLayout() {
         if (isRTL() && getManager().getReverseLayout()) {
             return true;
@@ -234,9 +222,8 @@ public class CarouselView extends RecyclerView {
     /**
      * @return cardListSnappingListener current item position and item scroll in XY
      */
-    @Deprecated
-    public CarouselListener getListener() {
-        return listener != null ? listener : new CarouselListener() {
+    public RosterListener getListener() {
+        return listener != null ? listener : new RosterListener() {
             @Override
             public void onPositionChange(int position) {
 
@@ -252,15 +239,13 @@ public class CarouselView extends RecyclerView {
     /**
      * @param listener the new listener to set, or null to set no listener
      */
-    @Deprecated
-    public void setListener(CarouselListener listener) {
+    public void setListener(RosterListener listener) {
         this.listener = listener;
     }
 
     /**
      * @return position fit in screen -> default is center
      */
-    @Deprecated
     public int getAnchor() {
         return anchor;
     }
@@ -268,7 +253,6 @@ public class CarouselView extends RecyclerView {
     /**
      * @param anchor position fit in screen -> default is center
      */
-    @Deprecated
     public void setAnchor(int anchor) {
         if (this.anchor != anchor) {
             this.anchor = anchor;
@@ -327,7 +311,6 @@ public class CarouselView extends RecyclerView {
     /**
      * @param positionPlus scroll to new position from previous position
      */
-    @Deprecated
     public void scrolling(int positionPlus) {
         if (calculateSnapViewPosition() > -1) {
             int centerViewPosition = calculateSnapViewPosition() + (positionPlus);
@@ -348,7 +331,6 @@ public class CarouselView extends RecyclerView {
     /**
      * @return position fit in screen for parent list
      */
-    @Deprecated
     @SuppressLint("WrongConstant")
     private int getParentAnchor() {
         return (getManager().getOrientation() == VERTICAL ? getHeight() : getWidth()) / 2;
@@ -358,7 +340,6 @@ public class CarouselView extends RecyclerView {
      * @param view item view
      * @return position fit in screen specific view in parent
      */
-    @Deprecated
     @SuppressLint("WrongConstant")
     private int getViewAnchor(View view) {
         return (getManager().getOrientation() == VERTICAL ? view.getTop() + (view.getHeight() / 2) : view.getLeft() + (view.getWidth() / 2));
@@ -367,7 +348,6 @@ public class CarouselView extends RecyclerView {
     /**
      * @return calculate snapping position relation anchor
      */
-    @Deprecated
     private int calculateSnapViewPosition() {
         int parentAnchor = getParentAnchor();
         int lastVisibleItemPosition = getManager().findLastVisibleItemPosition();
@@ -395,7 +375,6 @@ public class CarouselView extends RecyclerView {
     /**
      * @return current item position
      */
-    @Deprecated
     public int getCurrentPosition() {
         return currentPosition;
     }
@@ -404,7 +383,6 @@ public class CarouselView extends RecyclerView {
     /**
      * @param currentPosition go to specific position
      */
-    @Deprecated
     public void setCurrentPosition(int currentPosition) {
         this.currentPosition = currentPosition;
     }
@@ -412,15 +390,13 @@ public class CarouselView extends RecyclerView {
     /**
      * @return layoutManager
      */
-    @Deprecated
-    public CarouselLayoutManager getManager() {
-        return (CarouselLayoutManager) getLayoutManager();
+    public RosterLayoutManager getManager() {
+        return (RosterLayoutManager) getLayoutManager();
     }
 
     /**
      * @return enable/disable auto scrolling
      */
-    @Deprecated
     public boolean isAutoScroll() {
         return autoScroll;
     }
@@ -428,7 +404,6 @@ public class CarouselView extends RecyclerView {
     /**
      * @param autoScroll enable/disable auto scrolling
      */
-    @Deprecated
     public void setAutoScroll(boolean autoScroll) {
         this.autoScroll = autoScroll;
     }
@@ -436,7 +411,6 @@ public class CarouselView extends RecyclerView {
     /**
      * @return change position with delay time
      */
-    @Deprecated
     public long getDelayMillis() {
         return delayMillis;
     }
@@ -444,7 +418,6 @@ public class CarouselView extends RecyclerView {
     /**
      * @param delayMillis for change position
      */
-    @Deprecated
     public void setDelayMillis(long delayMillis) {
         this.delayMillis = delayMillis;
     }
@@ -452,7 +425,6 @@ public class CarouselView extends RecyclerView {
     /**
      * @return loop mode scrolling
      */
-    @Deprecated
     public boolean isLoopMode() {
         return loopMode;
     }
@@ -460,15 +432,12 @@ public class CarouselView extends RecyclerView {
     /**
      * @param loopMode
      */
-    @Deprecated
     public void setLoopMode(boolean loopMode) {
         this.loopMode = loopMode;
     }
 
-    @Deprecated
     public class Scheduler extends CountDownTimer {
 
-        @Deprecated
         public Scheduler(long millisInFuture, long countDownInterval) {
             super(millisInFuture, countDownInterval);
         }

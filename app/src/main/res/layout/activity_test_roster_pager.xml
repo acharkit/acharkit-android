@@ -4,13 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ir.acharkit.android.component.carousel.CarouselView
-        android:id="@+id/carousel"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:layout_marginBottom="48dp"
+    <ir.acharkit.android.component.roster.RosterView
+        android:id="@+id/roster"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_marginBottom="48dp"
+        android:gravity="center" />
 
     <Button
         android:id="@+id/add_carousel"

@@ -1,4 +1,4 @@
-package ir.acharkit.android.component.carousel;
+package ir.acharkit.android.component.roster;
 
 import android.content.Context;
 import android.graphics.PointF;
@@ -14,11 +14,9 @@ import android.view.View;
  * Date:    12/7/17
  * Email:   alirezat775@gmail.com
  */
+public class RosterLayoutManager extends LinearLayoutManager {
 
-@Deprecated
-public class CarouselLayoutManager extends LinearLayoutManager {
-
-    private static final String TAG = CarouselLayoutManager.class.getName();
+    private static final String TAG = RosterLayoutManager.class.getName();
     private final float shrinkAmount = 0.15f;
     private final float shrinkDistance = 0.9f;
     private SmoothScroller smoothScroller;
@@ -28,8 +26,7 @@ public class CarouselLayoutManager extends LinearLayoutManager {
     /**
      * @param context Current context, will be used to access resources
      */
-    @Deprecated
-    public CarouselLayoutManager(Context context) {
+    public RosterLayoutManager(Context context) {
         super(context);
     }
 
@@ -37,8 +34,7 @@ public class CarouselLayoutManager extends LinearLayoutManager {
      * @param context current context, will be used to access resources
      * @param orientation how to arrange items vertical or horizontal
      */
-    @Deprecated
-    public CarouselLayoutManager(Context context, int orientation) {
+    public RosterLayoutManager(Context context, int orientation) {
         super(context, orientation, false);
     }
 
@@ -47,10 +43,9 @@ public class CarouselLayoutManager extends LinearLayoutManager {
      * @param orientation how to arrange items vertical or horizontal
      * @param reverseLayout reverse the list display
      */
-    @Deprecated
-    public CarouselLayoutManager(Context context, int orientation, boolean reverseLayout) {
+    public RosterLayoutManager(Context context, int orientation, boolean reverseLayout) {
         super(context, orientation, reverseLayout);
-        smoothScroller = new SmoothScroller(context);
+        initSmoothScroller(context);
     }
 
     /**
@@ -59,12 +54,17 @@ public class CarouselLayoutManager extends LinearLayoutManager {
      * @param defStyleAttr defStyleAttr
      * @param defStyleRes defStyleRes
      */
-    @Deprecated
-    public CarouselLayoutManager(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public RosterLayoutManager(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        smoothScroller = new SmoothScroller(context);
+        initSmoothScroller(context);
     }
 
+
+    void initSmoothScroller(Context context) {
+        if (smoothScroller == null) {
+            smoothScroller = new SmoothScroller(context);
+        }
+    }
 
     /**
      * @param recycler
@@ -144,7 +144,7 @@ public class CarouselLayoutManager extends LinearLayoutManager {
     /**
      * @return center view scale
      */
-    @Deprecated
+
     public boolean isScaleView() {
         return scaleView;
     }
@@ -152,7 +152,6 @@ public class CarouselLayoutManager extends LinearLayoutManager {
     /**
      * @param scaleView set center view scale
      */
-    @Deprecated
     public void setScaleView(boolean scaleView) {
         this.scaleView = scaleView;
     }
@@ -160,7 +159,6 @@ public class CarouselLayoutManager extends LinearLayoutManager {
     /**
      * @return
      */
-    @Deprecated
     public int getAnchor() {
         return anchor;
     }
@@ -168,7 +166,6 @@ public class CarouselLayoutManager extends LinearLayoutManager {
     /**
      * @param anchor set snap position
      */
-    @Deprecated
     public void setAnchor(int anchor) {
         this.anchor = anchor;
     }
@@ -176,7 +173,6 @@ public class CarouselLayoutManager extends LinearLayoutManager {
     /**
      * @param scrollSpeed milliSecond per inch
      */
-    @Deprecated
     public void setScrollSpeed(float scrollSpeed) {
         smoothScroller.setScrollSpeed(scrollSpeed);
     }
@@ -192,7 +188,6 @@ public class CarouselLayoutManager extends LinearLayoutManager {
         startSmoothScroll(smoothScroller);
     }
 
-    @Deprecated
     public class SmoothScroller extends LinearSmoothScroller {
 
         //scrolling speed
@@ -203,7 +198,6 @@ public class CarouselLayoutManager extends LinearLayoutManager {
         /**
          * @param context
          */
-        @Deprecated
         public SmoothScroller(Context context) {
             super(context);
         }
@@ -211,7 +205,6 @@ public class CarouselLayoutManager extends LinearLayoutManager {
         /**
          * @param scrollSpeed milliSecond per inch
          */
-        @Deprecated
         public void setScrollSpeed(float scrollSpeed) {
             this.milliSecondsPerInch = scrollSpeed;
         }
@@ -222,7 +215,7 @@ public class CarouselLayoutManager extends LinearLayoutManager {
          */
         @Override
         public PointF computeScrollVectorForPosition(int targetPosition) {
-            return CarouselLayoutManager.this.computeScrollVectorForPosition(targetPosition);
+            return RosterLayoutManager.this.computeScrollVectorForPosition(targetPosition);
         }
 
         /**

@@ -10,11 +10,11 @@ import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import ir.acharkit.android.annotation.CarouselOrientation;
-import ir.acharkit.android.component.carousel.CarouselLayoutManager;
-import ir.acharkit.android.component.carousel.CarouselListener;
-import ir.acharkit.android.component.carousel.CarouselView;
-import ir.acharkit.android.component.carousel.adapter.CarouselAdapter;
-import ir.acharkit.android.component.carousel.model.CarouselModel;
+import ir.acharkit.android.component.roster.RosterLayoutManager;
+import ir.acharkit.android.component.roster.RosterListener;
+import ir.acharkit.android.component.roster.RosterView;
+import ir.acharkit.android.component.roster.adapter.RosterAdapter;
+import ir.acharkit.android.component.roster.model.RosterModel;
 import ir.acharkit.android.util.helper.ViewHelper;
 
 /**
@@ -23,14 +23,13 @@ import ir.acharkit.android.util.helper.ViewHelper;
  * Email:   alirezat775@gmail.com
  */
 
-@Deprecated
-public class Carousel {
+public class Roster {
 
-    private static final String TAG = Carousel.class.getName();
-    private CarouselView carouselView;
-    private CarouselAdapter adapter;
+    private static final String TAG = Roster.class.getName();
+    private RosterView rosterView;
+    private RosterAdapter adapter;
     private AppCompatActivity activity;
-    private CarouselLayoutManager manager;
+    private RosterLayoutManager manager;
     private int currentPosition;
     private boolean autoScroll = false;
     private boolean snapping;
@@ -39,58 +38,54 @@ public class Carousel {
     /**
      * @param activity
      * @param carouselViewId
-     * @param carouselAdapter
+     * @param rosterAdapter
      */
-    @Deprecated
-    public Carousel(@NonNull AppCompatActivity activity, @IdRes int carouselViewId, @NonNull CarouselAdapter carouselAdapter) {
+    public Roster(@NonNull AppCompatActivity activity, @IdRes int carouselViewId, @NonNull RosterAdapter rosterAdapter) {
         View view = activity.getWindow().getDecorView();
-        init(activity, view, carouselViewId, carouselAdapter);
+        init(activity, view, carouselViewId, rosterAdapter);
     }
 
     /**
      * @param activity
      * @param view
      * @param carouselViewId
-     * @param carouselAdapter
+     * @param rosterAdapter
      */
-    @Deprecated
-    public Carousel(@NonNull AppCompatActivity activity, @NonNull View view, @IdRes int carouselViewId, @NonNull CarouselAdapter carouselAdapter) {
-        init(activity, view, carouselViewId, carouselAdapter);
+    public Roster(@NonNull AppCompatActivity activity, @NonNull View view, @IdRes int carouselViewId, @NonNull RosterAdapter rosterAdapter) {
+        init(activity, view, carouselViewId, rosterAdapter);
     }
 
     /**
      * @param activity
      * @param view
      * @param carouselViewId
-     * @param carouselAdapter
+     * @param rosterAdapter
      */
-    @Deprecated
-    private synchronized void init(@NonNull AppCompatActivity activity, @NonNull View view, @IdRes int carouselViewId, @NonNull CarouselAdapter carouselAdapter) {
+    private synchronized void init(@NonNull AppCompatActivity activity, @NonNull View view, @IdRes int carouselViewId, @NonNull RosterAdapter rosterAdapter) {
         this.activity = activity;
-        this.adapter = carouselAdapter;
-        carouselView = view.findViewById(carouselViewId);
-        carouselView.setLayoutManager(getManager());
-        carouselView.setAdapter(adapter);
-        carouselView.setAutoScroll(isAutoScroll());
+        this.adapter = rosterAdapter;
+        rosterView = view.findViewById(carouselViewId);
+        rosterView.setLayoutManager(getManager());
+        rosterView.setAdapter(adapter);
+        rosterView.setAutoScroll(isAutoScroll());
     }
 
     /**
      * @param orientation
      * @param reverseLayout
      */
-    @Deprecated
     public synchronized void setOrientation(@CarouselOrientation int orientation, boolean reverseLayout) {
-        manager = new CarouselLayoutManager(activity, orientation, reverseLayout);
-        carouselView.setLayoutManager(manager);
+        manager = new RosterLayoutManager(activity, orientation, reverseLayout);
+        rosterView.setLayoutManager(manager);
         int padding = 0;
         switch (orientation) {
-            case CarouselView.HORIZONTAL:
+            case RosterView.HORIZONTAL:
                 padding = ViewHelper.getScreenWidth() / 4;
-                carouselView.setPadding(padding, 0, padding, 0);
+                rosterView.setPadding(padding, 0, padding, 0);
                 break;
-            case CarouselView.VERTICAL:
+            case RosterView.VERTICAL:
                 padding = ViewHelper.getScreenHeight() / 4;
-                carouselView.setPadding(0, padding, 0, padding);
+                rosterView.setPadding(0, padding, 0, padding);
                 break;
         }
     }
@@ -98,7 +93,6 @@ public class Carousel {
     /**
      * @param scaleView
      */
-    @Deprecated
     public void setScaleView(boolean scaleView) {
         getManager().setScaleView(scaleView);
     }
@@ -106,10 +100,9 @@ public class Carousel {
     /**
      * @return
      */
-    @Deprecated
-    private synchronized CarouselLayoutManager getManager() {
+    private synchronized RosterLayoutManager getManager() {
         if (manager == null) {
-            setOrientation(CarouselView.HORIZONTAL, false);
+            setOrientation(RosterView.HORIZONTAL, false);
         }
         return manager;
     }
@@ -117,16 +110,6 @@ public class Carousel {
     /**
      * @param items
      */
-    @Deprecated
-    public void addAll(@NonNull ArrayList items) {
-        adapter.addAll(items);
-        adapter.notifyDataSetChanged();
-    }
-
-    /**
-     * @param items
-     */
-    @Deprecated
     public void addAll(@NonNull List items) {
         adapter.addAll(items);
         adapter.notifyDataSetChanged();
@@ -135,25 +118,22 @@ public class Carousel {
     /**
      * @param items
      */
-    @Deprecated
-    public void add(@NonNull CarouselModel items) {
-        adapter.operation(items, CarouselAdapter.ADD);
+    public void add(@NonNull RosterModel items) {
+        adapter.operation(items, RosterAdapter.ADD);
         adapter.notifyDataSetChanged();
     }
 
     /**
      * @param items
      */
-    @Deprecated
-    public void remove(@NonNull CarouselModel items) {
-        adapter.operation(items, CarouselAdapter.REMOVE);
+    public void remove(@NonNull RosterModel items) {
+        adapter.operation(items, RosterAdapter.REMOVE);
         adapter.notifyDataSetChanged();
     }
 
     /**
      *
      */
-    @Deprecated
     public void notifyDataSetChanged() {
         adapter.notifyDataSetChanged();
     }
@@ -161,50 +141,44 @@ public class Carousel {
     /**
      * @return
      */
-    @Deprecated
     public int getCurrentPosition() {
-        return carouselView.getCurrentPosition();
+        return rosterView.getCurrentPosition();
     }
 
     /**
      * @param currentPosition
      */
-    @Deprecated
     public void setCurrentPosition(int currentPosition) {
         this.currentPosition = currentPosition;
-        carouselView.scrollToPosition(currentPosition);
+        rosterView.scrollToPosition(currentPosition);
     }
 
     /**
      * @param listener
      */
-    @Deprecated
-    public void setSnappingListener(CarouselListener listener) {
-        carouselView.setListener(listener);
+    public void setSnappingListener(RosterListener listener) {
+        rosterView.setListener(listener);
     }
 
     /**
      *
      */
-    @Deprecated
     public void setAutoScrollPause() {
-        carouselView.setAutoScrollPause();
+        rosterView.setAutoScrollPause();
     }
 
 
     /**
      *
      */
-    @Deprecated
     public void setAutoScrollResume() {
-        carouselView.setAutoScrollResume();
+        rosterView.setAutoScrollResume();
     }
 
 
     /**
      * @return
      */
-    @Deprecated
     public boolean isAutoScroll() {
         return autoScroll;
     }
@@ -214,18 +188,16 @@ public class Carousel {
      * @param delayMillis
      * @param loopMode
      */
-    @Deprecated
     public void setAutoScroll(boolean autoScroll, long delayMillis, boolean loopMode) {
         this.autoScroll = autoScroll;
-        carouselView.setAutoScroll(autoScroll);
-        carouselView.setDelayMillis(delayMillis);
-        carouselView.setLoopMode(loopMode);
+        rosterView.setAutoScroll(autoScroll);
+        rosterView.setDelayMillis(delayMillis);
+        rosterView.setLoopMode(loopMode);
     }
 
     /**
      * @return
      */
-    @Deprecated
     private boolean isSnapping() {
         return snapping;
     }
@@ -233,7 +205,6 @@ public class Carousel {
     /**
      * @param snapping
      */
-    @Deprecated
     public void setSnapping(boolean snapping) {
         this.snapping = snapping;
     }
@@ -241,7 +212,6 @@ public class Carousel {
     /**
      * @param enableSlider
      */
-    @Deprecated
     public void setEnableSlider(boolean enableSlider) {
         this.enableSlider = enableSlider;
         adapter.setEnableSlider(enableSlider);

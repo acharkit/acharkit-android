@@ -38,3 +38,5 @@ build-maven.gradle
 acharkit-android.iml
 AcharKit.iml
 
+.DS_Store
+
