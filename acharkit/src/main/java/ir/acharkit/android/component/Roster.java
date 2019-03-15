@@ -3,13 +3,12 @@ package ir.acharkit.android.component;
 
 import android.view.View;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import ir.acharkit.android.annotation.CarouselOrientation;
+import ir.acharkit.android.annotation.RosterOrientation;
 import ir.acharkit.android.component.roster.RosterLayoutManager;
 import ir.acharkit.android.component.roster.RosterListener;
 import ir.acharkit.android.component.roster.RosterView;
@@ -74,7 +73,7 @@ public class Roster {
      * @param orientation
      * @param reverseLayout
      */
-    public synchronized void setOrientation(@CarouselOrientation int orientation, boolean reverseLayout) {
+    public synchronized void setOrientation(@RosterOrientation int orientation, boolean reverseLayout) {
         manager = new RosterLayoutManager(activity, orientation, reverseLayout);
         rosterView.setLayoutManager(manager);
         int padding = 0;

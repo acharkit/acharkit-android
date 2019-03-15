@@ -107,7 +107,7 @@ public class TestRosterPager extends AbstractActivity {
 
         roster.setScaleView(true);
         roster.setCurrentPosition(3);
-        roster.setEnableSlider(true);
+        roster.setEnableSlider(false);
         roster.addAll(testRosterModels);
 
         roster.setSnappingListener(new RosterListener() {
