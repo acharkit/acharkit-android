@@ -2,8 +2,7 @@ package ir.acharkit.android.component.tabPager;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import com.google.android.material.tabs.TabLayout;
-import androidx.appcompat.widget.LinearLayoutCompat;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
@@ -11,8 +10,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.material.tabs.TabLayout;
+
 import java.util.HashMap;
 
+import androidx.appcompat.widget.LinearLayoutCompat;
 import ir.acharkit.android.component.badge.BadgeView;
 import ir.acharkit.android.util.Font;
 import ir.acharkit.android.util.helper.StringHelper;
@@ -26,6 +28,7 @@ import ir.acharkit.android.util.helper.ViewHelper;
 public class TabPagerView extends TabLayout {
 
     private static final int DEFAULT_PADDING = 12;
+    private static final int TEXT_SIZE = 10;
 
     private HashMap<Integer, BadgeView> badgeList = new HashMap<>();
     private int typeface;
@@ -91,7 +94,8 @@ public class TabPagerView extends TabLayout {
      */
     @SuppressLint("WrongConstant")
     private TextView addTitle(Tab tab) {
-        if (StringHelper.isEmpty(tab.getText()))
+        String titleText = (String) tab.getText();
+        if (StringHelper.isEmpty(titleText))
             return null;
         TextView title = new TextView(getContext());
         LinearLayoutCompat.LayoutParams param = new LinearLayoutCompat.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 1.0f);
@@ -101,11 +105,11 @@ public class TabPagerView extends TabLayout {
         if (getPathFont() != null)
             Font.fromAsset(getContext(), getPathFont(), getTypeface(), title);
 
-        if (!StringHelper.isEmpty(tab.getText()))
-            title.setText(tab.getText());
-        else
-            title.setVisibility(GONE);
-
+        title.setText(titleText);
+        title.setSingleLine(false);
+        title.setEllipsize(TextUtils.TruncateAt.END);
+        title.setLines(1);
+        title.setTextSize(TEXT_SIZE);
         return title;
     }
 
