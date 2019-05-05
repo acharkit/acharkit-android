@@ -8,9 +8,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import ir.acharkit.android.component.carousel.adapter.CarouselAdapter;
+import ir.acharkit.android.component.roster.adapter.RosterAdapter;
 import ir.acharkit.android.demo.R;
-import ir.acharkit.android.demo.model.TestCarouselModel;
+import ir.acharkit.android.demo.model.TestRosterModel;
 import ir.acharkit.android.imageLoader.ImageLoader;
 import ir.acharkit.android.imageLoader.OnImageLoaderListener;
 import ir.acharkit.android.util.Logger;
@@ -21,15 +21,15 @@ import ir.acharkit.android.util.Logger;
  * Email:   alirezat775@gmail.com
  */
 
-public class TestCarouselAdapter extends CarouselAdapter {
+public class TestRosterAdapter extends RosterAdapter {
 
-    private static final String TAG = TestCarouselAdapter.class.getSimpleName();
+    private static final String TAG = TestRosterAdapter.class.getSimpleName();
     private final Context context;
     private MyViewHolder vh;
     private ImageLoader.Builder imageLoader;
 
 
-    public TestCarouselAdapter(Context context) {
+    public TestRosterAdapter(Context context) {
         this.context = context;
         imageLoader = new ImageLoader.Builder(context, null);
     }
@@ -37,7 +37,7 @@ public class TestCarouselAdapter extends CarouselAdapter {
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View v = inflater.inflate(R.layout.carousel_item, parent, false);
+        View v = inflater.inflate(R.layout.roster_item, parent, false);
         vh = new MyViewHolder(v);
         return vh;
     }
@@ -45,7 +45,7 @@ public class TestCarouselAdapter extends CarouselAdapter {
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         vh = (MyViewHolder) holder;
-        final TestCarouselModel model = (TestCarouselModel) getItems().get(position);
+        final TestRosterModel model = (TestRosterModel) getItems().get(position);
 
         Logger.d(TAG, "ID : " + model.getId());
         Logger.d(TAG, "TITLE : " + model.getTitle());
@@ -80,8 +80,8 @@ public class TestCarouselAdapter extends CarouselAdapter {
 
         MyViewHolder(View view) {
             super(view);
-            id = view.findViewById(R.id.carousel_item_text);
-            imageView = view.findViewById(R.id.carousel_item_content);
+            id = view.findViewById(R.id.roster_item_text);
+            imageView = view.findViewById(R.id.roster_item_content);
         }
     }
 }

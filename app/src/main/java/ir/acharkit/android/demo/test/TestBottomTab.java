@@ -41,9 +41,9 @@ public class TestBottomTab extends AbstractActivity {
         bottomTab.setEnableType(BottomTab.EnableType.TRANSLATION_ANIMATION);
         bottomTab.setFont("OpenSans.ttf", Typeface.NORMAL);
         bottomTab.setBackground(Colour.LTGRAY);
-        bottomTab.add(useFragment0, "test", android.R.drawable.stat_notify_more);
-        bottomTab.add(useFragment1, "test", android.R.drawable.stat_notify_chat);
-        bottomTab.add(useFragment2, "test", android.R.drawable.stat_notify_sync);
+        bottomTab.add(useFragment0, "test1", android.R.drawable.stat_notify_more);
+        bottomTab.add(useFragment1, "test2", android.R.drawable.stat_notify_chat);
+        bottomTab.add(useFragment2, "test3", android.R.drawable.stat_notify_sync);
         bottomTab.setDefaultTab(1);
 
         bottomTab.addBadge(1, Colour.MAGENTA, Colour.WHITE, 78);

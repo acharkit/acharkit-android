@@ -47,7 +47,7 @@
             android:name=".test.TestDialog"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".test.TestCarouselPager"
+            android:name=".test.TestRosterPager"
             android:screenOrientation="portrait" />
         <activity
             android:name=".test.TestImageLoader"

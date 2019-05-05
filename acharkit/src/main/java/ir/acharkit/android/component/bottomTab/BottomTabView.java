@@ -4,8 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.LinearLayoutCompat;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -17,6 +16,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.LinearLayoutCompat;
 import ir.acharkit.android.component.BottomTab;
 import ir.acharkit.android.component.badge.BadgeView;
 import ir.acharkit.android.util.Colour;
@@ -35,6 +36,7 @@ public class BottomTabView extends LinearLayout {
     private static final int DEFAULT_COLOR = Colour.LTGRAY;
     private static final int DEFAULT_PADDING = 16;
     private static final int TAB_HEIGHT = 56;
+    private static final int TEXT_SIZE = 10;
 
     // text animation scale icon
     private static final float SCALE = 1.3f;
@@ -320,6 +322,10 @@ public class BottomTabView extends LinearLayout {
                 param.gravity = Gravity.CENTER;
                 textView.setGravity(Gravity.CENTER);
                 textView.setText(title);
+                textView.setSingleLine(false);
+                textView.setEllipsize(TextUtils.TruncateAt.END);
+                textView.setLines(1);
+                textView.setTextSize(TEXT_SIZE);
                 textView.setTextColor(getInActiveColor());
                 if (getPathFont() != null)
                     Font.fromAsset(getContext(), getPathFont(), getTypeface(), textView);

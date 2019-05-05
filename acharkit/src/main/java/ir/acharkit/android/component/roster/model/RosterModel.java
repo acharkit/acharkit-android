@@ -1,4 +1,4 @@
-package ir.acharkit.android.component.carousel.model;
+package ir.acharkit.android.component.roster.model;
 
 import java.io.Serializable;
 
@@ -7,9 +7,7 @@ import java.io.Serializable;
  * Date:    12/7/17
  * Email:   alirezat775@gmail.com
  */
-
-@Deprecated
-public abstract class CarouselModel implements Serializable {
+public abstract class RosterModel implements Serializable {
 
     @Override
     public String toString() {

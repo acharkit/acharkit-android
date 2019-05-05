@@ -9,12 +9,12 @@ import java.util.List;
 import java.util.Random;
 
 import ir.acharkit.android.app.AbstractActivity;
-import ir.acharkit.android.component.Carousel;
-import ir.acharkit.android.component.carousel.CarouselListener;
-import ir.acharkit.android.component.carousel.CarouselView;
+import ir.acharkit.android.component.Roster;
+import ir.acharkit.android.component.roster.RosterListener;
+import ir.acharkit.android.component.roster.RosterView;
 import ir.acharkit.android.demo.R;
-import ir.acharkit.android.demo.adapter.TestCarouselAdapter;
-import ir.acharkit.android.demo.model.TestCarouselModel;
+import ir.acharkit.android.demo.adapter.TestRosterAdapter;
+import ir.acharkit.android.demo.model.TestRosterModel;
 import ir.acharkit.android.util.Logger;
 
 /**
@@ -23,9 +23,9 @@ import ir.acharkit.android.util.Logger;
  * Email:   alirezat775@gmail.com
  */
 
-public class TestCarouselPager extends AbstractActivity {
+public class TestRosterPager extends AbstractActivity {
 
-    private static final String TAG = TestCarouselPager.class.getSimpleName();
+    private static final String TAG = TestRosterPager.class.getSimpleName();
     private int count;
 
     private String url0 = "https://api.androidhive.info/images/glide/large/bourne.jpg";
@@ -44,8 +44,8 @@ public class TestCarouselPager extends AbstractActivity {
     private String url13 = "@drawable/ic_android";
 
     private ArrayList<String> list = new ArrayList<>();
-    private List<TestCarouselModel> testCarouselModels = new ArrayList<>();
-    private Carousel carousel;
+    private List<TestRosterModel> testRosterModels = new ArrayList<>();
+    private Roster roster;
 
     @Override
     public void onBackPressed() {
@@ -58,23 +58,23 @@ public class TestCarouselPager extends AbstractActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        if (carousel != null) {
-            carousel.setAutoScrollPause();
+        if (roster != null) {
+            roster.setAutoScrollPause();
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (carousel != null) {
-            carousel.setAutoScrollResume();
+        if (roster != null) {
+            roster.setAutoScrollResume();
         }
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_test_carousel_pager);
+        setContentView(R.layout.activity_test_roster_pager);
 
         list.add(url0);
         list.add(url1);
@@ -92,25 +92,25 @@ public class TestCarouselPager extends AbstractActivity {
         list.add(url13);
 
         Button add_carousel = findViewById(R.id.add_carousel);
-        final TestCarouselAdapter carouselPagerAdapter = new TestCarouselAdapter(this);
-        carousel = new Carousel(this, R.id.carousel, carouselPagerAdapter);
-        carousel.setOrientation(CarouselView.HORIZONTAL, true);
-        carousel.setAutoScroll(true, 5000, true);
+        final TestRosterAdapter testRosterAdapter = new TestRosterAdapter(this);
+        roster = new Roster(this, R.id.roster, testRosterAdapter);
+        roster.setOrientation(RosterView.HORIZONTAL, true);
+        roster.setAutoScroll(true, 5000, true);
         for (int i = 0; i < 14; i++) {
             count = i;
-            TestCarouselModel model = new TestCarouselModel();
+            TestRosterModel model = new TestRosterModel();
             model.setId(i);
             model.setTitle("# " + i);
             model.setImageUri(list.get(i));
-            testCarouselModels.add(model);
+            testRosterModels.add(model);
         }
 
-        carousel.setScaleView(true);
-        carousel.setCurrentPosition(3);
-        carousel.setEnableSlider(true);
-        carousel.addAll(testCarouselModels);
+        roster.setScaleView(true);
+        roster.setCurrentPosition(3);
+        roster.setEnableSlider(false);
+        roster.addAll(testRosterModels);
 
-        carousel.setSnappingListener(new CarouselListener() {
+        roster.setSnappingListener(new RosterListener() {
             @Override
             public void onPositionChange(int position) {
                 Logger.d(TAG, "position: " + position);
@@ -128,18 +128,18 @@ public class TestCarouselPager extends AbstractActivity {
                 count++;
                 Random random = new Random();
                 int index = random.nextInt(list.size());
-                TestCarouselModel model = new TestCarouselModel();
+                TestRosterModel model = new TestRosterModel();
                 model.setId(count);
                 model.setTitle("# " + count);
                 model.setImageUri(list.get(index));
-                carousel.add(model);
+                roster.add(model);
             }
         });
 
         add_carousel.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                carousel.remove(carouselPagerAdapter.getItems().get(1));
+                roster.remove(testRosterAdapter.getItems().get(1));
                 return false;
             }
         });

@@ -370,26 +370,26 @@ Use Indicator Pager
         indicatorPager.add(useFragment0.setTagId("0"));
 ```
 
-Use Carousel
+Use Roster
 ```code
 
-    <ir.acharkit.android.component.carousel.CarouselView
-        android:id="@+id/carousel"
+    <ir.acharkit.android.component.roster.RosterView
+        android:id="@+id/roster"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-          TestCarouselAdapter carouselPagerAdapter = new TestCarouselAdapter(this);
-          carousel = new Carousel(this, R.id.carousel, carouselPagerAdapter);
-          carousel.setOrientation(CarouselView.HORIZONTAL, true);
-          carousel.setAutoScroll(true, 5000, true);
-          carousel.setScaleView(true);
+          TestRosterAdapter adapter = new TestRosterAdapter(this);
+          roster = new Carousel(this, R.id.roster, adapter);
+          roster.setOrientation(RosterView.HORIZONTAL, true);
+          roster.setAutoScroll(true, 5000, true);
+          roster.setScaleView(true);
         
         for(int i = 0; i < 10; i++) {
-        TestCarouselModel model = new TestCarouselModel();
+        TestRosterModel model = new TestRosterModel();
         ...
         ...
         ...
-        carousel.add(model);
+        roster.add(model);
         }
 
 ```
